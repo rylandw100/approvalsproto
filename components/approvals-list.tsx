@@ -11,6 +11,7 @@ interface ApprovalsListProps {
   onToggleItem: (id: number) => void
   onSelectAll: (filteredIds: number[]) => void
   onClearSelection: () => void
+  onFilterChange: (filteredIds: number[]) => void
 }
 
 export function ApprovalsList({ 
@@ -19,7 +20,8 @@ export function ApprovalsList({
   selectedItems, 
   onToggleItem, 
   onSelectAll, 
-  onClearSelection 
+  onClearSelection,
+  onFilterChange
 }: ApprovalsListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -137,6 +139,11 @@ export function ApprovalsList({
     
     return categoryMatch && searchMatch
   })
+
+  // Notify parent of filtered IDs for smart selection handling
+  useEffect(() => {
+    onFilterChange(filteredApprovals.map(approval => approval.id))
+  }, [filteredApprovals, onFilterChange])
 
   const isAllSelected = filteredApprovals.length > 0 && filteredApprovals.every(approval => selectedItems?.has(approval.id))
   const isSomeSelected = filteredApprovals.some(approval => selectedItems?.has(approval.id))

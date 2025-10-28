@@ -218,10 +218,6 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
         <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-500">Select an approval request to view details</p>
         </div>
-        <div className="border-t border-gray-200 p-4 flex justify-end gap-3 bg-white">
-          <Button variant="outline" disabled={hasSelectedItems}>Decline</Button>
-          <Button disabled={hasSelectedItems}>Approve</Button>
-        </div>
       </div>
     )
   }

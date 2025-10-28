@@ -8,7 +8,7 @@ import { AppNavBar } from "./app-navbar"
 import { useState } from "react"
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [selectedItem, setSelectedItem] = useState<number | null>(null)
+  const [selectedItem, setSelectedItem] = useState<number | null>(1) // Default to first item
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
 
   const handleToggleItem = (id: number) => {
@@ -31,6 +31,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
     setSelectedItems(new Set())
   }
 
+  const handleFilterChange = (filteredIds: number[]) => {
+    // If current selection is not in filtered results, clear it
+    if (selectedItem && !filteredIds.includes(selectedItem)) {
+      setSelectedItem(null)
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col">
       <TopBar />
@@ -47,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 onToggleItem={handleToggleItem}
                 onSelectAll={handleSelectAll}
                 onClearSelection={handleClearSelection}
+                onFilterChange={handleFilterChange}
               />
             </div>
             <div className="flex-1">
