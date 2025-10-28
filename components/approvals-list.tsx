@@ -145,8 +145,8 @@ export function ApprovalsList({
     onFilterChange(filteredApprovals.map(approval => approval.id))
   }, [filteredApprovals, onFilterChange])
 
-  const isAllSelected = filteredApprovals.length > 0 && filteredApprovals.every(approval => selectedItems?.has(approval.id))
-  const isSomeSelected = filteredApprovals.some(approval => selectedItems?.has(approval.id))
+  const isAllSelected = filteredApprovals.length > 0 && filteredApprovals.every(approval => selectedItems?.has(approval.id) || false)
+  const isSomeSelected = filteredApprovals.some(approval => selectedItems?.has(approval.id) || false)
 
   const handleSelectAllClick = () => {
     if (isAllSelected) {
@@ -228,7 +228,7 @@ export function ApprovalsList({
       </div>
       
       <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="space-y-0">
+        <div className="space-y-0 pb-4">
           {filteredApprovals.map((approval) => (
             <div
               key={approval.id}

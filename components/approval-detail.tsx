@@ -210,7 +210,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
 
   const approval = selectedItem ? approvalData[selectedItem] : null
 
-  const hasSelectedItems = selectedItems?.size > 0
+  const hasSelectedItems = selectedItems?.size > 0 || false
 
   if (!selectedItem || !approval) {
     return (
@@ -225,7 +225,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
 
          <div className="h-full flex flex-col bg-[#FAF9F7]">
            <div className="flex-1 flex flex-col overflow-hidden">
-             <div className="p-6 border-b border-gray-200">
+             <div className="p-6 border-b border-gray-200 flex-shrink-0">
                <div className="flex items-center justify-between mb-4">
                <div className="flex items-center gap-4">
                  <div>
@@ -291,7 +291,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
            <div className="flex-1 flex flex-col overflow-hidden">
              {activeTab === "Overview" && (
                <div className="flex-1 overflow-y-auto">
-                 <div className="p-6">
+                 <div className="p-6 pb-20">
                    <div className="max-w-3xl space-y-6">
                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                        <h2 className="text-lg font-semibold text-gray-900 mb-2">Request Summary</h2>
@@ -438,7 +438,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
              
              {activeTab === "Approval Process" && (
                <div className="flex-1 overflow-y-auto">
-                 <div className="p-6">
+                 <div className="p-6 pb-20">
                    <div className="mb-4">
                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Process</h2>
                      <p className="text-sm text-gray-600">Step 1: All approvers must accept</p>
@@ -508,7 +508,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
              
              {activeTab === "Policy" && (
                <div className="flex-1 overflow-y-auto">
-                 <div className="p-6">
+                 <div className="p-6 pb-20">
                    <div className="mb-4">
                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Policies</h2>
                      <p className="text-sm text-gray-600">Policies triggered for this request</p>
@@ -543,7 +543,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
              
              {activeTab === "Activity log" && (
                <div className="flex-1 overflow-y-auto">
-                 <div className="p-6">
+                 <div className="p-6 pb-20">
                    <div className="mb-4">
                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Activity Log</h2>
                      <p className="text-sm text-gray-600">History of actions performed on this request</p>
@@ -580,7 +580,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
              
              {activeTab === "Comments" && (
                <div className="flex-1 overflow-y-auto">
-                 <div className="p-6">
+                 <div className="p-6 pb-20">
                    <div className="mb-4">
                      <h2 className="text-lg font-semibold text-gray-900 mb-2">Comments</h2>
                      <p className="text-sm text-gray-600">Discussion and feedback on this request</p>
@@ -614,7 +614,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
              )}
            </div>
            
-           <div className="border-t border-gray-200 p-4 flex justify-end gap-3 bg-white">
+           <div className="border-t border-gray-200 p-4 flex justify-end gap-3 bg-white flex-shrink-0">
              <Button variant="outline" disabled={hasSelectedItems}>Decline</Button>
              <Button disabled={hasSelectedItems}>Approve</Button>
            </div>
