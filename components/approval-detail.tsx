@@ -227,425 +227,434 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection }
   }
   const initials = approval.employee.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
 
-  return (
-    <div className="h-full flex flex-col bg-[#FAF9F7]">
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">{approval.subject}</h1>
-                 <p className="text-base leading-6 text-gray-600 mt-0.5">
-                   By {approval.requestor} - {new Date().toLocaleDateString('en-US', { 
-                     year: 'numeric', 
-                     month: 'long', 
-                     day: 'numeric' 
-                   })}
-                 </p>
-          </div>
-        </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="default">Pending Approval</Badge>
-            <Button variant="ghost" size="icon">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            </Button>
-          </div>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button 
-            variant={activeTab === "Overview" ? "default" : "ghost"} 
-            size="sm"
-            onClick={() => setActiveTab("Overview")}
-          >
-            Overview
-          </Button>
-          <Button 
-            variant={activeTab === "Approval Process" ? "default" : "ghost"} 
-            size="sm"
-            onClick={() => setActiveTab("Approval Process")}
-          >
-            Approval Process
-          </Button>
-          <Button 
-            variant={activeTab === "Policy" ? "default" : "ghost"} 
-            size="sm"
-            onClick={() => setActiveTab("Policy")}
-          >
-            Policy
-          </Button>
-          <Button 
-            variant={activeTab === "Activity log" ? "default" : "ghost"} 
-            size="sm"
-            onClick={() => setActiveTab("Activity log")}
-          >
-            Activity log
-          </Button>
-          <Button 
-            variant={activeTab === "Comments" ? "default" : "ghost"} 
-            size="sm"
-            onClick={() => setActiveTab("Comments")}
-          >
-            Comments
-          </Button>
-        </div>
-      </div>
-      
-      <div className="flex-1 flex flex-col">
-        {activeTab === "Overview" && (
-          <div className="p-6 overflow-y-auto">
-            <div className="max-w-3xl space-y-6">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Request Summary</h2>
-                <p className="text-gray-700">{approval.summary}</p>
-                {approval.trip && approval.trip.linked && (
-                  <div className="mt-3">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                      ✈️ Linked to trip: {approval.trip.name}
-                    </span>
-                  </div>
-                )}
-                {approval.warning && (
-                  <div className="mt-3">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                      ⚠️ {approval.warning}
-                    </span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                  <h3 className="font-medium text-gray-900">
-                    {approval.category === "Reimbursements" ? "Expense Details" : "Impacted Employee"}
-                  </h3>
-                </div>
-                <div className="p-4 bg-white">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
-                      {approval.category === "Reimbursements" 
-                        ? approval.vendor?.name?.charAt(0) || "V"
-                        : initials
-                      }
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">
-                        {approval.category === "Reimbursements" 
-                          ? approval.changes.new
-                          : approval.employee.name
-                        }
-                      </h4>
-                      <p className="text-sm text-gray-600">
-                        {approval.category === "Reimbursements" 
-                          ? approval.vendor?.name || "Vendor"
-                          : `${approval.employee.role} - ${approval.employee.status}`
-                        }
-                      </p>
-                      {approval.category !== "Reimbursements" && (
-                        <p className="text-sm text-gray-600">{approval.employee.location}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                  <h3 className="font-medium text-gray-900">Details</h3>
-                </div>
-                <div className="p-4 space-y-3 bg-white">
-                  {approval.category === "Reimbursements" ? (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Amount</span>
-                        <span className="font-medium text-gray-900">{approval.changes.new}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Entity</span>
-                        <span className="font-medium text-gray-900">{approval.entity || "Acme Corp"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Purchase date</span>
-                        <span className="font-medium text-gray-900">{approval.purchaseDate || "Oct 25, 2024"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Purchaser</span>
-                        <span className="font-medium text-gray-900">{approval.requestor}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Vendor</span>
-                        <span className="font-medium text-gray-900">{approval.vendor?.name || "Uber"}</span>
-                      </div>
-                    </>
-                  ) : approval.category === "HR Management" ? (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">{approval.fieldName || "Target annual bonus"}</span>
-                        <span className="font-medium text-gray-900">{approval.changes.current} → {approval.changes.new}</span>
-                      </div>
-                    </>
-                  ) : approval.category === "Time and Attendance" ? (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Start time</span>
-                        <span className="font-medium text-gray-900">{approval.startTime || "9:00 AM"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">End time</span>
-                        <span className="font-medium text-gray-900">{approval.endTime || "10:57 PM"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Duration</span>
-                        <span className="font-medium text-gray-900">{approval.changes.new}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Requested by</span>
-                        <span className="font-medium text-gray-900">{approval.requestor}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Office location</span>
-                        <span className="font-medium text-gray-900">{approval.officeLocation || "Remote"}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Number of breaks</span>
-                        <span className="font-medium text-gray-900">{approval.numberOfBreaks || "2"}</span>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Current Value</span>
-                        <span className="font-medium text-gray-900">{approval.changes.current}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">New Value</span>
-                        <span className="font-medium text-green-600">{approval.changes.new}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Change Amount</span>
-                        <span className="font-medium">{approval.changes.amount}</span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <p className="text-sm text-gray-600">{approval.note}</p>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === "Approval Process" && (
-          <div className="p-6 overflow-y-auto">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Process</h2>
-              <p className="text-sm text-gray-600">Step 1: All approvers must accept</p>
-            </div>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Approver</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Sent on</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Responded on</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Decision</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-sm">
-                          JS
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">John Smith</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {new Date().toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">-</td>
-                    <td className="px-4 py-3">
-                      <Badge variant="outline">Pending</Badge>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">-</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
-                          SW
-                        </div>
-                        <span className="text-sm font-medium text-gray-900">Sarah Wilson</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {new Date().toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">-</td>
-                    <td className="px-4 py-3">
-                      <Badge variant="outline">Pending</Badge>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">-</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === "Policy" && (
-          <div className="p-6 overflow-y-auto">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Policies</h2>
-              <p className="text-sm text-gray-600">Policies triggered for this request</p>
-            </div>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Name</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Published by</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">HR Management Policy</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">Jennifer Martinez</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">Expense Reimbursement Policy</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">Michael Chen</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">Time Tracking Policy</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">Lisa Thompson</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === "Activity log" && (
-          <div className="p-6 overflow-y-auto">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Activity Log</h2>
-              <p className="text-sm text-gray-600">History of actions performed on this request</p>
-            </div>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Date and time</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Performed by</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      {new Date().toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </td>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{approval.requestor}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">Request submitted</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === "Comments" && (
-          <div className="p-6 overflow-y-auto">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Comments</h2>
-              <p className="text-sm text-gray-600">Discussion and feedback on this request</p>
-            </div>
-            <div className="space-y-4">
-              {approval.comments && approval.comments.length > 0 ? (
-                approval.comments.map((comment: any) => (
-                  <div key={comment.id} className="bg-white border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">
-                        {comment.author.split(' ').map((n: string) => n[0]).join('')}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium text-gray-900">{comment.author}</span>
-                          <span className="text-xs text-gray-500">{comment.timestamp}</span>
-                        </div>
-                        <p className="text-sm text-gray-700">{comment.text}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No comments yet</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-      
-      <div className="border-t border-gray-200 p-4 flex justify-end gap-3 bg-white">
-        <Button variant="outline" disabled={hasSelectedItems}>Decline</Button>
-        <Button disabled={hasSelectedItems}>Approve</Button>
-      </div>
-      
-      {hasSelectedItems && (
-        <div className="fixed bottom-[75px] left-1/2 transform -translate-x-1/2 w-[350px] bg-[#512f3e] text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClearSelection}
-              className="h-8 w-8 text-white hover:bg-white/20"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{selectedItems?.size || 0}</span>
-              <span className="text-sm">selected</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              className="text-white hover:bg-white/20 h-8 px-3"
-            >
-              Approve
-            </Button>
-            <Button 
-              variant="ghost" 
-              className="text-white hover:bg-white/20 h-8 px-3"
-            >
-              Reject
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+         <div className="h-full flex flex-col bg-[#FAF9F7]">
+           <div className="flex-1 flex flex-col overflow-hidden">
+             <div className="p-6 border-b border-gray-200">
+               <div className="flex items-center justify-between mb-4">
+               <div className="flex items-center gap-4">
+                 <div>
+                   <h1 className="text-2xl font-semibold text-gray-900">{approval.subject}</h1>
+                   <p className="text-base leading-6 text-gray-600 mt-0.5">
+                     By {approval.requestor} - {new Date().toLocaleDateString('en-US', { 
+                       year: 'numeric', 
+                       month: 'long', 
+                       day: 'numeric' 
+                     })}
+                   </p>
+                 </div>
+               </div>
+               <div className="flex items-center gap-2">
+                 <Badge variant="default">Pending Approval</Badge>
+                 <Button variant="ghost" size="icon">
+                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                   </svg>
+                 </Button>
+               </div>
+             </div>
+
+             <div className="flex gap-2">
+               <Button 
+                 variant={activeTab === "Overview" ? "default" : "ghost"} 
+                 size="sm"
+                 onClick={() => setActiveTab("Overview")}
+               >
+                 Overview
+               </Button>
+               <Button 
+                 variant={activeTab === "Approval Process" ? "default" : "ghost"} 
+                 size="sm"
+                 onClick={() => setActiveTab("Approval Process")}
+               >
+                 Approval Process
+               </Button>
+               <Button 
+                 variant={activeTab === "Policy" ? "default" : "ghost"} 
+                 size="sm"
+                 onClick={() => setActiveTab("Policy")}
+               >
+                 Policy
+               </Button>
+               <Button 
+                 variant={activeTab === "Activity log" ? "default" : "ghost"} 
+                 size="sm"
+                 onClick={() => setActiveTab("Activity log")}
+               >
+                 Activity log
+               </Button>
+               <Button 
+                 variant={activeTab === "Comments" ? "default" : "ghost"} 
+                 size="sm"
+                 onClick={() => setActiveTab("Comments")}
+               >
+                 Comments
+               </Button>
+             </div>
+           </div>
+           
+           <div className="flex-1 flex flex-col overflow-hidden">
+             {activeTab === "Overview" && (
+               <div className="flex-1 overflow-y-auto">
+                 <div className="p-6">
+                   <div className="max-w-3xl space-y-6">
+                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                       <h2 className="text-lg font-semibold text-gray-900 mb-2">Request Summary</h2>
+                       <p className="text-gray-700">{approval.summary}</p>
+                       {approval.trip && approval.trip.linked && (
+                         <div className="mt-3">
+                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                             ✈️ Linked to trip: {approval.trip.name}
+                           </span>
+                         </div>
+                       )}
+                       {approval.warning && (
+                         <div className="mt-3">
+                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                             ⚠️ {approval.warning}
+                           </span>
+                         </div>
+                       )}
+                     </div>
+                     
+                     <div className="border border-gray-200 rounded-lg overflow-hidden">
+                       <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                         <h3 className="font-medium text-gray-900">
+                           {approval.category === "Reimbursements" ? "Expense Details" : "Impacted Employee"}
+                         </h3>
+                       </div>
+                       <div className="p-4 bg-white">
+                         <div className="flex items-center gap-4">
+                           <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+                             {approval.category === "Reimbursements" 
+                               ? approval.vendor?.name?.charAt(0) || "V"
+                               : initials
+                             }
+                           </div>
+                           <div className="flex-1">
+                             <h4 className="font-medium text-gray-900">
+                               {approval.category === "Reimbursements" 
+                                 ? approval.changes.new
+                                 : approval.employee.name
+                               }
+                             </h4>
+                             <p className="text-sm text-gray-600">
+                               {approval.category === "Reimbursements" 
+                                 ? approval.vendor?.name || "Vendor"
+                                 : `${approval.employee.role} - ${approval.employee.status}`
+                               }
+                             </p>
+                             {approval.category !== "Reimbursements" && (
+                               <p className="text-sm text-gray-600">{approval.employee.location}</p>
+                             )}
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                     
+                     <div className="border border-gray-200 rounded-lg overflow-hidden">
+                       <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                         <h3 className="font-medium text-gray-900">Details</h3>
+                       </div>
+                       <div className="p-4 space-y-3 bg-white">
+                         {approval.category === "Reimbursements" ? (
+                           <>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Amount</span>
+                               <span className="font-medium text-gray-900">{approval.changes.new}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Entity</span>
+                               <span className="font-medium text-gray-900">{approval.entity || "Acme Corp"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Purchase date</span>
+                               <span className="font-medium text-gray-900">{approval.purchaseDate || "Oct 25, 2024"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Purchaser</span>
+                               <span className="font-medium text-gray-900">{approval.requestor}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Vendor</span>
+                               <span className="font-medium text-gray-900">{approval.vendor?.name || "Uber"}</span>
+                             </div>
+                           </>
+                         ) : approval.category === "HR Management" ? (
+                           <>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">{approval.fieldName || "Target annual bonus"}</span>
+                               <span className="font-medium text-gray-900">{approval.changes.current} → {approval.changes.new}</span>
+                             </div>
+                           </>
+                         ) : approval.category === "Time and Attendance" ? (
+                           <>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Start time</span>
+                               <span className="font-medium text-gray-900">{approval.startTime || "9:00 AM"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">End time</span>
+                               <span className="font-medium text-gray-900">{approval.endTime || "10:57 PM"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Duration</span>
+                               <span className="font-medium text-gray-900">{approval.changes.new}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Requested by</span>
+                               <span className="font-medium text-gray-900">{approval.requestor}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Office location</span>
+                               <span className="font-medium text-gray-900">{approval.officeLocation || "Remote"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Number of breaks</span>
+                               <span className="font-medium text-gray-900">{approval.numberOfBreaks || "2"}</span>
+                             </div>
+                           </>
+                         ) : (
+                           <>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Current Value</span>
+                               <span className="font-medium text-gray-900">{approval.changes.current}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">New Value</span>
+                               <span className="font-medium text-green-600">{approval.changes.new}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Change Amount</span>
+                               <span className="font-medium">{approval.changes.amount}</span>
+                             </div>
+                           </>
+                         )}
+                       </div>
+                     </div>
+                     
+                     <div className="bg-white border border-gray-200 rounded-lg p-4">
+                       <p className="text-sm text-gray-600">{approval.note}</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             )}
+             
+             {activeTab === "Approval Process" && (
+               <div className="flex-1 overflow-y-auto">
+                 <div className="p-6">
+                   <div className="mb-4">
+                     <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Process</h2>
+                     <p className="text-sm text-gray-600">Step 1: All approvers must accept</p>
+                   </div>
+                   <div className="border border-gray-200 rounded-lg overflow-hidden">
+                     <table className="w-full">
+                       <thead className="bg-gray-50">
+                         <tr>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Approver</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Sent on</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Responded on</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Decision</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Notes</th>
+                         </tr>
+                       </thead>
+                       <tbody className="bg-white divide-y divide-gray-200">
+                         <tr>
+                           <td className="px-4 py-3">
+                             <div className="flex items-center gap-3">
+                               <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-sm">
+                                 JS
+                               </div>
+                               <span className="text-sm font-medium text-gray-900">John Smith</span>
+                             </div>
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-600">
+                             {new Date().toLocaleDateString('en-US', { 
+                               year: 'numeric', 
+                               month: 'long', 
+                               day: 'numeric' 
+                             })}
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-400">-</td>
+                           <td className="px-4 py-3">
+                             <Badge variant="outline">Pending</Badge>
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-400">-</td>
+                         </tr>
+                         <tr>
+                           <td className="px-4 py-3">
+                             <div className="flex items-center gap-3">
+                               <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                                 SW
+                               </div>
+                               <span className="text-sm font-medium text-gray-900">Sarah Wilson</span>
+                             </div>
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-600">
+                             {new Date().toLocaleDateString('en-US', { 
+                               year: 'numeric', 
+                               month: 'long', 
+                               day: 'numeric' 
+                             })}
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-400">-</td>
+                           <td className="px-4 py-3">
+                             <Badge variant="outline">Pending</Badge>
+                           </td>
+                           <td className="px-4 py-3 text-sm text-gray-400">-</td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                 </div>
+               </div>
+             )}
+             
+             {activeTab === "Policy" && (
+               <div className="flex-1 overflow-y-auto">
+                 <div className="p-6">
+                   <div className="mb-4">
+                     <h2 className="text-lg font-semibold text-gray-900 mb-2">Approval Policies</h2>
+                     <p className="text-sm text-gray-600">Policies triggered for this request</p>
+                   </div>
+                   <div className="border border-gray-200 rounded-lg overflow-hidden">
+                     <table className="w-full">
+                       <thead className="bg-gray-50">
+                         <tr>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Name</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Published by</th>
+                         </tr>
+                       </thead>
+                       <tbody className="bg-white divide-y divide-gray-200">
+                         <tr>
+                           <td className="px-4 py-3 text-sm font-medium text-gray-900">HR Management Policy</td>
+                           <td className="px-4 py-3 text-sm text-gray-600">Jennifer Martinez</td>
+                         </tr>
+                         <tr>
+                           <td className="px-4 py-3 text-sm font-medium text-gray-900">Expense Reimbursement Policy</td>
+                           <td className="px-4 py-3 text-sm text-gray-600">Michael Chen</td>
+                         </tr>
+                         <tr>
+                           <td className="px-4 py-3 text-sm font-medium text-gray-900">Time Tracking Policy</td>
+                           <td className="px-4 py-3 text-sm text-gray-600">Lisa Thompson</td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                 </div>
+               </div>
+             )}
+             
+             {activeTab === "Activity log" && (
+               <div className="flex-1 overflow-y-auto">
+                 <div className="p-6">
+                   <div className="mb-4">
+                     <h2 className="text-lg font-semibold text-gray-900 mb-2">Activity Log</h2>
+                     <p className="text-sm text-gray-600">History of actions performed on this request</p>
+                   </div>
+                   <div className="border border-gray-200 rounded-lg overflow-hidden">
+                     <table className="w-full">
+                       <thead className="bg-gray-50">
+                         <tr>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Date and time</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Performed by</th>
+                           <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">Action</th>
+                         </tr>
+                       </thead>
+                       <tbody className="bg-white divide-y divide-gray-200">
+                         <tr>
+                           <td className="px-4 py-3 text-sm text-gray-600">
+                             {new Date().toLocaleDateString('en-US', { 
+                               year: 'numeric', 
+                               month: 'long', 
+                               day: 'numeric',
+                               hour: '2-digit',
+                               minute: '2-digit'
+                             })}
+                           </td>
+                           <td className="px-4 py-3 text-sm font-medium text-gray-900">{approval.requestor}</td>
+                           <td className="px-4 py-3 text-sm text-gray-600">Request submitted</td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                 </div>
+               </div>
+             )}
+             
+             {activeTab === "Comments" && (
+               <div className="flex-1 overflow-y-auto">
+                 <div className="p-6">
+                   <div className="mb-4">
+                     <h2 className="text-lg font-semibold text-gray-900 mb-2">Comments</h2>
+                     <p className="text-sm text-gray-600">Discussion and feedback on this request</p>
+                   </div>
+                   <div className="space-y-4">
+                     {approval.comments && approval.comments.length > 0 ? (
+                       approval.comments.map((comment: any) => (
+                         <div key={comment.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                           <div className="flex items-start gap-3">
+                             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">
+                               {comment.author.split(' ').map((n: string) => n[0]).join('')}
+                             </div>
+                             <div className="flex-1">
+                               <div className="flex items-center gap-2 mb-1">
+                                 <span className="text-sm font-medium text-gray-900">{comment.author}</span>
+                                 <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                               </div>
+                               <p className="text-sm text-gray-700">{comment.text}</p>
+                             </div>
+                           </div>
+                         </div>
+                       ))
+                     ) : (
+                       <div className="text-center py-8">
+                         <p className="text-gray-500">No comments yet</p>
+                       </div>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             )}
+           </div>
+           
+           <div className="border-t border-gray-200 p-4 flex justify-end gap-3 bg-white">
+             <Button variant="outline" disabled={hasSelectedItems}>Decline</Button>
+             <Button disabled={hasSelectedItems}>Approve</Button>
+           </div>
+           
+           {hasSelectedItems && (
+             <div className="fixed bottom-[75px] left-1/2 transform -translate-x-1/2 w-[350px] bg-[#512f3e] text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50">
+               <div className="flex items-center gap-3">
+                 <Button
+                   variant="ghost"
+                   size="icon"
+                   onClick={onClearSelection}
+                   className="h-8 w-8 text-white hover:bg-white/20"
+                 >
+                   <X className="h-4 w-4" />
+                 </Button>
+                 <div className="flex items-center gap-2">
+                   <span className="text-sm font-medium">{selectedItems?.size || 0}</span>
+                   <span className="text-sm">selected</span>
+                 </div>
+               </div>
+               <div className="flex items-center gap-2">
+                 <Button 
+                   variant="ghost" 
+                   className="text-white hover:bg-white/20 h-8 px-3"
+                 >
+                   Approve
+                 </Button>
+                 <Button 
+                   variant="ghost" 
+                   className="text-white hover:bg-white/20 h-8 px-3"
+                 >
+                   Reject
+                 </Button>
+               </div>
+             </div>
+           )}
+         </div>
 }
 
