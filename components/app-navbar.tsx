@@ -53,18 +53,6 @@ export function AppNavBar({ activeTab, onTabChange }: AppNavBarProps) {
               Needs my review opt. 2
             </span>
           </button>
-          <div className="px-4 pb-1">
-            <span className="text-sm text-gray-600">My requests</span>
-          </div>
-          <div className="px-4 pb-1">
-            <span className="text-sm text-gray-600">Reviewed</span>
-          </div>
-          <div className="px-4 pb-1">
-            <span className="text-sm text-gray-600">All requests</span>
-          </div>
-          <div className="px-4 pb-1">
-            <span className="text-sm text-gray-600">Policies</span>
-          </div>
         </div>
       </div>
     </div>
