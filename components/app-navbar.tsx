@@ -1,6 +1,13 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 
-export function AppNavBar() {
+interface AppNavBarProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
+
+export function AppNavBar({ activeTab, onTabChange }: AppNavBarProps) {
   return (
     <div className="bg-white border-b border-gray-200">
       <div className="px-14 pt-8 pb-0">
@@ -14,9 +21,38 @@ export function AppNavBar() {
         </div>
         
         <div className="flex border-b border-gray-200">
-          <div className="border-b-2 border-[#512f3e] pb-1 px-4">
-            <span className="text-sm font-medium text-[#512f3e]">Needs my review</span>
-          </div>
+          <button
+            onClick={() => onTabChange("opt1")}
+            className={`px-4 pb-1 border-b-2 transition-colors ${
+              activeTab === "opt1"
+                ? "border-[#512f3e]"
+                : "border-transparent"
+            }`}
+          >
+            <span className={`text-sm ${
+              activeTab === "opt1"
+                ? "font-medium text-[#512f3e]"
+                : "text-gray-600"
+            }`}>
+              Needs my review opt. 1
+            </span>
+          </button>
+          <button
+            onClick={() => onTabChange("opt2")}
+            className={`px-4 pb-1 border-b-2 transition-colors ${
+              activeTab === "opt2"
+                ? "border-[#512f3e]"
+                : "border-transparent"
+            }`}
+          >
+            <span className={`text-sm ${
+              activeTab === "opt2"
+                ? "font-medium text-[#512f3e]"
+                : "text-gray-600"
+            }`}>
+              Needs my review opt. 2
+            </span>
+          </button>
           <div className="px-4 pb-1">
             <span className="text-sm text-gray-600">My requests</span>
           </div>
