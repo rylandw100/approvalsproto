@@ -527,61 +527,61 @@ export function ApprovalsList({
                 </div>
               </div>
               
-                     {hoveredItem === approval.id && (
-                       <div className="absolute top-2 right-2 flex gap-1">
-                         {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
-                           <Button
-                             variant="ghost"
-                             size="icon"
-                             className="h-6 w-6 hover:bg-gray-100"
-                             onClick={(e) => {
-                               e.stopPropagation()
-                               // Handle archive action
-                             }}
-                             title="Archive"
-                           >
-                             <Archive className="h-3 w-3 text-gray-600" />
-                           </Button>
-                         ) : (
-                           <>
-                             <Button
-                               variant="ghost"
-                               size="icon"
-                               className="h-6 w-6 hover:bg-green-100"
-                               onClick={(e) => {
-                                 e.stopPropagation()
-                                 // Handle approve action
-                               }}
-                             >
-                               <Check className="h-3 w-3 text-green-600" />
-                             </Button>
-                             <Button
-                               variant="ghost"
-                               size="icon"
-                               className="h-6 w-6 hover:bg-red-100"
-                               onClick={(e) => {
-                                 e.stopPropagation()
-                                 // Handle reject action
-                               }}
-                             >
-                               <X className="h-3 w-3 text-red-600" />
-                             </Button>
-                           </>
-                         )}
-                       </div>
-                     )}
-                     
-                     {'comments' in approval && approval.comments && approval.comments.length > 0 && (
-                       <div className={`absolute top-4 right-4 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
-                         <MessageCircle className="h-4 w-4 text-gray-400" />
-                       </div>
-                     )}
-                     
-                     {'trip' in approval && approval.trip && approval.trip.linked && (
-                       <div className={`absolute top-4 right-8 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
-                         <Plane className="h-4 w-4 text-gray-400" />
-                       </div>
-                     )}
+              {hoveredItem === approval.id && (
+                <div className="absolute top-2 right-2 flex gap-1">
+                  {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 hover:bg-gray-100"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        // Handle archive action
+                      }}
+                      title="Archive"
+                    >
+                      <Archive className="h-3 w-3 text-gray-600" />
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 hover:bg-green-100"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // Handle approve action
+                        }}
+                      >
+                        <Check className="h-3 w-3 text-green-600" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 hover:bg-red-100"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // Handle reject action
+                        }}
+                      >
+                        <X className="h-3 w-3 text-red-600" />
+                      </Button>
+                    </>
+                  )}
+                </div>
+              )}
+              
+              {'comments' in approval && approval.comments && approval.comments.length > 0 && (
+                <div className={`absolute top-4 right-4 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
+                  <MessageCircle className="h-4 w-4 text-gray-400" />
+                </div>
+              )}
+              
+              {'trip' in approval && approval.trip && approval.trip.linked && (
+                <div className={`absolute top-4 right-8 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
+                  <Plane className="h-4 w-4 text-gray-400" />
+                </div>
+              )}
             </div>
           ))}
         </div>
