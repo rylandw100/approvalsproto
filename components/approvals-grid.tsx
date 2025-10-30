@@ -422,7 +422,7 @@ export function ApprovalsGrid({
   }
 
   const getCommentsTooltipContent = (approval: any) => {
-    if (!approval.comments || approval.comments.length === 0) return null
+    if (!('comments' in approval) || !approval.comments || approval.comments.length === 0) return null
     
     const sortedComments = [...approval.comments].sort((a, b) => {
       const timeA = parseInt(a.timestamp)
@@ -673,9 +673,9 @@ export function ApprovalsGrid({
             {/* Table Rows */}
             <div className="divide-y divide-gray-200">
               {sortedApprovals.map((approval) => {
-                const hasWarning = !!approval.warning
-                const hasComments = approval.comments && approval.comments.length > 0
-                const hasTrip = approval.trip && approval.trip.linked
+                const hasWarning = 'warning' in approval && !!approval.warning
+                const hasComments = 'comments' in approval && approval.comments && approval.comments.length > 0
+                const hasTrip = 'trip' in approval && approval.trip && approval.trip.linked
                 const detailsContent = getDetailsTooltipContent(approval)
                 const commentsContent = getCommentsTooltipContent(approval)
                 
