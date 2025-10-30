@@ -10,6 +10,7 @@ import { Drawer } from "./drawer"
 import { useState } from "react"
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [activePage, setActivePage] = useState<"approvals" | "tasks">("approvals")
   const [activeTab, setActiveTab] = useState<string>("opt1")
   const [selectedItem, setSelectedItem] = useState<number | null>(1) // Default to first item
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
@@ -57,9 +58,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="h-screen flex flex-col">
       <TopBar />
       <div className="flex-1 flex overflow-hidden bg-[#FAF9F7]">
-        <Sidebar />
+        <Sidebar activePage={activePage} onPageChange={setActivePage} />
         <div className="flex-1 flex flex-col">
-          <AppNavBar activeTab={activeTab} onTabChange={setActiveTab} />
+          <AppNavBar activeTab={activeTab} onTabChange={setActiveTab} page={activePage} />
           <div className="flex-1 flex overflow-hidden">
             {activeTab === "opt1" ? (
               <>
@@ -72,6 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onSelectAll={handleSelectAll}
                     onClearSelection={handleClearSelection}
                     onFilterChange={handleFilterChange}
+                    page={activePage}
                   />
                 </div>
                 <div className="flex-1">
@@ -79,6 +81,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     selectedItem={selectedItem} 
                     selectedItems={selectedItems}
                     onClearSelection={handleClearSelection}
+                    page={activePage}
                   />
                 </div>
               </>
@@ -90,6 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onSelectAll={handleSelectAll}
                   onClearSelection={handleClearSelection}
                   onOpenDrawer={handleOpenDrawer}
+                  page={activePage}
                 />
               </div>
             )}
@@ -103,6 +107,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         selectedItem={drawerItem}
         selectedItems={selectedItems}
         onClearSelection={handleClearSelection}
+        page={activePage}
       />
     </div>
   )

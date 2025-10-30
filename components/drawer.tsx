@@ -10,9 +10,10 @@ interface DrawerProps {
   selectedItem: number | null
   selectedItems: Set<number>
   onClearSelection: () => void
+  page?: "approvals" | "tasks"
 }
 
-export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSelection }: DrawerProps) {
+export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSelection, page = "approvals" }: DrawerProps) {
   if (!isOpen) return null
 
   return (
@@ -42,6 +43,7 @@ export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSe
             selectedItem={selectedItem}
             selectedItems={selectedItems}
             onClearSelection={onClearSelection}
+            page={page}
           />
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter } from "lucide-react"
+import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter, Archive } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 interface ApprovalsGridProps {
@@ -12,6 +12,7 @@ interface ApprovalsGridProps {
   onSelectAll: (filteredIds: number[]) => void
   onClearSelection: () => void
   onOpenDrawer: (id: number) => void
+  page?: "approvals" | "tasks"
 }
 
 export function ApprovalsGrid({
@@ -19,20 +20,34 @@ export function ApprovalsGrid({
   onToggleItem,
   onSelectAll,
   onClearSelection,
-  onOpenDrawer
+  onOpenDrawer,
+  page = "approvals"
 }: ApprovalsGridProps) {
+  // Helper function to get display category name
+  const getDisplayCategory = (category: string) => {
+    if (page === "approvals" && category.startsWith("Approvals - ")) {
+      return category.replace("Approvals - ", "")
+    }
+    return category
+  }
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
   const [tooltipData, setTooltipData] = useState<{id: number | null, type: string | null, x: number, y: number}>({id: null, type: null, x: 0, y: 0})
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedRequestType, setSelectedRequestType] = useState<string>("All")
+  const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
   const [isRequestTypeDropdownOpen, setIsRequestTypeDropdownOpen] = useState(false)
+  const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const requestTypeDropdownRef = useRef<HTMLDivElement>(null)
+  const sortDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (requestTypeDropdownRef.current && !requestTypeDropdownRef.current.contains(event.target as Node)) {
         setIsRequestTypeDropdownOpen(false)
+      }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+        setIsSortDropdownOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -41,12 +56,12 @@ export function ApprovalsGrid({
     }
   }, [])
 
-  const approvals = [
+  const approvalData = [
     {
       id: 1,
       requestor: "Kristine Young",
       subject: "Request to update Stephanie Perkins' target annual bonus",
-      category: "HR Management",
+      category: "Approvals - HR Management",
       time: "3 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -72,7 +87,7 @@ export function ApprovalsGrid({
       id: 2,
       requestor: "Thomas Bennett",
       subject: "Request to reimburse $72.41 for Uber",
-      category: "Reimbursements",
+      category: "Approvals - Reimbursements",
       time: "5 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -93,7 +108,7 @@ export function ApprovalsGrid({
       id: 3,
       requestor: "Madeline Hernandez",
       subject: "Request to reimburse $595.49 for Hilton Hotel",
-      category: "Reimbursements",
+      category: "Approvals - Reimbursements",
       time: "10 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -106,7 +121,7 @@ export function ApprovalsGrid({
       id: 4,
       requestor: "Sarah Johnson",
       subject: "Request to log 13h 57m from Oct 26 - 27",
-      category: "Time and Attendance",
+      category: "Approvals - Time and Attendance",
       time: "15 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -122,7 +137,7 @@ export function ApprovalsGrid({
       id: 5,
       requestor: "Michael Chen",
       subject: "Request to update Jennifer Lee's salary",
-      category: "HR Management",
+      category: "Approvals - HR Management",
       time: "20 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -139,7 +154,7 @@ export function ApprovalsGrid({
       id: 6,
       requestor: "Emily Rodriguez",
       subject: "Request to reimburse $45.20 for parking",
-      category: "Reimbursements",
+      category: "Approvals - Reimbursements",
       time: "25 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -155,7 +170,7 @@ export function ApprovalsGrid({
       id: 7,
       requestor: "David Park",
       subject: "Request to log 8h 30m from Oct 25",
-      category: "Time and Attendance",
+      category: "Approvals - Time and Attendance",
       time: "30 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -169,7 +184,7 @@ export function ApprovalsGrid({
       id: 8,
       requestor: "Lisa Thompson",
       subject: "Request to update Robert Wilson's benefits",
-      category: "HR Management",
+      category: "Approvals - HR Management",
       time: "35 min ago",
       requestedOn: "Oct 28, 2024",
       status: "pending",
@@ -185,26 +200,153 @@ export function ApprovalsGrid({
     }
   ]
 
-  const requestTypes = ["All", "HR Management", "Reimbursements", "Time and Attendance"]
+  const taskData = [
+    {
+      id: 101,
+      requestor: "HR Team",
+      subject: "Take required cybersecurity course for Q4 certification",
+      category: "Training",
+      time: "2 hours ago",
+      requestedOn: "Oct 26, 2024",
+      status: "pending",
+      courseName: "Cybersecurity Fundamentals",
+      dueDate: "Nov 15, 2024",
+      estimatedDuration: "3 hours"
+    },
+    {
+      id: 102,
+      requestor: "Legal Department",
+      subject: "Sign updated company policy document",
+      category: "Documents",
+      time: "5 hours ago",
+      requestedOn: "Oct 26, 2024",
+      status: "pending",
+      documentName: "Employee Handbook 2024",
+      dueDate: "Oct 30, 2024"
+    },
+    {
+      id: 103,
+      requestor: "Onboarding Team",
+      subject: "Take new hire Alex Martinez out to lunch",
+      category: "Team Building",
+      time: "1 day ago",
+      requestedOn: "Oct 25, 2024",
+      status: "pending",
+      newHireName: "Alex Martinez",
+      newHireRole: "Software Engineer",
+      suggestedDate: "This week",
+      dueDate: "Nov 12, 2024"
+    },
+    {
+      id: 104,
+      requestor: "HR Team",
+      subject: "Complete leadership development course",
+      category: "Training",
+      time: "2 days ago",
+      requestedOn: "Oct 24, 2024",
+      status: "pending",
+      courseName: "Leadership Essentials",
+      dueDate: "Dec 1, 2024",
+      estimatedDuration: "8 hours"
+    },
+    {
+      id: 105,
+      requestor: "Legal Department",
+      subject: "Sign non-disclosure agreement for new project",
+      category: "Documents",
+      time: "3 days ago",
+      requestedOn: "Oct 23, 2024",
+      status: "pending",
+      documentName: "NDA - Project Phoenix",
+      dueDate: "Nov 5, 2024"
+    },
+    {
+      id: 106,
+      requestor: "Onboarding Team",
+      subject: "Take new hire Sarah Kim out to lunch",
+      category: "Team Building",
+      time: "4 days ago",
+      requestedOn: "Oct 22, 2024",
+      status: "pending",
+      newHireName: "Sarah Kim",
+      newHireRole: "Product Designer",
+      suggestedDate: "This week",
+      dueDate: "Nov 8, 2024"
+    }
+  ]
+
+  // For tasks page, show both approvals and tasks. For approvals page, only show approvals.
+  const approvals = page === "tasks" ? [...approvalData, ...taskData] : approvalData
+
+  const requestTypes = page === "tasks"
+    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building"]
+    : ["All", "HR Management", "Reimbursements", "Time and Attendance"]
+  
+  // For tasks page, handle hierarchical category filtering
+  const getCategoryMatch = (approval: any, selectedCategory: string) => {
+    if (selectedCategory === "All") return true
+    if (selectedCategory === "Approvals") {
+      return approval.category.startsWith("Approvals -")
+    }
+    if (selectedCategory === "HR Management" || selectedCategory === "Reimbursements" || selectedCategory === "Time and Attendance") {
+      return approval.category === `Approvals - ${selectedCategory}` || approval.category === selectedCategory
+    }
+    return approval.category === selectedCategory
+  }
 
   const filteredApprovals = approvals.filter(approval => {
     const searchMatch = searchQuery === "" || 
       approval.requestor.toLowerCase().includes(searchQuery.toLowerCase()) ||
       approval.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       approval.category.toLowerCase().includes(searchQuery.toLowerCase())
-    const typeMatch = selectedRequestType === "All" || approval.category === selectedRequestType
+    const typeMatch = page === "tasks"
+      ? (selectedRequestType === "All" ? true : getCategoryMatch(approval, selectedRequestType))
+      : (selectedRequestType === "All" || approval.category === `Approvals - ${selectedRequestType}`)
     return searchMatch && typeMatch
   })
 
-  const isAllSelected = filteredApprovals.length > 0 && filteredApprovals.every(approval => selectedItems.has(approval.id))
-  const isSomeSelected = filteredApprovals.some(approval => selectedItems.has(approval.id))
+  // Sort filtered approvals
+  const sortedApprovals = [...filteredApprovals].sort((a, b) => {
+    if (page === "tasks" && sortBy === "dueDate") {
+      // Sort by due date (items without due date go to the end)
+      const aHasDueDate = 'dueDate' in a && a.dueDate
+      const bHasDueDate = 'dueDate' in b && b.dueDate
+      if (!aHasDueDate && !bHasDueDate) return 0
+      if (!aHasDueDate) return 1
+      if (!bHasDueDate) return -1
+      
+      // Parse dates and compare (format: "Nov 15, 2024")
+      const dateA = new Date(a.dueDate as string)
+      const dateB = new Date(b.dueDate as string)
+      return dateA.getTime() - dateB.getTime()
+    } else {
+      // Sort by recency (time string - most recent first)
+      // Parse time strings to relative timestamps
+      const parseTime = (timeStr: string) => {
+        if (timeStr.includes("min ago")) {
+          return parseInt(timeStr) * 60000
+        } else if (timeStr.includes("hour") || timeStr.includes("hours ago")) {
+          const hours = parseInt(timeStr)
+          return hours * 3600000
+        } else if (timeStr.includes("day") || timeStr.includes("days ago")) {
+          const days = parseInt(timeStr)
+          return days * 86400000
+        }
+        return Infinity
+      }
+      return parseTime(a.time) - parseTime(b.time)
+    }
+  })
+
+  const isAllSelected = sortedApprovals.length > 0 && sortedApprovals.every(approval => selectedItems.has(approval.id))
+  const isSomeSelected = sortedApprovals.some(approval => selectedItems.has(approval.id))
   const hasSelectedItems = selectedItems.size > 0
 
   const handleSelectAllClick = () => {
     if (isAllSelected) {
       onClearSelection()
     } else {
-      onSelectAll(filteredApprovals.map(approval => approval.id))
+      onSelectAll(sortedApprovals.map(approval => approval.id))
     }
   }
 
@@ -244,7 +386,7 @@ export function ApprovalsGrid({
   }
 
   const getDetailsTooltipContent = (approval: any) => {
-    if (approval.category === "HR Management" && approval.changes) {
+    if ((approval.category === "HR Management" || approval.category === "Approvals - HR Management") && approval.changes) {
       return (
         <div className="space-y-1">
           <div className="font-semibold">{approval.fieldName}</div>
@@ -255,7 +397,7 @@ export function ApprovalsGrid({
           )}
         </div>
       )
-    } else if (approval.category === "Reimbursements" && approval.changes) {
+    } else if ((approval.category === "Reimbursements" || approval.category === "Approvals - Reimbursements") && approval.changes) {
       return (
         <div className="space-y-1">
           <div className="font-semibold">Expense Details</div>
@@ -265,7 +407,7 @@ export function ApprovalsGrid({
           {approval.entity && <div className="text-xs"><span className="font-medium">Entity:</span> {approval.entity}</div>}
         </div>
       )
-    } else if (approval.category === "Time and Attendance" && approval.changes) {
+    } else if ((approval.category === "Time and Attendance" || approval.category === "Approvals - Time and Attendance") && approval.changes) {
       return (
         <div className="space-y-1">
           <div className="font-semibold">Time Details</div>
@@ -338,10 +480,49 @@ export function ApprovalsGrid({
                       className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <label htmlFor="select-all-grid" className="text-sm text-gray-600">
-                      {filteredApprovals.length} items
+                      {sortedApprovals.length} items
                     </label>
                   </div>
                 </div>
+                {page === "tasks" && (
+                  <div className="relative" ref={sortDropdownRef}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                      className="h-8 gap-2"
+                    >
+                      Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                    {isSortDropdownOpen && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                        <button
+                          onClick={() => {
+                            setSortBy("recency")
+                            setIsSortDropdownOpen(false)
+                          }}
+                          className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                            sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                          }`}
+                        >
+                          Recency
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSortBy("dueDate")
+                            setIsSortDropdownOpen(false)
+                          }}
+                          className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                            sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                          }`}
+                        >
+                          Due Date
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               
               {/* Bottom row: Search and Filter */}
@@ -349,7 +530,7 @@ export function ApprovalsGrid({
                 <div className="relative flex-1 max-w-[280px]">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input 
-                    placeholder="Search approvals..." 
+                    placeholder="Search..." 
                     className="w-full pl-10 pr-10" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -378,20 +559,101 @@ export function ApprovalsGrid({
                   </Button>
                   {isRequestTypeDropdownOpen && (
                     <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
-                      {requestTypes.map((type) => (
-                        <button
-                          key={type}
-                          onClick={() => {
-                            setSelectedRequestType(type)
-                            setIsRequestTypeDropdownOpen(false)
-                          }}
-                          className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                            selectedRequestType === type ? 'bg-gray-50 font-medium' : ''
-                          }`}
-                        >
-                          {type}
-                        </button>
-                      ))}
+                      {page === "tasks" ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              setSelectedRequestType("All")
+                              setIsRequestTypeDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                              selectedRequestType === "All" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            All
+                          </button>
+                          {requestTypes.filter(type => type !== "All" && type !== "HR Management" && type !== "Reimbursements" && type !== "Time and Attendance").map((type) => (
+                            type === "Approvals" ? (
+                              <div key={type}>
+                                <button
+                                  onClick={() => {
+                                    setSelectedRequestType(type)
+                                    setIsRequestTypeDropdownOpen(false)
+                                  }}
+                                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm font-medium ${
+                                    selectedRequestType === type ? 'bg-gray-50' : ''
+                                  }`}
+                                >
+                                  {type}
+                                </button>
+                                <div className="pl-4">
+                                  <button
+                                    onClick={() => {
+                                      setSelectedRequestType("HR Management")
+                                      setIsRequestTypeDropdownOpen(false)
+                                    }}
+                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                      selectedRequestType === "HR Management" ? 'bg-gray-50' : ''
+                                    }`}
+                                  >
+                                    HR Management
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setSelectedRequestType("Reimbursements")
+                                      setIsRequestTypeDropdownOpen(false)
+                                    }}
+                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                      selectedRequestType === "Reimbursements" ? 'bg-gray-50' : ''
+                                    }`}
+                                  >
+                                    Reimbursements
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setSelectedRequestType("Time and Attendance")
+                                      setIsRequestTypeDropdownOpen(false)
+                                    }}
+                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                      selectedRequestType === "Time and Attendance" ? 'bg-gray-50' : ''
+                                    }`}
+                                  >
+                                    Time and Attendance
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <button
+                                key={type}
+                                onClick={() => {
+                                  setSelectedRequestType(type)
+                                  setIsRequestTypeDropdownOpen(false)
+                                }}
+                                className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                                  selectedRequestType === type ? 'bg-gray-50 font-medium' : ''
+                                }`}
+                              >
+                                {type}
+                              </button>
+                            )
+                          ))}
+                        </>
+                      ) : (
+                        requestTypes.map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => {
+                              setSelectedRequestType(type)
+                              setIsRequestTypeDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                              selectedRequestType === type ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))
+                      )}
                     </div>
                   )}
                 </div>
@@ -410,7 +672,7 @@ export function ApprovalsGrid({
 
             {/* Table Rows */}
             <div className="divide-y divide-gray-200">
-              {filteredApprovals.map((approval) => {
+              {sortedApprovals.map((approval) => {
                 const hasWarning = !!approval.warning
                 const hasComments = approval.comments && approval.comments.length > 0
                 const hasTrip = approval.trip && approval.trip.linked
@@ -444,7 +706,7 @@ export function ApprovalsGrid({
 
                     {/* Request type */}
                     <div className="flex items-center">
-                      <span className="text-sm text-gray-600">{approval.category}</span>
+                      <span className="text-sm text-gray-600">{getDisplayCategory(approval.category)}</span>
                     </div>
 
                     {/* Details */}
@@ -498,30 +760,47 @@ export function ApprovalsGrid({
 
                     {/* Actions - Always visible */}
                     <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 hover:bg-green-100"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          // Handle approve action
-                        }}
-                        title="Approve"
-                      >
-                        <Check className="h-3.5 w-3.5 text-green-600" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 hover:bg-red-100"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          // Handle reject action
-                        }}
-                        title="Reject"
-                      >
-                        <X className="h-3.5 w-3.5 text-red-600" />
-                      </Button>
+                      {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-gray-100"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // Handle mark as done action
+                          }}
+                          title="Mark as done"
+                        >
+                          <Archive className="h-3.5 w-3.5 text-gray-600" />
+                        </Button>
+                      ) : (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 hover:bg-green-100"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              // Handle approve action
+                            }}
+                            title="Approve"
+                          >
+                            <Check className="h-3.5 w-3.5 text-green-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 hover:bg-red-100"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              // Handle reject action
+                            }}
+                            title="Reject"
+                          >
+                            <X className="h-3.5 w-3.5 text-red-600" />
+                          </Button>
+                        </>
+                      )}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -570,7 +849,7 @@ export function ApprovalsGrid({
 
       {/* Action Bar */}
       {hasSelectedItems && (
-        <div className="fixed bottom-[75px] left-1/2 transform -translate-x-1/2 w-[350px] bg-[#512f3e] text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50">
+        <div className="fixed bottom-[75px] left-1/2 transform -translate-x-1/2 min-w-[350px] max-w-[600px] bg-[#512f3e] text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
@@ -585,20 +864,82 @@ export function ApprovalsGrid({
               <span className="text-sm">selected</span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              className="text-white hover:bg-white/20 h-8 px-3"
-            >
-              Approve
-            </Button>
-            <Button 
-              variant="ghost" 
-              className="text-white hover:bg-white/20 h-8 px-3"
-            >
-              Reject
-            </Button>
-          </div>
+              <div className="flex items-center gap-2">
+                {(() => {
+                  if (!selectedItems || selectedItems.size === 0) return null;
+                  
+                  // Get all selected items data
+                  const selectedApprovals = Array.from(selectedItems).map(id => 
+                    [...approvalData, ...taskData].find(item => item.id === id)
+                  ).filter(Boolean);
+                  
+                  // Determine categories of selected items
+                  const hasApprovals = selectedApprovals.some(item => 
+                    item.category.startsWith('Approvals -')
+                  );
+                  const hasDocuments = selectedApprovals.some(item => item.category === 'Documents');
+                  const hasTraining = selectedApprovals.some(item => item.category === 'Training');
+                  const hasTeamBuilding = selectedApprovals.some(item => item.category === 'Team Building');
+                  
+                  // Show actions based on what's selected
+                  const actions = [];
+                  
+                  // If only approvals are selected, show Approve, Reject, Mark as done
+                  if (hasApprovals && !hasDocuments && !hasTraining && !hasTeamBuilding) {
+                    actions.push(
+                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Approve
+                      </Button>,
+                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Reject
+                      </Button>,
+                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Mark as done
+                      </Button>
+                    );
+                  }
+                  // If only documents are selected, show Sign document, Mark as done
+                  else if (hasDocuments && !hasApprovals && !hasTraining && !hasTeamBuilding) {
+                    actions.push(
+                      <Button key="sign" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Sign document
+                      </Button>,
+                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Mark as done
+                      </Button>
+                    );
+                  }
+                  // If only training are selected, show Take course, Mark as done
+                  else if (hasTraining && !hasApprovals && !hasDocuments && !hasTeamBuilding) {
+                    actions.push(
+                      <Button key="take-course" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Take course
+                      </Button>,
+                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Mark as done
+                      </Button>
+                    );
+                  }
+                  // If only team building are selected, show Mark as done
+                  else if (hasTeamBuilding && !hasApprovals && !hasDocuments && !hasTraining) {
+                    actions.push(
+                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Mark as done
+                      </Button>
+                    );
+                  }
+                  // If mixed selections, only show Mark as done
+                  else {
+                    actions.push(
+                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                        Mark as done
+                      </Button>
+                    );
+                  }
+                  
+                  return actions;
+                })()}
+              </div>
         </div>
       )}
     </div>
