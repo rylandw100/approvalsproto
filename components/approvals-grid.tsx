@@ -831,18 +831,20 @@ export function ApprovalsGrid({
               transform: 'translate(-50%, -100%)'
             }}
           >
-            {tooltipData.type === 'warning' && (
-              <div>{approvals.find(a => a.id === tooltipData.id)?.warning}</div>
-            )}
+            {tooltipData.type === 'warning' && (() => {
+              const approval = approvals.find(a => a.id === tooltipData.id)
+              return approval && 'warning' in approval ? <div>{approval.warning}</div> : null
+            })()}
             {tooltipData.type === 'details' && (
               <div>{getDetailsTooltipContent(approvals.find(a => a.id === tooltipData.id))}</div>
             )}
             {tooltipData.type === 'comments' && (
               <div>{getCommentsTooltipContent(approvals.find(a => a.id === tooltipData.id))}</div>
             )}
-            {tooltipData.type === 'trip' && (
-              <div>Linked to trip: {approvals.find(a => a.id === tooltipData.id)?.trip?.name}</div>
-            )}
+            {tooltipData.type === 'trip' && (() => {
+              const approval = approvals.find(a => a.id === tooltipData.id)
+              return approval && 'trip' in approval ? <div>Linked to trip: {approval.trip?.name}</div> : null
+            })()}
           </div>
         )}
       </div>
@@ -871,7 +873,7 @@ export function ApprovalsGrid({
                   // Get all selected items data
                   const selectedApprovals = Array.from(selectedItems).map(id => 
                     [...approvalData, ...taskData].find(item => item.id === id)
-                  ).filter(Boolean);
+                  ).filter((item): item is NonNullable<typeof item> => Boolean(item));
                   
                   // Determine categories of selected items
                   const hasApprovals = selectedApprovals.some(item => 
