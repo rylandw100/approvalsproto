@@ -328,14 +328,14 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
   const initials = approval.employee.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
 
   return (
-    <div className="h-full flex flex-col bg-[#FAF9F7]">
+    <div className="h-full flex flex-col bg-background">
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-6 border-b border-gray-200 flex-shrink-0">
+        <div className="p-6 border-b border-border flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">{approval.subject}</h1>
-                <p className="text-base leading-6 text-gray-600 mt-0.5">
+                <h1 className="rippling-text-2xl text-foreground">{approval.subject}</h1>
+                <p className="rippling-text-base text-muted-foreground mt-0.5">
                   By {approval.requestor} - {new Date().toLocaleDateString('en-US', { 
                     year: 'numeric', 
                     month: 'long', 
@@ -362,6 +362,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <Button 
               variant={activeTab === "Overview" ? "default" : "ghost"} 
               size="sm"
+              className={activeTab === "Overview" ? "rippling-btn-primary" : "rippling-btn-ghost"}
               onClick={() => setActiveTab("Overview")}
             >
               Overview
@@ -371,6 +372,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 <Button 
                   variant={activeTab === "Approval Process" ? "default" : "ghost"} 
                   size="sm"
+                  className={activeTab === "Approval Process" ? "rippling-btn-primary" : "rippling-btn-ghost"}
                   onClick={() => setActiveTab("Approval Process")}
                 >
                   Approval Process
@@ -378,6 +380,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 <Button 
                   variant={activeTab === "Policy" ? "default" : "ghost"} 
                   size="sm"
+                  className={activeTab === "Policy" ? "rippling-btn-primary" : "rippling-btn-ghost"}
                   onClick={() => setActiveTab("Policy")}
                 >
                   Policy
@@ -387,6 +390,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <Button 
               variant={activeTab === "Activity log" ? "default" : "ghost"} 
               size="sm"
+              className={activeTab === "Activity log" ? "rippling-btn-primary" : "rippling-btn-ghost"}
               onClick={() => setActiveTab("Activity log")}
             >
               Activity log
@@ -395,6 +399,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
               <Button 
                 variant={activeTab === "Comments" ? "default" : "ghost"} 
                 size="sm"
+                className={activeTab === "Comments" ? "rippling-btn-primary" : "rippling-btn-ghost"}
                 onClick={() => setActiveTab("Comments")}
               >
                 Comments
@@ -408,19 +413,19 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <div className="flex-1 overflow-y-auto">
               <div className="p-6 pb-20">
                 <div className="max-w-3xl space-y-6">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-2">Request Summary</h2>
-                    <p className="text-gray-700">{approval.summary}</p>
+                  <div className="rippling-card bg-primary-light border-primary/20 p-6">
+                    <h2 className="rippling-text-lg text-foreground mb-2">Request Summary</h2>
+                    <p className="rippling-text-base text-muted-foreground">{approval.summary}</p>
                        {approval.trip && approval.trip.linked && (
                          <div className="mt-3">
-                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                           <span className="rippling-badge-info">
                              ✈️ Linked to trip: {approval.trip.name}
                            </span>
                          </div>
                        )}
                        {approval.warning && (
                          <div className="mt-3">
-                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                           <span className="rippling-badge-warning">
                              ⚠️ {approval.warning}
                            </span>
                          </div>
@@ -428,7 +433,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                   </div>
                   
                   <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                    <div className="bg-muted px-4 py-3 border-b border-border">
                       <h3 className="font-medium text-gray-900">
                         {(approval.category === "Reimbursements" || approval.category === "Approvals - Reimbursements") ? "Expense Details" : 
                          approval.category === "Training" ? "Course Information" :
@@ -485,7 +490,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                   </div>
                   
                   <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                    <div className="bg-muted px-4 py-3 border-b border-border">
                       <h3 className="font-medium text-gray-900">Details</h3>
                     </div>
                     <div className="p-4 space-y-3 bg-white">
@@ -805,25 +810,25 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
         </div>
       </div>
       
-      <div className="border-t border-gray-200 p-4 flex justify-between items-center bg-white flex-shrink-0">
+      <div className="border-t border-border p-4 flex justify-between items-center bg-card flex-shrink-0">
           {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
             <>
-              <Button variant="outline" disabled={hasSelectedItems}>Mark as done</Button>
+              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
               <div className="flex gap-3">
                 {approval.category === "Documents" && (
-                  <Button disabled={hasSelectedItems}>Sign document</Button>
+                  <Button disabled={hasSelectedItems} className="rippling-btn-primary">Sign document</Button>
                 )}
                 {approval.category === "Training" && (
-                  <Button disabled={hasSelectedItems}>Take course</Button>
+                  <Button disabled={hasSelectedItems} className="rippling-btn-primary">Take course</Button>
                 )}
               </div>
             </>
           ) : (
             <>
-              <Button variant="outline" disabled={hasSelectedItems}>Mark as done</Button>
+              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
               <div className="flex gap-3">
-                <Button variant="outline" disabled={hasSelectedItems}>Decline</Button>
-                <Button disabled={hasSelectedItems}>Approve</Button>
+              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Decline</Button>
+              <Button disabled={hasSelectedItems} className="rippling-btn-primary">Approve</Button>
               </div>
             </>
           )}
