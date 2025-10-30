@@ -293,21 +293,21 @@ export function ApprovalsList({
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#FAF9F7]">
-      <div className="p-6 border-b border-gray-200">
+    <div className="h-full flex flex-col bg-card">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="relative" ref={dropdownRef}>
               <Button 
                 variant="ghost" 
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="h-auto p-0 text-xl font-semibold text-gray-900 hover:bg-transparent"
+                className="rippling-btn-ghost h-auto p-0 rippling-text-xl text-foreground hover:bg-transparent"
               >
                 {selectedCategory}
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-[200px]">
+                <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-10 min-w-[200px] rippling-card-elevated">
                 {page === "tasks" ? (
                   <>
                     <button
@@ -315,8 +315,8 @@ export function ApprovalsList({
                         setSelectedCategory("All")
                         setIsDropdownOpen(false)
                       }}
-                      className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                        selectedCategory === "All" ? 'bg-gray-50 font-medium' : ''
+                      className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                        selectedCategory === "All" ? 'bg-muted font-semibold' : ''
                       }`}
                     >
                       All
@@ -431,20 +431,20 @@ export function ApprovalsList({
                 variant="outline"
                 size="sm"
                 onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                className="h-8 gap-2"
+                className="rippling-btn-outline h-8 gap-2 rippling-text-sm"
               >
                 Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
                 <ChevronDown className="h-4 w-4" />
               </Button>
               {isSortDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-[160px]">
+                <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-10 min-w-[160px] rippling-card-elevated">
                   <button
                     onClick={() => {
                       setSortBy("recency")
                       setIsSortDropdownOpen(false)
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                      sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                    className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                      sortBy === "recency" ? 'bg-muted font-semibold' : ''
                     }`}
                   >
                     Recency
@@ -454,8 +454,8 @@ export function ApprovalsList({
                       setSortBy("dueDate")
                       setIsSortDropdownOpen(false)
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                      sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                    className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                      sortBy === "dueDate" ? 'bg-muted font-semibold' : ''
                     }`}
                   >
                     Due Date
@@ -467,10 +467,10 @@ export function ApprovalsList({
         </div>
         
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
             placeholder="Search..." 
-            className="w-full pl-10 pr-10" 
+            className="rippling-input w-full pl-10 pr-10" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -478,10 +478,10 @@ export function ApprovalsList({
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
+              className="rippling-btn-ghost absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6"
               onClick={() => setSearchQuery("")}
             >
-              <X className="h-3 w-3 text-gray-400" />
+              <X className="h-3 w-3 text-muted-foreground" />
             </Button>
           )}
         </div>
@@ -495,8 +495,8 @@ export function ApprovalsList({
               onClick={() => onSelectItem(approval.id)}
               onMouseEnter={() => setHoveredItem(approval.id)}
               onMouseLeave={() => setHoveredItem(null)}
-              className={`p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer relative ${
-                selectedItem === approval.id ? 'bg-[#E7E1DE]' : 'bg-[#FAF9F7]'
+              className={`p-4 border-b border-border hover:bg-muted cursor-pointer relative transition-colors ${
+                selectedItem === approval.id ? 'bg-primary-light' : 'bg-card'
               }`}
             >
               <div className="flex items-start gap-3">
@@ -506,22 +506,22 @@ export function ApprovalsList({
                   onCheckedChange={() => onToggleItem(approval.id)}
                 />
                 <div className="flex-1">
-                  <h3 className="font-medium text-gray-900">{approval.requestor}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{approval.subject}</p>
+                  <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
+                  <p className="rippling-text-sm text-muted-foreground mt-1">{approval.subject}</p>
                   {'warning' in approval && approval.warning && (
                     <div className="mt-1">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <span className="rippling-badge-warning">
                         {approval.warning}
                       </span>
                     </div>
                   )}
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-gray-500 truncate max-w-[200px]">{getDisplayCategory(approval.category)}</span>
+                    <span className="rippling-text-xs text-muted-foreground truncate max-w-[200px]">{getDisplayCategory(approval.category)}</span>
                     <div className="flex items-center gap-2 ml-3">
                       {'dueDate' in approval && approval.dueDate && (
-                        <span className="text-xs text-gray-500 whitespace-nowrap">Due: {approval.dueDate}</span>
+                        <span className="rippling-text-xs text-muted-foreground whitespace-nowrap">Due: {approval.dueDate}</span>
                       )}
-                      <span className="text-xs text-gray-500 whitespace-nowrap">{approval.time}</span>
+                      <span className="rippling-text-xs text-muted-foreground whitespace-nowrap">{approval.time}</span>
                     </div>
                   </div>
                 </div>
@@ -533,38 +533,38 @@ export function ApprovalsList({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 hover:bg-gray-100"
+                            className="rippling-btn-ghost h-6 w-6"
                       onClick={(e) => {
                         e.stopPropagation()
                         // Handle archive action
                       }}
                       title="Archive"
                     >
-                      <Archive className="h-3 w-3 text-gray-600" />
+                      <Archive className="h-3 w-3 text-muted-foreground" />
                     </Button>
                   ) : (
                     <>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 hover:bg-green-100"
+                        className="rippling-btn-ghost h-6 w-6 hover:bg-success/10"
                         onClick={(e) => {
                           e.stopPropagation()
                           // Handle approve action
                         }}
                       >
-                        <Check className="h-3 w-3 text-green-600" />
+                        <Check className="h-3 w-3 text-success" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 hover:bg-red-100"
+                        className="rippling-btn-ghost h-6 w-6 hover:bg-destructive/10"
                         onClick={(e) => {
                           e.stopPropagation()
                           // Handle reject action
                         }}
                       >
-                        <X className="h-3 w-3 text-red-600" />
+                        <X className="h-3 w-3 text-destructive" />
                       </Button>
                     </>
                   )}
@@ -573,13 +573,13 @@ export function ApprovalsList({
               
               {'comments' in approval && approval.comments && approval.comments.length > 0 && (
                 <div className={`absolute top-4 right-4 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
-                  <MessageCircle className="h-4 w-4 text-gray-400" />
+                         <MessageCircle className="h-4 w-4 text-muted-foreground" />
                 </div>
               )}
               
               {'trip' in approval && approval.trip && approval.trip.linked && (
                 <div className={`absolute top-4 right-8 ${hoveredItem === approval.id ? 'opacity-0' : 'opacity-100'} transition-opacity`}>
-                  <Plane className="h-4 w-4 text-gray-400" />
+                         <Plane className="h-4 w-4 text-muted-foreground" />
                 </div>
               )}
             </div>

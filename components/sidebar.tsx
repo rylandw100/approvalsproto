@@ -10,25 +10,33 @@ interface SidebarProps {
 
 export function Sidebar({ activePage, onPageChange }: SidebarProps) {
   return (
-    <div className="w-14 bg-white border-r border-gray-200 flex flex-col items-center py-4">
-      <div className="mb-2">
+    <div className="w-16 rippling-sidebar flex flex-col items-center py-6 space-y-4">
+      <div className="w-full flex justify-center">
         <Button 
-          variant={activePage === "approvals" ? "default" : "ghost"}
+          variant="ghost"
           size="icon"
-          className={`h-10 w-10 ${activePage === "approvals" ? 'bg-primary text-white' : ''}`}
+          className={`h-12 w-12 rounded-xl transition-all duration-200 ${
+            activePage === "approvals" 
+              ? 'rippling-btn-primary shadow-lg' 
+              : 'rippling-btn-ghost hover:bg-primary-light'
+          }`}
           onClick={() => onPageChange("approvals")}
         >
-          <CheckCircle className="h-5 w-5" />
+          <CheckCircle className="h-6 w-6" />
         </Button>
       </div>
-      <div className="mb-2">
+      <div className="w-full flex justify-center">
         <Button 
-          variant={activePage === "tasks" ? "default" : "ghost"}
+          variant="ghost"
           size="icon"
-          className={`h-10 w-10 ${activePage === "tasks" ? 'bg-primary text-white' : ''}`}
+          className={`h-12 w-12 rounded-xl transition-all duration-200 ${
+            activePage === "tasks" 
+              ? 'rippling-btn-primary shadow-lg' 
+              : 'rippling-btn-ghost hover:bg-primary-light'
+          }`}
           onClick={() => onPageChange("tasks")}
         >
-          <CheckSquare className="h-5 w-5" />
+          <CheckSquare className="h-6 w-6" />
         </Button>
       </div>
     </div>

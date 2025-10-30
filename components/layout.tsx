@@ -55,16 +55,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-background">
       <TopBar />
-      <div className="flex-1 flex overflow-hidden bg-[#FAF9F7]">
+      <div className="flex-1 flex overflow-hidden">
         <Sidebar activePage={activePage} onPageChange={setActivePage} />
         <div className="flex-1 flex flex-col">
           <AppNavBar activeTab={activeTab} onTabChange={setActiveTab} page={activePage} />
           <div className="flex-1 flex overflow-hidden">
             {activeTab === "opt1" ? (
               <>
-                <div className="w-[340px] border-r border-gray-200 pl-6 flex flex-col overflow-hidden">
+                <div className="w-[360px] border-r border-border pl-6 flex flex-col overflow-hidden bg-card">
                   <ApprovalsList 
                     selectedItem={selectedItem} 
                     onSelectItem={setSelectedItem}
@@ -76,7 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     page={activePage}
                   />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 bg-background">
                   <ApprovalDetail 
                     selectedItem={selectedItem} 
                     selectedItems={selectedItems}
@@ -86,7 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               </>
             ) : (
-              <div className="flex-1">
+              <div className="flex-1 bg-background">
                 <ApprovalsGrid
                   selectedItems={selectedItems}
                   onToggleItem={handleToggleItem}
