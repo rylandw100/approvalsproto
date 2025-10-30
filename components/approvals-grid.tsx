@@ -456,16 +456,16 @@ export function ApprovalsGrid({
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-background">
       <div className="flex-1 overflow-auto relative">
         <div className="p-6">
-          <div className="bg-white rounded-[16px] border border-gray-200 overflow-hidden min-w-full">
+          <div className="rippling-card-elevated rounded-[16px] overflow-hidden min-w-full">
             {/* Header with title, bulk selection, and search - Inside the table frame */}
-            <div className="px-6 pt-6 pb-4 border-b border-gray-200">
+            <div className="px-6 pt-6 pb-4 border-b border-border">
               {/* Top row: Title and Bulk Selection */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-xl font-semibold text-gray-900">All</h2>
+                  <h2 className="rippling-text-xl text-foreground">All</h2>
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -479,7 +479,7 @@ export function ApprovalsGrid({
                       onChange={handleSelectAllClick}
                       className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <label htmlFor="select-all-grid" className="text-sm text-gray-600">
+                    <label htmlFor="select-all-grid" className="rippling-text-sm text-muted-foreground">
                       {sortedApprovals.length} items
                     </label>
                   </div>
@@ -528,10 +528,10 @@ export function ApprovalsGrid({
               {/* Bottom row: Search and Filter */}
               <div className="flex items-center gap-4">
                 <div className="relative flex-1 max-w-[280px]">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     placeholder="Search..." 
-                    className="w-full pl-10 pr-10" 
+                    className="rippling-input w-full pl-10 pr-10" 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -539,10 +539,10 @@ export function ApprovalsGrid({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
+                      className="rippling-btn-ghost absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6"
                       onClick={() => setSearchQuery("")}
                     >
-                      <X className="h-3 w-3 text-gray-400" />
+                      <X className="h-3 w-3 text-muted-foreground" />
                     </Button>
                   )}
                 </div>
@@ -551,14 +551,14 @@ export function ApprovalsGrid({
                     variant="outline"
                     size="sm"
                     onClick={() => setIsRequestTypeDropdownOpen(!isRequestTypeDropdownOpen)}
-                    className="h-8 gap-2"
+                    className="rippling-btn-outline h-8 gap-2"
                   >
                     <Filter className="h-4 w-4" />
                     <span className="text-sm">{selectedRequestType}</span>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                   {isRequestTypeDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
+                    <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-20 min-w-[200px] rippling-card-elevated">
                       {page === "tasks" ? (
                         <>
                           <button
@@ -592,7 +592,7 @@ export function ApprovalsGrid({
                                       setSelectedRequestType("HR Management")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
-                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                    className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
                                       selectedRequestType === "HR Management" ? 'bg-gray-50' : ''
                                     }`}
                                   >
@@ -603,7 +603,7 @@ export function ApprovalsGrid({
                                       setSelectedRequestType("Reimbursements")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
-                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                    className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
                                       selectedRequestType === "Reimbursements" ? 'bg-gray-50' : ''
                                     }`}
                                   >
@@ -614,7 +614,7 @@ export function ApprovalsGrid({
                                       setSelectedRequestType("Time and Attendance")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
-                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
+                                    className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
                                       selectedRequestType === "Time and Attendance" ? 'bg-gray-50' : ''
                                     }`}
                                   >
@@ -660,18 +660,18 @@ export function ApprovalsGrid({
               </div>
             </div>
             {/* Table Header */}
-            <div className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200">
+            <div className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-muted border-b border-border">
               <div></div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Requested on</div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Requested by</div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Request type</div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Details</div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Attributes</div>
-              <div className="text-xs font-semibold text-gray-700 uppercase">Actions</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested on</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested by</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Request type</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Details</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Attributes</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Actions</div>
             </div>
 
             {/* Table Rows */}
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-border">
               {sortedApprovals.map((approval) => {
                 const hasWarning = 'warning' in approval && !!approval.warning
                 const hasComments = 'comments' in approval && approval.comments && approval.comments.length > 0
@@ -684,7 +684,7 @@ export function ApprovalsGrid({
                     key={approval.id}
                     onMouseEnter={() => setHoveredItem(approval.id)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-gray-50 transition-colors"
+                    className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-muted transition-colors"
                   >
                     {/* Bulk Selection */}
                     <div className="flex items-center">
