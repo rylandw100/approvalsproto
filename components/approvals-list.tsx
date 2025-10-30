@@ -466,25 +466,25 @@ export function ApprovalsList({
           )}
         </div>
         
-             <div className="relative">
-               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-               <Input 
-                 placeholder="Search..." 
-                 className="w-full pl-10 pr-10" 
-                 value={searchQuery}
-                 onChange={(e) => setSearchQuery(e.target.value)}
-               />
-               {searchQuery && (
-                 <Button
-                   variant="ghost"
-                   size="icon"
-                   className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
-                   onClick={() => setSearchQuery("")}
-                 >
-                   <X className="h-3 w-3 text-gray-400" />
-                 </Button>
-               )}
-             </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input 
+            placeholder="Search..." 
+            className="w-full pl-10 pr-10" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
+              onClick={() => setSearchQuery("")}
+            >
+              <X className="h-3 w-3 text-gray-400" />
+            </Button>
+          )}
+        </div>
       </div>
       
       <div className="flex-1 overflow-y-auto min-h-0">
