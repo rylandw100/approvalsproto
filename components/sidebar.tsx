@@ -17,12 +17,12 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
           size="icon"
           className={`h-12 w-12 rounded-xl transition-all duration-200 ${
             activePage === "approvals" 
-              ? 'rippling-btn-primary shadow-lg' 
+              ? 'bg-[#CCCCCC]' 
               : 'rippling-btn-ghost hover:bg-primary-light'
           }`}
           onClick={() => onPageChange("approvals")}
         >
-          <CheckCircle className="h-6 w-6" />
+          <CheckCircle className={`h-6 w-6 ${activePage === "approvals" ? "text-black" : ""}`} />
         </Button>
       </div>
       <div className="w-full flex justify-center">
@@ -31,12 +31,12 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
           size="icon"
           className={`h-12 w-12 rounded-xl transition-all duration-200 ${
             activePage === "tasks" 
-              ? 'rippling-btn-primary shadow-lg' 
+              ? 'bg-[#CCCCCC]' 
               : 'rippling-btn-ghost hover:bg-primary-light'
           }`}
           onClick={() => onPageChange("tasks")}
         >
-          <CheckSquare className="h-6 w-6" />
+          <CheckSquare className={`h-6 w-6 ${activePage === "tasks" ? "text-black" : ""}`} />
         </Button>
       </div>
     </div>

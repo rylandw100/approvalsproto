@@ -7,16 +7,12 @@ export function TopBar() {
     <div className="bg-card border-b border-border h-14 flex items-center justify-between px-5">
       <div className="flex items-center gap-5 w-[266px]">
         <div className="flex items-center justify-center h-14 px-2.5">
-          <div className="h-10 w-10 rounded-md bg-primary relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-white font-bold text-xl">A</div>
-            </div>
-          </div>
+          <div className="h-10 w-10 rounded-full bg-gray-300"></div>
         </div>
         <div className="flex items-center gap-3">
           <div className="h-0.5 w-6 rotate-90 bg-gray-300 opacity-20" />
           <div className="flex items-center h-8 px-2.5 py-0 rounded-md">
-            <span className="rippling-text-base text-foreground font-semibold">Spend</span>
+            <span className="rippling-text-base text-foreground font-semibold">Tools</span>
             <ChevronDown className="ml-2 h-4 w-4 text-muted-foreground" />
           </div>
           <div className="h-0.5 w-6 rotate-90 bg-gray-300 opacity-20" />
@@ -24,11 +20,11 @@ export function TopBar() {
       </div>
       
       <div className="flex items-center justify-between flex-1 h-full">
-        <div className="bg-muted relative w-[600px] rounded-lg px-3 py-2 flex items-center gap-2">
+        <div className="bg-muted relative w-[600px] rounded-lg px-3 flex items-center gap-2" style={{ height: '44px' }}>
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input 
             placeholder="Search or jump to..."
-            className="rippling-input border-0 bg-transparent text-sm placeholder:text-muted-foreground"
+            className="rippling-input border-0 bg-transparent text-sm placeholder:text-muted-foreground h-full"
           />
         </div>
         

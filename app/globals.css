@@ -12,11 +12,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 13% 9%;
     
-    /* Rippling Primary Colors - Blue */
-    --primary: 210 100% 50%;
+    /* Rippling Primary Colors - Purple */
+    --primary: 318 100% 24%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 210 100% 45%;
-    --primary-light: 210 100% 95%;
+    --primary-hover: 318 100% 20%;
+    --primary-light: 318 100% 95%;
+    
+    /* Primary button color override */
+    --primary-button: 318 100% 24%;
     
     /* Rippling Secondary Colors - Green */
     --secondary: 142 76% 36%;
