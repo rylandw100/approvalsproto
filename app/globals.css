@@ -139,13 +139,13 @@
   
   /* Rippling Button Styles */
   .rippling-btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary-hover focus:ring-2 focus:ring-primary focus:ring-offset-2;
-    background-color: hsl(var(--primary));
+    @apply text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    background-color: rgb(122, 0, 93);
     color: hsl(var(--primary-foreground));
   }
   
   .rippling-btn-primary:hover {
-    background-color: hsl(var(--primary-hover));
+    background-color: rgb(102, 0, 78);
   }
   
   .rippling-btn-secondary {
