@@ -8,9 +8,13 @@ interface ApprovalDetailProps {
   selectedItems: Set<number>
   onClearSelection: () => void
   page?: "approvals" | "tasks"
+  backgroundColor?: "white" | "default"
+  viewMode?: "full-width" | "split"
+  onViewModeChange?: (mode: "full-width" | "split") => void
+  onExpandToDrawer?: () => void
 }
 
-export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, page = "approvals" }: ApprovalDetailProps) {
+export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, page = "approvals", backgroundColor = "default", viewMode, onViewModeChange, onExpandToDrawer }: ApprovalDetailProps) {
   const [activeTab, setActiveTab] = useState("Overview")
   
   // Helper function to get display category name
