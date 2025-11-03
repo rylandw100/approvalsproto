@@ -145,23 +145,38 @@ export function ApprovalsGridWithSplit({
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Content */}
       {viewMode === "full-width" ? (
-        <div className="flex-1 overflow-hidden">
-          <ApprovalsGrid
-            selectedItems={selectedItems}
-            onToggleItem={onToggleItem}
-            onSelectAll={onSelectAll}
-            onClearSelection={onClearSelection}
-            onOpenDrawer={onOpenDrawer}
-            page={page}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-            externalSearchQuery={searchQuery}
-            externalSelectedCategory={selectedCategory}
-            onSearchChange={setSearchQuery}
-            onCategoryChange={setSelectedCategory}
-            selectedItem={selectedItem}
-            onSelectItem={onSelectItem}
-          />
+        <div className="flex-1 flex overflow-hidden">
+          <div className="flex-1 overflow-hidden">
+            <ApprovalsGrid
+              selectedItems={selectedItems}
+              onToggleItem={onToggleItem}
+              onSelectAll={onSelectAll}
+              onClearSelection={onClearSelection}
+              onOpenDrawer={onOpenDrawer}
+              page={page}
+              viewMode={viewMode}
+              onViewModeChange={handleViewModeChange}
+              externalSearchQuery={searchQuery}
+              externalSelectedCategory={selectedCategory}
+              onSearchChange={setSearchQuery}
+              onCategoryChange={setSelectedCategory}
+              selectedItem={selectedItem}
+              onSelectItem={onSelectItem}
+            />
+          </div>
+          {selectedItem && (
+            <div className="w-[800px] border-l border-gray-200 flex flex-col bg-[#FAF9F7] overflow-hidden">
+              <ApprovalDetail 
+                selectedItem={selectedItem} 
+                selectedItems={selectedItems}
+                onClearSelection={onClearSelection}
+                page={page}
+                viewMode={viewMode}
+                onViewModeChange={handleViewModeChange}
+                onExpandToDrawer={handleExpandToDrawer}
+              />
+            </div>
+          )}
         </div>
       ) : (
         <div className="h-full flex flex-col bg-white overflow-hidden">

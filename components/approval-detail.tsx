@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { X } from "lucide-react"
+import { X, Maximize2, Minimize2 } from "lucide-react"
 import { useState } from "react"
 
 interface ApprovalDetailProps {
@@ -319,10 +319,14 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
   const approval = selectedItem ? approvalData[selectedItem] : null
 
   const hasSelectedItems = selectedItems?.size > 0 || false
+  
+  const isSplitView = backgroundColor === "white"
 
   if (!selectedItem || !approval) {
     return (
-      <div className="h-full flex flex-col bg-[#FAF9F7]">
+      <div className={`${backgroundColor === "white" ? "flex-1 flex flex-col min-h-0" : "h-full flex flex-col"} ${backgroundColor === "white" ? "" : "bg-[#FAF9F7]"}`}
+        style={backgroundColor === "white" ? { backgroundColor: 'white' } : {}}
+      >
         <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-500">Select an approval request to view details</p>
         </div>
@@ -332,28 +336,60 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
   const initials = approval.employee.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className={`${backgroundColor === "white" ? "flex-1 flex flex-col min-h-0" : "h-full flex flex-col"} ${backgroundColor === "white" ? "" : "bg-[#FAF9F7]"}`}
+      style={backgroundColor === "white" ? { backgroundColor: 'white' } : {}}
+    >
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-6 border-b border-border flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div>
-                <h1 className="rippling-text-2xl text-foreground">{approval.subject}</h1>
-                <p className="rippling-text-base text-muted-foreground mt-0.5">
-                  By {approval.requestor} - {new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </p>
+        <div className={`${isSplitView ? "p-4" : "p-6"} border-b border-gray-200 flex-shrink-0`}>
+          <div className={`flex items-center justify-between ${isSplitView ? "mb-3" : "mb-4"}`}>
+            <div className={`flex items-center ${isSplitView ? "gap-2" : "gap-4"}`}>
+              <div className="flex-1">
+                <h1 className={`${isSplitView ? "text-xl" : "text-2xl"} font-semibold text-gray-900`}>{approval.subject}</h1>
+                <div className={`flex items-center ${isSplitView ? "gap-2 mt-0" : "gap-4 mt-0.5"}`}>
+                  <p className={`${isSplitView ? "text-sm leading-5" : "text-base leading-6"} text-gray-600`}>
+                    By {approval.requestor} - {new Date().toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="default">
-                {approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building" 
-                  ? "Pending" 
-                  : "Pending Approval"}
-              </Badge>
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                Pending
+              </span>
+              {isSplitView && viewMode && onViewModeChange && selectedItem && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (onExpandToDrawer) {
+                      onExpandToDrawer()
+                    }
+                  }}
+                  title="Expand to drawer"
+                >
+                  <Maximize2 className="h-5 w-5" />
+                </Button>
+              )}
+              {!isSplitView && viewMode === "full-width" && onViewModeChange && selectedItem && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (onViewModeChange) {
+                      onViewModeChange("split")
+                    }
+                  }}
+                  title="Collapse to split screen"
+                >
+                  <Minimize2 className="h-5 w-5" />
+                </Button>
+              )}
               <Button variant="ghost" size="icon">
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -362,11 +398,11 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className={`flex ${isSplitView ? "gap-1.5" : "gap-2"}`}>
             <Button 
               variant={activeTab === "Overview" ? "default" : "ghost"} 
               size="sm"
-              className={activeTab === "Overview" ? "rippling-btn-primary" : "rippling-btn-ghost"}
+              className={`${isSplitView ? "h-7 text-xs px-2" : "h-8 text-sm px-3"} ${activeTab === "Overview" ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]" : ""}`}
               onClick={() => setActiveTab("Overview")}
             >
               Overview
@@ -376,7 +412,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 <Button 
                   variant={activeTab === "Approval Process" ? "default" : "ghost"} 
                   size="sm"
-                  className={activeTab === "Approval Process" ? "rippling-btn-primary" : "rippling-btn-ghost"}
+                  className={`${isSplitView ? "h-7 text-xs px-2" : "h-8 text-sm px-3"} ${activeTab === "Approval Process" ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]" : ""}`}
                   onClick={() => setActiveTab("Approval Process")}
                 >
                   Approval Process
@@ -384,7 +420,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 <Button 
                   variant={activeTab === "Policy" ? "default" : "ghost"} 
                   size="sm"
-                  className={activeTab === "Policy" ? "rippling-btn-primary" : "rippling-btn-ghost"}
+                  className={`${isSplitView ? "h-7 text-xs px-2" : "h-8 text-sm px-3"} ${activeTab === "Policy" ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]" : ""}`}
                   onClick={() => setActiveTab("Policy")}
                 >
                   Policy
@@ -394,7 +430,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <Button 
               variant={activeTab === "Activity log" ? "default" : "ghost"} 
               size="sm"
-              className={activeTab === "Activity log" ? "rippling-btn-primary" : "rippling-btn-ghost"}
+              className={`${isSplitView ? "h-7 text-xs px-2" : "h-8 text-sm px-3"} ${activeTab === "Activity log" ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]" : ""}`}
               onClick={() => setActiveTab("Activity log")}
             >
               Activity log
@@ -403,7 +439,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
               <Button 
                 variant={activeTab === "Comments" ? "default" : "ghost"} 
                 size="sm"
-                className={activeTab === "Comments" ? "rippling-btn-primary" : "rippling-btn-ghost"}
+                className={`${isSplitView ? "h-7 text-xs px-2" : "h-8 text-sm px-3"} ${activeTab === "Comments" ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]" : ""}`}
                 onClick={() => setActiveTab("Comments")}
               >
                 Comments
@@ -414,12 +450,12 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
         
         <div className="flex-1 flex flex-col overflow-hidden">
           {activeTab === "Overview" && (
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-6 pb-20">
-                <div className="max-w-3xl space-y-6">
-                  <div className="rippling-card bg-primary-light border-primary/20 p-6">
-                    <h2 className="rippling-text-lg text-foreground mb-2">Request Summary</h2>
-                    <p className="rippling-text-base text-muted-foreground">{approval.summary}</p>
+            <div className="flex-1 overflow-y-auto min-h-0">
+              <div className={`${isSplitView ? "p-4 pb-4" : "p-6 pb-20"}`}>
+                <div className={`${isSplitView ? "space-y-3" : "max-w-3xl space-y-6"}`}>
+                  <div className={`bg-blue-50 border border-blue-200 rounded-lg ${isSplitView ? "p-3" : "p-6"}`}>
+                    <h2 className={`${isSplitView ? "text-base" : "text-lg"} font-semibold text-gray-900 ${isSplitView ? "mb-1" : "mb-2"}`}>Request Summary</h2>
+                    <p className={`${isSplitView ? "text-sm" : ""} text-gray-700`}>{approval.summary}</p>
                        {approval.trip && approval.trip.linked && (
                          <div className="mt-3">
                            <span className="rippling-badge-info">
