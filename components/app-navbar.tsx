@@ -12,6 +12,7 @@ export function AppNavBar({ activeTab, onTabChange, page = "approvals" }: AppNav
   const title = page === "tasks" ? "Inbox" : "Approvals"
   const tab1Label = page === "tasks" ? "Pending opt. 1" : "Needs my review opt. 1"
   const tab2Label = page === "tasks" ? "Pending opt. 2" : "Needs my review opt. 2"
+  const tab3Label = page === "tasks" ? "Pending opt. 3" : "Needs my review opt. 3"
 
   return (
     <div className="bg-card border-b border-border">
@@ -56,6 +57,22 @@ export function AppNavBar({ activeTab, onTabChange, page = "approvals" }: AppNav
                 : "text-muted-foreground hover:text-foreground"
             }`}>
               {tab2Label}
+            </span>
+          </button>
+          <button
+            onClick={() => onTabChange("opt3")}
+            className={`px-4 pb-1 border-b-2 transition-colors ${
+              activeTab === "opt3"
+                ? "border-[#512f3e]"
+                : "border-transparent"
+            }`}
+          >
+            <span className={`text-sm ${
+              activeTab === "opt3"
+                ? "font-medium text-[#512f3e]"
+                : "text-gray-600"
+            }`}>
+              {tab3Label}
             </span>
           </button>
         </div>
