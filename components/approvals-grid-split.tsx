@@ -36,7 +36,7 @@ export function ApprovalsGridWithSplit({
   drawerViewModeChange,
   page = "approvals"
 }: ApprovalsGridWithSplitProps) {
-  const [viewMode, setViewMode] = useState<"full-width" | "split">("full-width")
+  const [viewMode, setViewMode] = useState<"full-width" | "split">("split")
   
   const handleExpandToDrawer = () => {
     if (selectedItem) {
@@ -208,7 +208,7 @@ export function ApprovalsGridWithSplit({
                           variant="ghost"
                           size="sm"
                           className="h-7 px-2 text-xs"
-                          onClick={() => setViewMode("full-width")}
+                          onClick={() => handleViewModeChange("full-width")}
                         >
                           Full-width
                         </Button>
@@ -216,7 +216,7 @@ export function ApprovalsGridWithSplit({
                           variant="default"
                           size="sm"
                           className="h-7 px-2 text-xs bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                          onClick={() => setViewMode("split")}
+                          onClick={() => handleViewModeChange("split")}
                         >
                           Split screen
                         </Button>
