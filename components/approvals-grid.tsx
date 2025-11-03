@@ -13,6 +13,14 @@ interface ApprovalsGridProps {
   onClearSelection: () => void
   onOpenDrawer: (id: number) => void
   page?: "approvals" | "tasks"
+  viewMode?: "full-width" | "split"
+  onViewModeChange?: (mode: "full-width" | "split") => void
+  externalSearchQuery?: string
+  externalSelectedCategory?: string
+  onSearchChange?: (query: string) => void
+  onCategoryChange?: (category: string) => void
+  selectedItem?: number | null
+  onSelectItem?: (id: number | null) => void
 }
 
 export function ApprovalsGrid({
@@ -21,7 +29,15 @@ export function ApprovalsGrid({
   onSelectAll,
   onClearSelection,
   onOpenDrawer,
-  page = "approvals"
+  page = "approvals",
+  viewMode,
+  onViewModeChange,
+  externalSearchQuery,
+  externalSelectedCategory,
+  onSearchChange,
+  onCategoryChange,
+  selectedItem,
+  onSelectItem
 }: ApprovalsGridProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
