@@ -190,25 +190,17 @@ export function ApprovalsGridWithSplit({
                       )}
                       <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
                         <Button
-                          variant={viewMode === "full-width" ? "default" : "ghost"}
+                          variant="ghost"
                           size="sm"
-                          className={`h-7 px-2 text-xs ${
-                            viewMode === "full-width"
-                              ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                              : ""
-                          }`}
+                          className="h-7 px-2 text-xs"
                           onClick={() => setViewMode("full-width")}
                         >
                           Full-width
                         </Button>
                         <Button
-                          variant={viewMode === "split" ? "default" : "ghost"}
+                          variant="default"
                           size="sm"
-                          className={`h-7 px-2 text-xs ${
-                            viewMode === "split"
-                              ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                              : ""
-                          }`}
+                          className="h-7 px-2 text-xs bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
                           onClick={() => setViewMode("split")}
                         >
                           Split screen
