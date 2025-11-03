@@ -13,6 +13,11 @@ interface ApprovalsListProps {
   onClearSelection: () => void
   onFilterChange: (filteredIds: number[]) => void
   page?: "approvals" | "tasks"
+  hideHeader?: boolean
+  externalSearchQuery?: string
+  externalSelectedCategory?: string
+  onSearchChange?: (query: string) => void
+  onCategoryChange?: (category: string) => void
 }
 
 export function ApprovalsList({ 
@@ -23,7 +28,12 @@ export function ApprovalsList({
   onSelectAll, 
   onClearSelection, 
   onFilterChange,
-  page = "approvals"
+  page = "approvals",
+  hideHeader = false,
+  externalSearchQuery,
+  externalSelectedCategory,
+  onSearchChange,
+  onCategoryChange
 }: ApprovalsListProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
@@ -32,12 +42,41 @@ export function ApprovalsList({
     }
     return category
   }
-  const [selectedCategory, setSelectedCategory] = useState<string>("All")
+  const [selectedCategory, setSelectedCategory] = useState<string>(externalSelectedCategory || "All")
   const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
-  const [searchQuery, setSearchQuery] = useState<string>("")
+  const [searchQuery, setSearchQuery] = useState<string>(externalSearchQuery || "")
+  
+  // Update internal state when external props change
+  useEffect(() => {
+    if (externalSearchQuery !== undefined) {
+      setSearchQuery(externalSearchQuery)
+    }
+  }, [externalSearchQuery])
+
+  useEffect(() => {
+    if (externalSelectedCategory !== undefined) {
+      setSelectedCategory(externalSelectedCategory)
+    }
+  }, [externalSelectedCategory])
+
+  // Handle search change
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    if (onSearchChange) {
+      onSearchChange(query)
+    }
+  }
+
+  // Handle category change
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    if (onCategoryChange) {
+      onCategoryChange(category)
+    }
+  }
   const dropdownRef = useRef<HTMLDivElement>(null)
   const sortDropdownRef = useRef<HTMLDivElement>(null)
 
@@ -294,6 +333,7 @@ export function ApprovalsList({
 
   return (
     <div className="h-full flex flex-col bg-card">
+      {!hideHeader && (
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
@@ -312,7 +352,7 @@ export function ApprovalsList({
                   <>
                     <button
                       onClick={() => {
-                        setSelectedCategory("All")
+                        handleCategoryChange("All")
                         setIsDropdownOpen(false)
                       }}
                       className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
@@ -326,7 +366,7 @@ export function ApprovalsList({
                         <div key={category}>
                           <button
                             onClick={() => {
-                              setSelectedCategory(category)
+                              handleCategoryChange(category)
                               setIsDropdownOpen(false)
                             }}
                             className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm font-medium ${
@@ -338,7 +378,7 @@ export function ApprovalsList({
                           <div className="pl-4">
                             <button
                               onClick={() => {
-                                setSelectedCategory("HR Management")
+                                handleCategoryChange("HR Management")
                                 setIsDropdownOpen(false)
                               }}
                               className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
@@ -349,7 +389,7 @@ export function ApprovalsList({
                             </button>
                             <button
                               onClick={() => {
-                                setSelectedCategory("Reimbursements")
+                                handleCategoryChange("Reimbursements")
                                 setIsDropdownOpen(false)
                               }}
                               className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
@@ -360,7 +400,7 @@ export function ApprovalsList({
                             </button>
                             <button
                               onClick={() => {
-                                setSelectedCategory("Time and Attendance")
+                                handleCategoryChange("Time and Attendance")
                                 setIsDropdownOpen(false)
                               }}
                               className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-600 ${
@@ -375,7 +415,7 @@ export function ApprovalsList({
                         <button
                           key={category}
                           onClick={() => {
-                            setSelectedCategory(category)
+                            handleCategoryChange(category)
                             setIsDropdownOpen(false)
                           }}
                           className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
@@ -392,7 +432,7 @@ export function ApprovalsList({
                     <button
                       key={category}
                       onClick={() => {
-                        setSelectedCategory(category)
+                        handleCategoryChange(category)
                         setIsDropdownOpen(false)
                       }}
                       className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
@@ -472,21 +512,21 @@ export function ApprovalsList({
             placeholder="Search..." 
             className="rippling-input w-full pl-10 pr-10" 
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
           {searchQuery && (
             <Button
               variant="ghost"
               size="icon"
               className="rippling-btn-ghost absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6"
-              onClick={() => setSearchQuery("")}
+              onClick={() => handleSearchChange("")}
             >
               <X className="h-3 w-3 text-muted-foreground" />
             </Button>
           )}
         </div>
       </div>
-      
+      )}
       <div className="flex-1 overflow-y-auto min-h-0">
         <div className="space-y-0 pb-4">
           {sortedApprovals.map((approval) => (
