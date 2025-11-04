@@ -159,9 +159,9 @@
   }
   
   .rippling-btn-outline {
-    @apply border border-primary text-primary hover:bg-primary-light focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply border border-primary hover:bg-primary-light focus:ring-2 focus:ring-primary focus:ring-offset-2;
     border-color: hsl(var(--primary));
-    color: hsl(var(--primary));
+    color: black;
   }
   
   .rippling-btn-outline:hover {

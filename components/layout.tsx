@@ -54,6 +54,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const handleCloseDrawer = () => {
     setDrawerOpen(false)
     setDrawerItem(null)
+    // Clear selected item when closing drawer in full-width mode
+    if (activeTab === "opt3") {
+      setSelectedItem(null)
+    }
   }
 
   return (

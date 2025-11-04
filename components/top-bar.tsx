@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Bell, Settings, HelpCircle } from "lucide-react"
+import { Search, Bell, Settings, HelpCircle, Menu } from "lucide-react"
 
 export function TopBar() {
   return (
     <div className="bg-card border-b border-border h-14 flex items-center justify-between px-5">
       <div className="flex items-center gap-5 w-[266px]">
         <div className="flex items-center justify-center h-14 px-2.5">
-          <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+          <Button variant="ghost" size="icon" className="h-10 w-10 rippling-btn-ghost">
+            <Menu className="h-6 w-6" />
+          </Button>
         </div>
         <div className="flex items-center gap-3">
           <div className="h-0.5 w-6 rotate-90 bg-gray-300 opacity-20" />

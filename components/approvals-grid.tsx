@@ -765,9 +765,11 @@ export function ApprovalsGrid({
                   >
                     {/* Bulk Selection */}
                     <div className="flex items-center">
-                      <Checkbox
+                      <input
+                        type="checkbox"
                         checked={selectedItems.has(approval.id)}
-                        onCheckedChange={() => onToggleItem(approval.id)}
+                        onChange={() => onToggleItem(approval.id)}
+                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                     </div>
 

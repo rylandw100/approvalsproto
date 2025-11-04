@@ -36,7 +36,7 @@ export function ApprovalsGridWithSplit({
   drawerViewModeChange,
   page = "approvals"
 }: ApprovalsGridWithSplitProps) {
-  const [viewMode, setViewMode] = useState<"full-width" | "split">("split")
+  const [viewMode, setViewMode] = useState<"full-width" | "split">("full-width")
   
   const handleExpandToDrawer = () => {
     if (selectedItem) {
@@ -166,6 +166,16 @@ export function ApprovalsGridWithSplit({
           </div>
           {selectedItem && (
             <div className="w-[800px] border-l border-gray-200 flex flex-col bg-[#FAF9F7] overflow-hidden">
+              <div className="flex items-center justify-end p-2 border-b border-gray-200 flex-shrink-0">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onSelectItem(null)}
+                  className="h-8 w-8"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
               <ApprovalDetail 
                 selectedItem={selectedItem} 
                 selectedItems={selectedItems}
