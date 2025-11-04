@@ -379,7 +379,9 @@ export function ApprovalsGrid({
       // Sort by recency (time string - most recent first)
       // Parse time strings to relative timestamps
       const parseTime = (timeStr: string) => {
-        if (timeStr.includes("min ago")) {
+        if (timeStr.includes("just now")) {
+          return 0
+        } else if (timeStr.includes("min ago")) {
           return parseInt(timeStr) * 60000
         } else if (timeStr.includes("hour") || timeStr.includes("hours ago")) {
           const hours = parseInt(timeStr)

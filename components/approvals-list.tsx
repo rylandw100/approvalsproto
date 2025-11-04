@@ -294,6 +294,13 @@ export function ApprovalsList({
 
   // Sort filtered approvals
   const sortedApprovals = [...filteredApprovals].sort((a, b) => {
+    // Critical/pinned items always go to the top
+    const aIsCritical = (a as any).isCritical || (a as any).pinned
+    const bIsCritical = (b as any).isCritical || (b as any).pinned
+    if (aIsCritical && !bIsCritical) return -1
+    if (!aIsCritical && bIsCritical) return 1
+    if (aIsCritical && bIsCritical) return 0 // Keep critical items in their original order
+    
     if (page === "tasks" && sortBy === "dueDate") {
       // Sort by due date (items without due date go to the end)
       const aHasDueDate = 'dueDate' in a && a.dueDate
@@ -310,7 +317,9 @@ export function ApprovalsList({
       // Sort by recency (time string - most recent first)
       // Parse time strings to relative timestamps
       const parseTime = (timeStr: string) => {
-        if (timeStr.includes("min ago")) {
+        if (timeStr.includes("just now")) {
+          return 0
+        } else if (timeStr.includes("min ago")) {
           return parseInt(timeStr) * 60000
         } else if (timeStr.includes("hour") || timeStr.includes("hours ago")) {
           const hours = parseInt(timeStr)
