@@ -363,6 +363,13 @@ export function ApprovalsGrid({
 
   // Sort filtered approvals
   const sortedApprovals = [...filteredApprovals].sort((a, b) => {
+    // Critical/pinned items always go to the top
+    const aIsCritical = (a as any).isCritical || (a as any).pinned
+    const bIsCritical = (b as any).isCritical || (b as any).pinned
+    if (aIsCritical && !bIsCritical) return -1
+    if (!aIsCritical && bIsCritical) return 1
+    if (aIsCritical && bIsCritical) return 0 // Keep critical items in their original order
+    
     if (page === "tasks" && sortBy === "dueDate") {
       // Sort by due date (items without due date go to the end)
       const aHasDueDate = 'dueDate' in a && a.dueDate
