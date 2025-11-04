@@ -48,14 +48,43 @@ export function ApprovalsGrid({
   }
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
   const [tooltipData, setTooltipData] = useState<{id: number | null, type: string | null, x: number, y: number}>({id: null, type: null, x: 0, y: 0})
-  const [searchQuery, setSearchQuery] = useState<string>("")
-  const [selectedRequestType, setSelectedRequestType] = useState<string>("All")
+  const [searchQuery, setSearchQuery] = useState<string>(externalSearchQuery || "")
+  const [selectedRequestType, setSelectedRequestType] = useState<string>(externalSelectedCategory || "All")
   const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
   const [isRequestTypeDropdownOpen, setIsRequestTypeDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const requestTypeDropdownRef = useRef<HTMLDivElement>(null)
   const sortDropdownRef = useRef<HTMLDivElement>(null)
+
+  // Update internal state when external props change
+  useEffect(() => {
+    if (externalSearchQuery !== undefined) {
+      setSearchQuery(externalSearchQuery)
+    }
+  }, [externalSearchQuery])
+  
+  useEffect(() => {
+    if (externalSelectedCategory !== undefined) {
+      setSelectedRequestType(externalSelectedCategory)
+    }
+  }, [externalSelectedCategory])
+
+  // Handle search change
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    if (onSearchChange) {
+      onSearchChange(query)
+    }
+  }
+  
+  // Handle category change
+  const handleCategoryChange = (category: string) => {
+    setSelectedRequestType(category)
+    if (onCategoryChange) {
+      onCategoryChange(category)
+    }
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -610,7 +639,7 @@ export function ApprovalsGrid({
                         <>
                           <button
                             onClick={() => {
-                              setSelectedRequestType("All")
+                              handleCategoryChange("All")
                               setIsRequestTypeDropdownOpen(false)
                             }}
                             className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
@@ -624,7 +653,7 @@ export function ApprovalsGrid({
                               <div key={type}>
                                 <button
                                   onClick={() => {
-                                    setSelectedRequestType(type)
+                                    handleCategoryChange(type)
                                     setIsRequestTypeDropdownOpen(false)
                                   }}
                                   className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm font-medium ${
@@ -636,7 +665,7 @@ export function ApprovalsGrid({
                                 <div className="pl-4">
                                   <button
                                     onClick={() => {
-                                      setSelectedRequestType("HR Management")
+                                      handleCategoryChange("HR Management")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
                                     className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
@@ -647,7 +676,7 @@ export function ApprovalsGrid({
                                   </button>
                                   <button
                                     onClick={() => {
-                                      setSelectedRequestType("Reimbursements")
+                                      handleCategoryChange("Reimbursements")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
                                     className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
@@ -658,7 +687,7 @@ export function ApprovalsGrid({
                                   </button>
                                   <button
                                     onClick={() => {
-                                      setSelectedRequestType("Time and Attendance")
+                                      handleCategoryChange("Time and Attendance")
                                       setIsRequestTypeDropdownOpen(false)
                                     }}
                                     className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
@@ -673,7 +702,7 @@ export function ApprovalsGrid({
                               <button
                                 key={type}
                                 onClick={() => {
-                                  setSelectedRequestType(type)
+                                  handleCategoryChange(type)
                                   setIsRequestTypeDropdownOpen(false)
                                 }}
                                 className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
