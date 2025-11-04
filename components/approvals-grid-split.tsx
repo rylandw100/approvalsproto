@@ -255,7 +255,11 @@ export function ApprovalsGridWithSplit({
                           }
                         }}
                         onChange={handleSelectAllClick}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                        style={{
+                          accentColor: isAllSelected ? '#7A005D' : '#A3A3A5',
+                          borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
+                        }}
                       />
                       <label htmlFor="select-all-split" className="text-xs text-gray-600">
                         {filteredIds.length} items

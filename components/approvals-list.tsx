@@ -459,7 +459,11 @@ export function ApprovalsList({
                 }
               }}
               onChange={handleSelectAllClick}
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+              style={{
+                accentColor: isAllSelected ? '#7A005D' : '#A3A3A5',
+                borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
+              }}
             />
             <label htmlFor="select-all" className="text-sm text-gray-600">
               {sortedApprovals.length} items
@@ -540,14 +544,19 @@ export function ApprovalsList({
               }`}
             >
               <div className="flex items-start gap-3">
-                <Checkbox 
-                  className="mt-1" 
+                <input
+                  type="checkbox"
                   checked={selectedItems?.has(approval.id) || false}
-                  onCheckedChange={() => onToggleItem(approval.id)}
+                  onChange={() => onToggleItem(approval.id)}
+                  className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                  style={{
+                    accentColor: selectedItems?.has(approval.id) ? '#7A005D' : '#A3A3A5',
+                    borderColor: selectedItems?.has(approval.id) ? '#7A005D' : '#A3A3A5'
+                  }}
                 />
                 <div className="flex-1">
                   <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
-                  <p className="rippling-text-sm text-muted-foreground mt-1">{approval.subject}</p>
+                  <p className="rippling-text-sm text-muted-foreground mt-1 font-normal">{approval.subject}</p>
                   {'warning' in approval && approval.warning && (
                     <div className="mt-1">
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

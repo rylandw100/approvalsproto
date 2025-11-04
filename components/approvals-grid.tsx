@@ -596,7 +596,11 @@ export function ApprovalsGrid({
                       }
                     }}
                     onChange={handleSelectAllClick}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                    style={{
+                      accentColor: isAllSelected ? '#7A005D' : '#A3A3A5',
+                      borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
+                    }}
                   />
                   <label htmlFor="select-all-grid" className="text-xs text-gray-600">
                     {sortedApprovals.length} items
@@ -769,7 +773,11 @@ export function ApprovalsGrid({
                         type="checkbox"
                         checked={selectedItems.has(approval.id)}
                         onChange={() => onToggleItem(approval.id)}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                        style={{
+                          accentColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5',
+                          borderColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5'
+                        }}
                       />
                     </div>
 
