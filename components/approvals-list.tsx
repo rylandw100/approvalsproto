@@ -536,7 +536,7 @@ export function ApprovalsList({
               onMouseEnter={() => setHoveredItem(approval.id)}
               onMouseLeave={() => setHoveredItem(null)}
               className={`p-4 border-b border-border hover:bg-muted cursor-pointer relative transition-colors ${
-                selectedItem === approval.id ? 'bg-primary-light' : 'bg-card'
+                selectedItem === approval.id ? 'bg-[#E3E3E3]' : 'bg-card'
               }`}
             >
               <div className="flex items-start gap-3">

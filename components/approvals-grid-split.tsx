@@ -71,15 +71,21 @@ export function ApprovalsGridWithSplit({
   }, [drawerViewModeChange, onCloseDrawer])
   
   // When an item is selected in full-width mode, open the drawer
-  // But only if we just switched to full-width or if item was just selected
+  // But only if we just switched to full-width from split AND an item was just selected
+  // Don't auto-open when switching from split to full-width if item was already selected
   const prevViewModeRef = useRef(viewMode)
   const prevSelectedItemRef = useRef(selectedItem)
   
   useEffect(() => {
     const viewModeChanged = prevViewModeRef.current !== viewMode
     const itemSelected = prevSelectedItemRef.current !== selectedItem && selectedItem !== null
+    const switchedFromSplitToFullWidth = prevViewModeRef.current === "split" && viewMode === "full-width"
     
-    if (viewMode === "full-width" && selectedItem && (viewModeChanged || itemSelected)) {
+    // Only open drawer if:
+    // 1. Item was just selected (not just switching views)
+    // 2. OR we're in full-width and item was just selected
+    // Don't auto-open when just switching from split to full-width
+    if (viewMode === "full-width" && selectedItem && itemSelected && !switchedFromSplitToFullWidth) {
       onOpenDrawer(selectedItem)
     }
     
