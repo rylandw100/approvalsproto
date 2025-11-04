@@ -458,14 +458,14 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                     <p className={`${isSplitView ? "text-sm" : ""} text-gray-700`}>{approval.summary}</p>
                        {approval.trip && approval.trip.linked && (
                          <div className="mt-3">
-                           <span className="rippling-badge-info">
+                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                              ✈️ Linked to trip: {approval.trip.name}
                            </span>
                          </div>
                        )}
                        {approval.warning && (
                          <div className="mt-3">
-                           <span className="rippling-badge-warning">
+                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                              ⚠️ {approval.warning}
                            </span>
                          </div>

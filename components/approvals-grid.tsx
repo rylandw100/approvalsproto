@@ -744,7 +744,7 @@ export function ApprovalsGrid({
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Request type</div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Details</div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Attributes</div>
-              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Actions</div>
+              <div className="rippling-text-xs text-muted-foreground uppercase font-semibold flex justify-end">Actions</div>
             </div>
 
             {/* Table Rows */}
@@ -838,7 +838,7 @@ export function ApprovalsGrid({
                     </div>
 
                     {/* Actions - Always visible */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 justify-end">
                       {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
                         <Button
                           variant="ghost"

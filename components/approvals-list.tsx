@@ -550,7 +550,7 @@ export function ApprovalsList({
                   <p className="rippling-text-sm text-muted-foreground mt-1">{approval.subject}</p>
                   {'warning' in approval && approval.warning && (
                     <div className="mt-1">
-                      <span className="rippling-badge-warning">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                         {approval.warning}
                       </span>
                     </div>

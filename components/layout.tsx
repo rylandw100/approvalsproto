@@ -13,7 +13,7 @@ import { useState, useRef } from "react"
 export function Layout({ children }: { children: React.ReactNode }) {
   const [activePage, setActivePage] = useState<"approvals" | "tasks">("approvals")
   const [activeTab, setActiveTab] = useState<string>("opt1")
-  const [selectedItem, setSelectedItem] = useState<number | null>(1) // Default to first item
+  const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerItem, setDrawerItem] = useState<number | null>(null)

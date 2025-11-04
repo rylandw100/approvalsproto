@@ -51,6 +51,8 @@ export function ApprovalsGridWithSplit({
     if (mode === "split" && onCloseDrawer) {
       onCloseDrawer()
     }
+    // When switching to split mode, keep the selected item visible
+    // The selectedItem is already set, so it will show in the split view
   }
   
   // Expose view mode change handler to parent (for drawer to call)
