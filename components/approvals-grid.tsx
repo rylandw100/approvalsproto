@@ -500,45 +500,75 @@ export function ApprovalsGrid({
                     </label>
                   </div>
                 </div>
-                {page === "tasks" && (
-                  <div className="relative" ref={sortDropdownRef}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                      className="h-8 gap-2"
-                    >
-                      Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                    {isSortDropdownOpen && (
-                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
-                        <button
-                          onClick={() => {
-                            setSortBy("recency")
-                            setIsSortDropdownOpen(false)
-                          }}
-                          className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                            sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
-                          }`}
-                        >
-                          Recency
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSortBy("dueDate")
-                            setIsSortDropdownOpen(false)
-                          }}
-                          className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
-                            sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
-                          }`}
-                        >
-                          Due Date
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div className="flex items-center gap-3">
+                  {page === "tasks" && (
+                    <div className="relative" ref={sortDropdownRef}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                        className="h-8 gap-2"
+                      >
+                        Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                      {isSortDropdownOpen && (
+                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                          <button
+                            onClick={() => {
+                              setSortBy("recency")
+                              setIsSortDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                              sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Recency
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSortBy("dueDate")
+                              setIsSortDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                              sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Due Date
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {viewMode !== undefined && onViewModeChange && (
+                    <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
+                      <Button
+                        variant={viewMode === "full-width" ? "default" : "ghost"}
+                        size="sm"
+                        className={`h-7 px-2 text-xs ${
+                          viewMode === "full-width"
+                            ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
+                            : ""
+                        }`}
+                        onClick={() => onViewModeChange("full-width")}
+                      >
+                        Full-width
+                      </Button>
+                      <Button
+                        variant={viewMode === "split" ? "default" : "ghost"}
+                        size="sm"
+                        className={`h-7 px-2 text-xs ${
+                          viewMode === "split"
+                            ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
+                            : ""
+                        }`}
+                        onClick={() => onViewModeChange("split")}
+                      >
+                        Split screen
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
               
               {/* Bottom row: Search and Filter */}
