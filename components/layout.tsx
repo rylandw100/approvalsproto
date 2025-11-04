@@ -4,10 +4,11 @@ import { TopBar } from "./top-bar"
 import { Sidebar } from "./sidebar"
 import { ApprovalsList } from "./approvals-list"
 import { ApprovalsGrid } from "./approvals-grid"
+import { ApprovalsGridWithSplit } from "./approvals-grid-split"
 import { ApprovalDetail } from "./approval-detail"
 import { AppNavBar } from "./app-navbar"
 import { Drawer } from "./drawer"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [activePage, setActivePage] = useState<"approvals" | "tasks">("approvals")
@@ -16,6 +17,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerItem, setDrawerItem] = useState<number | null>(null)
+  const opt3ViewModeChangeRef = useRef<((mode: "full-width" | "split") => void) | null>(null)
 
   const handleToggleItem = (id: number) => {
     setSelectedItems(prev => {
@@ -85,7 +87,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   />
                 </div>
               </>
-            ) : (
+            ) : activeTab === "opt2" ? (
               <div className="flex-1 bg-background">
                 <ApprovalsGrid
                   selectedItems={selectedItems}
@@ -93,6 +95,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onSelectAll={handleSelectAll}
                   onClearSelection={handleClearSelection}
                   onOpenDrawer={handleOpenDrawer}
+                  page={activePage}
+                />
+              </div>
+            ) : (
+              <div className="flex-1">
+                <ApprovalsGridWithSplit
+                  selectedItem={selectedItem}
+                  onSelectItem={(id) => {
+                    setSelectedItem(id)
+                  }}
+                  selectedItems={selectedItems}
+                  onToggleItem={handleToggleItem}
+                  onSelectAll={handleSelectAll}
+                  onClearSelection={handleClearSelection}
+                  onFilterChange={handleFilterChange}
+                  onOpenDrawer={handleOpenDrawer}
+                  onCloseDrawer={handleCloseDrawer}
+                  drawerViewModeChange={(handler) => {
+                    opt3ViewModeChangeRef.current = handler
+                  }}
                   page={activePage}
                 />
               </div>
@@ -108,6 +130,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         selectedItems={selectedItems}
         onClearSelection={handleClearSelection}
         page={activePage}
+        onViewModeChange={(mode) => {
+          // When collapsing from drawer, switch to split screen in opt3
+          if (activeTab === "opt3" && mode === "split") {
+            handleCloseDrawer()
+            if (opt3ViewModeChangeRef.current) {
+              opt3ViewModeChangeRef.current("split")
+            }
+          }
+        }}
       />
     </div>
   )
