@@ -107,14 +107,33 @@ export function ApprovalsGridWithSplit({
   const [filteredIds, setFilteredIds] = useState<number[]>([])
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
+  const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false)
+  const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const filterDropdownRef = useRef<HTMLDivElement>(null)
+  const sortDropdownRef = useRef<HTMLDivElement>(null)
 
   // Track filtered IDs for bulk selection calculation
   const handleFilterChange = (ids: number[]) => {
     setFilteredIds(ids)
     onFilterChange(ids)
   }
+
+  // Handle click outside for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target as Node)) {
+        setIsFilterDropdownOpen(false)
+      }
+      if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+        setIsSortDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   const isAllSelected = filteredIds.length > 0 && filteredIds.every(id => selectedItems.has(id))
   const isSomeSelected = filteredIds.some(id => selectedItems.has(id))
@@ -221,16 +240,42 @@ export function ApprovalsGridWithSplit({
                     </div>
                     <div className="flex items-center gap-3">
                       {page === "tasks" && (
-                        <div className="relative">
+                        <div className="relative" ref={sortDropdownRef}>
                           <Button
                             variant="outline"
                             size="sm"
+                            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                             className="h-7 text-xs gap-1.5 px-2"
-                            disabled
                           >
-                            Sort: Recency
+                            Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
                             <ChevronDown className="h-3 w-3" />
                           </Button>
+                          {isSortDropdownOpen && (
+                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                              <button
+                                onClick={() => {
+                                  setSortBy("recency")
+                                  setIsSortDropdownOpen(false)
+                                }}
+                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                  sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                                }`}
+                              >
+                                Recency
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setSortBy("dueDate")
+                                  setIsSortDropdownOpen(false)
+                                }}
+                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                  sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                                }`}
+                              >
+                                Due Date
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                       <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">

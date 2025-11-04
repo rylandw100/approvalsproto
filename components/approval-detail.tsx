@@ -220,6 +220,21 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
       comments: []
     },
     // Task data (for Inbox/Tasks page)
+    100: {
+      requestor: "Payroll Team",
+      subject: "Run payroll",
+      category: "Payroll",
+      summary: "You need to run payroll for the current pay period. This is a critical task that must be completed before the end of the business day.",
+      isCritical: true,
+      pinned: true,
+      note: "Payroll processing is time-sensitive and must be completed by 5:00 PM today to ensure employees are paid on time.",
+      employee: {
+        name: "You",
+        role: "Payroll Administrator",
+        status: "Full Time",
+        location: "Current Location"
+      }
+    },
     101: {
       requestor: "HR Team",
       subject: "Take required cybersecurity course for Q4 certification",

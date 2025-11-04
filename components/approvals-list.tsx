@@ -181,6 +181,16 @@ export function ApprovalsList({
 
   const taskData = [
     {
+      id: 100,
+      requestor: "Payroll Team",
+      subject: "Run payroll",
+      category: "Payroll",
+      time: "just now",
+      status: "pending",
+      isCritical: true,
+      pinned: true
+    },
+    {
       id: 101,
       requestor: "HR Team",
       subject: "Take required cybersecurity course for Q4 certification",

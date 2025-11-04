@@ -247,6 +247,17 @@ export function ApprovalsGrid({
 
   const taskData = [
     {
+      id: 100,
+      requestor: "Payroll Team",
+      subject: "Run payroll",
+      category: "Payroll",
+      time: "just now",
+      requestedOn: "Oct 27, 2024",
+      status: "pending",
+      isCritical: true,
+      pinned: true
+    },
+    {
       id: 101,
       requestor: "HR Team",
       subject: "Take required cybersecurity course for Q4 certification",
@@ -638,7 +649,7 @@ export function ApprovalsGrid({
                       <ChevronDown className="h-3 w-3" />
                     </Button>
                   {isRequestTypeDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-20 min-w-[200px] rippling-card-elevated">
+                    <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-20 min-w-[200px] rippling-card-elevated">
                       {page === "tasks" ? (
                         <>
                           <button
