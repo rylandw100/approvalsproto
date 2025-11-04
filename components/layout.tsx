@@ -120,6 +120,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   drawerViewModeChange={(handler) => {
                     opt3ViewModeChangeRef.current = handler
                   }}
+                  drawerOpen={drawerOpen}
                   page={activePage}
                 />
               </div>

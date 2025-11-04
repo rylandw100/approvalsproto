@@ -20,6 +20,7 @@ interface ApprovalsGridWithSplitProps {
   onOpenDrawer: (id: number) => void
   onCloseDrawer?: () => void
   drawerViewModeChange?: (handler: (mode: "full-width" | "split") => void) => void
+  drawerOpen?: boolean
   page?: "approvals" | "tasks"
 }
 
@@ -34,6 +35,7 @@ export function ApprovalsGridWithSplit({
   onOpenDrawer,
   onCloseDrawer,
   drawerViewModeChange,
+  drawerOpen = false,
   page = "approvals"
 }: ApprovalsGridWithSplitProps) {
   const [viewMode, setViewMode] = useState<"full-width" | "split">("full-width")
@@ -46,13 +48,19 @@ export function ApprovalsGridWithSplit({
   }
   
   const handleViewModeChange = (mode: "full-width" | "split") => {
+    const prevMode = viewMode
     setViewMode(mode)
+    
+    // When switching from split to full-width, clear selectedItem so inline detail doesn't show
+    if (prevMode === "split" && mode === "full-width") {
+      onSelectItem(null)
+    }
+    
     // When collapsing from full-width to split, close drawer if open
     // But only close the drawer if there's actually a drawer open (not just inline detail)
-    if (mode === "split" && onCloseDrawer) {
-      // Only call onCloseDrawer if we're closing an actual drawer
-      // When collapsing from inline detail to split, we don't need to close drawer
-      // The drawer is only open when we're in full-width mode with a drawer, not inline detail
+    // We can tell if we're in inline detail mode because selectedItem is set but drawerOpen is false
+    if (mode === "split" && onCloseDrawer && prevMode === "full-width" && drawerOpen) {
+      // Only call onCloseDrawer if drawer is actually open (not inline detail)
       onCloseDrawer()
     }
     // When switching to split mode, keep the selected item visible
