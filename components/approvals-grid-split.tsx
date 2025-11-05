@@ -270,7 +270,7 @@ export function ApprovalsGridWithSplit({
       ) : (
         <div className="h-full flex flex-col bg-white overflow-hidden">
           <div className="overflow-hidden p-6 flex flex-col" style={{ height: '750px' }}>
-            <div className="bg-white rounded-[16px] border border-gray-200 overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
+            <div className="bg-white rounded-[16px] overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
               {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
               <div className="px-4 pt-3 pb-4 flex-shrink-0">
                   {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
@@ -296,8 +296,8 @@ export function ApprovalsGridWithSplit({
                         {filteredIds.length} items
                       </label>
                     </div>
-                    <div className="flex items-center gap-2 justify-end">
-                      <div className="relative max-w-[280px]">
+                    <div className="flex items-center gap-2 justify-end flex-nowrap">
+                      <div className="relative max-w-[280px] flex-shrink-0">
                         <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input 
                           placeholder="Search..." 
@@ -316,7 +316,7 @@ export function ApprovalsGridWithSplit({
                           </Button>
                         )}
                       </div>
-                      <div className="relative" ref={filterDropdownRef}>
+                      <div className="relative flex-shrink-0" ref={filterDropdownRef}>
                         <Button
                           variant="outline"
                           size="sm"
@@ -427,7 +427,7 @@ export function ApprovalsGridWithSplit({
                         </div>
                       )}
                       {page === "tasks" && (
-                        <div className="relative" ref={sortDropdownRef}>
+                        <div className="relative flex-shrink-0" ref={sortDropdownRef}>
                           <Button
                             variant="outline"
                             size="sm"
@@ -465,7 +465,7 @@ export function ApprovalsGridWithSplit({
                           )}
                         </div>
                       )}
-                      <div className="relative" ref={viewModeDropdownRef}>
+                      <div className="relative flex-shrink-0" ref={viewModeDropdownRef}>
                         <Button
                           variant="outline"
                           size="sm"
@@ -508,7 +508,7 @@ export function ApprovalsGridWithSplit({
               </div>
 
                 {/* List and Detail View */}
-                <div className="flex flex-1 min-h-0 overflow-hidden">
+                <div className="flex flex-1 min-h-0 overflow-hidden border border-gray-200 rounded-[8px]">
                   <div className="w-[340px] border-r border-gray-200 flex flex-col min-h-0">
                             <ApprovalsList 
                               selectedItem={selectedItem} 
