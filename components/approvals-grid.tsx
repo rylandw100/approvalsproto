@@ -287,8 +287,7 @@ export function ApprovalsGrid({
       time: "just now",
       requestedOn: "Oct 27, 2024",
       status: "pending",
-      isCritical: true,
-      pinned: true
+      isCritical: true
     },
     {
       id: 101,
