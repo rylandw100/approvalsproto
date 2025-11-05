@@ -21,6 +21,8 @@ interface ApprovalsGridProps {
   onCategoryChange?: (category: string) => void
   selectedItem?: number | null
   onSelectItem?: (id: number | null) => void
+  sortBy?: "recency" | "dueDate"
+  onSortChange?: (sortBy: "recency" | "dueDate") => void
 }
 
 export function ApprovalsGrid({
@@ -37,7 +39,9 @@ export function ApprovalsGrid({
   onSearchChange,
   onCategoryChange,
   selectedItem,
-  onSelectItem
+  onSelectItem,
+  sortBy: externalSortBy,
+  onSortChange
 }: ApprovalsGridProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
@@ -50,7 +54,21 @@ export function ApprovalsGrid({
   const [tooltipData, setTooltipData] = useState<{id: number | null, type: string | null, x: number, y: number}>({id: null, type: null, x: 0, y: 0})
   const [searchQuery, setSearchQuery] = useState<string>(externalSearchQuery || "")
   const [selectedRequestType, setSelectedRequestType] = useState<string>(externalSelectedCategory || "All")
-  const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
+  const [sortBy, setSortBy] = useState<"recency" | "dueDate">(externalSortBy || "recency")
+  
+  // Sync internal sortBy with external prop if provided
+  useEffect(() => {
+    if (externalSortBy !== undefined) {
+      setSortBy(externalSortBy)
+    }
+  }, [externalSortBy])
+  
+  const handleSortChange = (newSortBy: "recency" | "dueDate") => {
+    setSortBy(newSortBy)
+    if (onSortChange) {
+      onSortChange(newSortBy)
+    }
+  }
   const [isRequestTypeDropdownOpen, setIsRequestTypeDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -335,7 +353,7 @@ export function ApprovalsGrid({
   const approvals = page === "tasks" ? [...approvalData, ...taskData] : approvalData
 
   const requestTypes = page === "tasks"
-    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building"]
+    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building", "Payroll"]
     : ["All", "HR Management", "Reimbursements", "Time and Attendance"]
   
   // For tasks page, handle hierarchical category filtering
@@ -482,6 +500,17 @@ export function ApprovalsGrid({
           {approval.officeLocation && <div className="text-xs"><span className="font-medium">Location:</span> {approval.officeLocation}</div>}
         </div>
       )
+    } else if (approval.category === "Payroll") {
+      return (
+        <div className="space-y-1">
+          <div className="font-semibold">Pay Run Details</div>
+          {approval.payRunType && <div className="text-xs"><span className="font-medium">Pay run type:</span> {approval.payRunType}</div>}
+          {approval.payPeriodStartDate && <div className="text-xs"><span className="font-medium">Start date:</span> {approval.payPeriodStartDate}</div>}
+          {approval.payPeriodEndDate && <div className="text-xs"><span className="font-medium">End date:</span> {approval.payPeriodEndDate}</div>}
+          {approval.takeActionDeadline && <div className="text-xs"><span className="font-medium">Deadline:</span> {approval.takeActionDeadline}</div>}
+          {approval.payScheduleFrequency && <div className="text-xs"><span className="font-medium">Frequency:</span> {approval.payScheduleFrequency}</div>}
+        </div>
+      )
     }
     return null
   }
@@ -548,7 +577,7 @@ export function ApprovalsGrid({
                         <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
                           <button
                             onClick={() => {
-                              setSortBy("recency")
+                                  handleSortChange("recency")
                               setIsSortDropdownOpen(false)
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
@@ -559,7 +588,7 @@ export function ApprovalsGrid({
                           </button>
                           <button
                             onClick={() => {
-                              setSortBy("dueDate")
+                                  handleSortChange("dueDate")
                               setIsSortDropdownOpen(false)
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
@@ -783,12 +812,17 @@ export function ApprovalsGrid({
                 return (
                   <div
                     key={approval.id}
+                    onClick={() => {
+                      if (onSelectItem) {
+                        onSelectItem(approval.id)
+                      }
+                    }}
                     onMouseEnter={() => setHoveredItem(approval.id)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-muted transition-colors"
+                    className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-muted transition-colors cursor-pointer"
                   >
                     {/* Bulk Selection */}
-                    <div className="flex items-center">
+                    <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
                       <input
                         type="checkbox"
                         checked={selectedItems.has(approval.id)}

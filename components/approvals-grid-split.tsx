@@ -159,7 +159,7 @@ export function ApprovalsGridWithSplit({
   }, [])
 
   const categories = page === "tasks" 
-    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building"]
+    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building", "Payroll"]
     : ["All", "HR Management", "Reimbursements", "Time and Attendance"]
   
   const getCategoryMatch = (category: string, selectedCategory: string) => {
@@ -201,6 +201,8 @@ export function ApprovalsGridWithSplit({
               onCategoryChange={setSelectedCategory}
               selectedItem={selectedItem}
               onSelectItem={onSelectItem}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
             />
           </div>
           {selectedItem && (

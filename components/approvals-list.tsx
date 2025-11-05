@@ -266,7 +266,7 @@ export function ApprovalsList({
   const approvals = page === "tasks" ? [...approvalData, ...taskData] : approvalData
 
   const categories = page === "tasks" 
-    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building"]
+    ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building", "Payroll"]
     : ["All", "HR Management", "Reimbursements", "Time and Attendance"]
   
   // For tasks page, handle hierarchical category filtering
