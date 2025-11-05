@@ -932,28 +932,26 @@ export function ApprovalsGrid({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7"
-                            style={{ backgroundColor: '#106964', color: 'white' }}
+                            className="h-7 w-7 hover:bg-green-100"
                             onClick={(e) => {
                               e.stopPropagation()
                               // Handle approve action
                             }}
                             title="Approve"
                           >
-                            <Check className="h-3.5 w-3.5" />
+                            <Check className="h-3.5 w-3.5 text-green-600" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7"
-                            style={{ backgroundColor: '#BB3D2A', color: 'white' }}
+                            className="h-7 w-7 hover:bg-red-100"
                             onClick={(e) => {
                               e.stopPropagation()
                               // Handle reject action
                             }}
                             title="Reject"
                           >
-                            <X className="h-3.5 w-3.5" />
+                            <X className="h-3.5 w-3.5 text-red-600" />
                           </Button>
                         </>
                       )}
@@ -1046,10 +1044,10 @@ export function ApprovalsGrid({
                   // If only approvals or payroll are selected, show Approve, Reject, Mark as done
                   if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                     actions.push(
-                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#106964' }}>
+                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
                         Approve
                       </Button>,
-                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#BB3D2A' }}>
+                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
                         Reject
                       </Button>,
                       <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">

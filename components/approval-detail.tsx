@@ -939,7 +939,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <>
               <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
               <div className="flex gap-3">
-              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline" style={{ borderColor: '#BB3D2A', color: '#BB3D2A' }}>Reject</Button>
+              <Button disabled={hasSelectedItems} className="rippling-btn-primary" style={{ backgroundColor: '#BB3D2A' }}>Reject</Button>
               <Button disabled={hasSelectedItems} className="rippling-btn-primary" style={{ backgroundColor: '#106964' }}>Approve</Button>
               </div>
             </>
@@ -986,10 +986,10 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If only approvals or payroll are selected, show Approve, Reject, Mark as done
                 if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                   actions.push(
-                    <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#106964' }}>
+                    <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
                       Approve
                     </Button>,
-                    <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#BB3D2A' }}>
+                    <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
                       Reject
                     </Button>,
                     <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">

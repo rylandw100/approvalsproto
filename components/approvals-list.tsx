@@ -635,28 +635,24 @@ export function ApprovalsList({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="rippling-btn-ghost h-6 w-6"
-                        style={{ backgroundColor: '#106964', color: 'white' }}
+                        className="rippling-btn-ghost h-6 w-6 hover:bg-success/10"
                         onClick={(e) => {
                           e.stopPropagation()
                           // Handle approve action
                         }}
-                        title="Approve"
                       >
-                        <Check className="h-3 w-3" />
+                        <Check className="h-3 w-3 text-success" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="rippling-btn-ghost h-6 w-6"
-                        style={{ backgroundColor: '#BB3D2A', color: 'white' }}
+                        className="rippling-btn-ghost h-6 w-6 hover:bg-destructive/10"
                         onClick={(e) => {
                           e.stopPropagation()
                           // Handle reject action
                         }}
-                        title="Reject"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="h-3 w-3 text-destructive" />
                       </Button>
                     </>
                   )}
