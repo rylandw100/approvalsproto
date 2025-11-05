@@ -417,9 +417,64 @@ export function ApprovalsList({
   }
 
   return (
-    <div className="h-full flex flex-col bg-card">
+    <div className="h-full flex bg-card">
+      {/* Expansion Panel */}
       {!hideHeader && (
-      <div className="p-6 border-b border-border">
+        <div className={`flex-shrink-0 border-r border-border transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
+          <div className="p-4 h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-gray-900">Categories</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsPanelExpanded(false)}
+                className="h-6 w-6"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="space-y-1">
+              {getPanelCategories().map((cat) => (
+                <button
+                  key={cat.name}
+                  onClick={() => {
+                    handleCategoryChange(cat.name)
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                    cat.isSubCategory ? 'pl-6' : ''
+                  } ${
+                    selectedCategory === cat.name 
+                      ? 'bg-[#CCCCCC] text-black font-medium' 
+                      : 'hover:bg-muted text-gray-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span>{cat.name}</span>
+                    <span className="text-xs text-gray-500">{getCategoryCount(cat.name)}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Panel toggle button */}
+      {!hideHeader && !isPanelExpanded && (
+        <div className="flex-shrink-0 border-r border-border">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsPanelExpanded(true)}
+            className="h-8 w-8 m-1"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+      {/* Right side: Header and List */}
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        {!hideHeader && (
+        <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="relative" ref={dropdownRef}>
@@ -618,61 +673,6 @@ export function ApprovalsList({
             </Button>
           )}
         </div>
-      </div>
-      )}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Expansion Panel */}
-        {!hideHeader && (
-          <div className={`flex-shrink-0 border-r border-border transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
-            <div className="p-4 h-full">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-gray-900">Categories</h3>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsPanelExpanded(false)}
-                  className="h-6 w-6"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="space-y-1">
-                {getPanelCategories().map((cat) => (
-                  <button
-                    key={cat.name}
-                    onClick={() => {
-                      handleCategoryChange(cat.name)
-                    }}
-                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                      cat.isSubCategory ? 'pl-6' : ''
-                    } ${
-                      selectedCategory === cat.name 
-                        ? 'bg-[#CCCCCC] text-black font-medium' 
-                        : 'hover:bg-muted text-gray-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span>{cat.name}</span>
-                      <span className="text-xs text-gray-500">{getCategoryCount(cat.name)}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Panel toggle button */}
-        {!hideHeader && !isPanelExpanded && (
-          <div className="flex-shrink-0 border-r border-border">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsPanelExpanded(true)}
-              className="h-8 w-8 m-1"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
         )}
         <div className="flex-1 overflow-y-auto min-h-0">
         {sortedApprovals.length === 0 ? (
