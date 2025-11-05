@@ -16,7 +16,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
   const [removedItems, setRemovedItems] = useState<Set<number>>(new Set())
-  const [pinnedItems, setPinnedItems] = useState<Set<number>>(new Set())
+  const [pinnedItems, setPinnedItems] = useState<Set<number>>(new Set([100])) // Payroll task (id: 100) pinned by default
 
   // Clear selectedItem when switching from opt1 to opt3
   const prevActiveTabRef = useRef(activeTab)

@@ -202,8 +202,7 @@ export function ApprovalsList({
       category: "Payroll",
       time: "1 min ago",
       status: "pending",
-      isCritical: true,
-      pinned: true
+      isCritical: true
     },
     {
       id: 101,
@@ -714,7 +713,7 @@ export function ApprovalsList({
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
-                    {(pinnedItems.has(approval.id) || (approval as any).pinned) && (
+                    {pinnedItems.has(approval.id) && (
                       <Pin className="h-3.5 w-3.5 text-gray-500 fill-current" />
                     )}
                   </div>

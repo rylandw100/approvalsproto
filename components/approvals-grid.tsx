@@ -400,8 +400,8 @@ export function ApprovalsGrid({
   // Sort filtered approvals
   const sortedApprovals = [...filteredApprovals].sort((a, b) => {
     // Pinned items always go to the top (check pinnedItems state)
-    const aIsPinned = pinnedItems.has(a.id) || (a as any).isCritical || (a as any).pinned
-    const bIsPinned = pinnedItems.has(b.id) || (b as any).isCritical || (b as any).pinned
+    const aIsPinned = pinnedItems.has(a.id) || (a as any).isCritical
+    const bIsPinned = pinnedItems.has(b.id) || (b as any).isCritical
     if (aIsPinned && !bIsPinned) return -1
     if (!aIsPinned && bIsPinned) return 1
     if (aIsPinned && bIsPinned) return 0 // Keep pinned items in their original order
