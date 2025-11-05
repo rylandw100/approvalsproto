@@ -818,7 +818,7 @@ export function ApprovalsGrid({
                 <div className="flex flex-col items-center justify-center py-16 px-6">
                   <div className="text-center">
                     <div className="text-4xl mb-4">🎉</div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">You're all caught up!</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">You&apos;re all caught up!</h3>
                     <p className="text-sm text-gray-600">All tasks have been processed.</p>
                   </div>
                 </div>
