@@ -570,12 +570,15 @@ export function ApprovalsGrid({
     <div className="h-full flex flex-col bg-background">
       <div className="flex-1 overflow-auto relative">
         <div className="p-6">
-          <div className="rippling-card-elevated rounded-[16px] overflow-hidden min-w-full">
+          <div className="rounded-[16px] overflow-hidden min-w-full">
             {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
             <div className="px-4 pt-3 pb-2 border-b border-gray-200 flex-shrink-0">
               {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
+                  {viewMode === undefined && (
+                    <h2 className="text-base font-semibold text-gray-900 mr-3">Needs my review</h2>
+                  )}
                   <input
                     type="checkbox"
                     id="select-all-grid"
@@ -598,10 +601,10 @@ export function ApprovalsGrid({
                 </div>
                 <div className="flex items-center gap-2 justify-end">
                   <div className="relative max-w-[280px]">
-                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                    <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input 
                       placeholder="Search..." 
-                      className="w-full pl-8 pr-8 h-7 text-xs" 
+                      className="w-full pl-9 pr-9 h-8 text-sm" 
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
                     />
@@ -609,10 +612,10 @@ export function ApprovalsGrid({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-5 w-5 hover:bg-gray-100"
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
                         onClick={() => handleSearchChange("")}
                       >
-                        <X className="h-3 w-3 text-gray-400" />
+                        <X className="h-3.5 w-3.5 text-gray-400" />
                       </Button>
                     )}
                   </div>
@@ -621,14 +624,14 @@ export function ApprovalsGrid({
                       variant="outline"
                       size="sm"
                       onClick={() => setIsRequestTypeDropdownOpen(!isRequestTypeDropdownOpen)}
-                      className="h-7 text-xs gap-1.5 px-2"
+                      className="h-8 text-sm gap-2 px-3"
                     >
-                      <Filter className="h-3.5 w-3.5" />
-                      <span className="text-xs">{getDisplayCategory(selectedRequestType)}</span>
-                      <ChevronDown className="h-3 w-3" />
+                      <Filter className="h-4 w-4" />
+                      <span className="text-sm">{getDisplayCategory(selectedRequestType)}</span>
+                      <ChevronDown className="h-3.5 w-3.5" />
                     </Button>
                   {isRequestTypeDropdownOpen && (
-                    <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-20 min-w-[200px] rippling-card-elevated">
+                    <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg z-20 min-w-[200px]">
                       {page === "tasks" ? (
                         <>
                           <button
@@ -733,10 +736,10 @@ export function ApprovalsGrid({
                         variant="outline"
                         size="sm"
                         onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                        className="h-7 text-xs gap-1.5 px-2"
+                        className="h-8 text-sm gap-2 px-3"
                       >
                         Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
-                        <ChevronDown className="h-3 w-3" />
+                        <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                       {isSortDropdownOpen && (
                         <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
@@ -772,10 +775,10 @@ export function ApprovalsGrid({
                         variant="outline"
                         size="sm"
                         onClick={() => setIsViewModeDropdownOpen(!isViewModeDropdownOpen)}
-                        className="h-7 text-xs gap-1.5 px-2"
+                        className="h-8 text-sm gap-2 px-3"
                       >
                         View: {viewMode === "full-width" ? "Full-width" : "Split screen"}
-                        <ChevronDown className="h-3 w-3" />
+                        <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                       {isViewModeDropdownOpen && (
                         <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
