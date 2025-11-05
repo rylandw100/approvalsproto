@@ -127,7 +127,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex-1 flex overflow-hidden">
             {activeTab === "opt1" ? (
               <>
-                <div className="w-[360px] border-r border-border pl-6 flex flex-col overflow-hidden bg-card">
+                <div className="border-r border-border pl-6 flex flex-col overflow-hidden bg-card">
                   <ApprovalsList 
                     selectedItem={selectedItem} 
                     onSelectItem={setSelectedItem}

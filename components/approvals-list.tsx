@@ -417,7 +417,7 @@ export function ApprovalsList({
   }
 
   return (
-    <div className="h-full flex bg-card">
+    <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 ${isPanelExpanded ? 'w-[584px]' : 'w-[335px]'}`}>
       {/* Expansion Panel */}
       {!hideHeader && (
         <div className={`flex-shrink-0 border-r border-border transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
@@ -483,7 +483,7 @@ export function ApprovalsList({
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="rippling-btn-ghost h-auto p-0 hover:bg-transparent"
               >
-                <h2 className="text-2xl font-semibold text-foreground">{selectedCategory}</h2>
+                <h2 className="text-base font-semibold text-gray-900">{selectedCategory}</h2>
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
               {isDropdownOpen && (
