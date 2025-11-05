@@ -17,6 +17,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
   const [removedItems, setRemovedItems] = useState<Set<number>>(new Set())
   const [pinnedItems, setPinnedItems] = useState<Set<number>>(new Set([100])) // Payroll task (id: 100) pinned by default
+  const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
 
   // Clear selectedItem when switching from opt1 to opt3
   const prevActiveTabRef = useRef(activeTab)
@@ -164,6 +165,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     page={activePage}
                     pinnedItems={pinnedItems}
                     onTogglePin={handleTogglePin}
+                    sortBy={sortBy}
+                    onSortChange={setSortBy}
                   />
                 </div>
                 <div className="flex-1 bg-background">
