@@ -824,176 +824,178 @@ export function ApprovalsGrid({
                         </div>
                       ) : (
                         sortedApprovals.map((approval) => {
-                const hasWarning = 'warning' in approval && !!approval.warning
-                const hasComments = 'comments' in approval && approval.comments && approval.comments.length > 0
-                const hasTrip = 'trip' in approval && approval.trip && approval.trip.linked
-                const detailsContent = getDetailsTooltipContent(approval)
-                const commentsContent = getCommentsTooltipContent(approval)
-                
-                return (
-                  <div
-                    key={approval.id}
-                    onClick={() => {
-                      if (onSelectItem) {
-                        onSelectItem(approval.id)
-                      }
-                    }}
-                    onMouseEnter={() => setHoveredItem(approval.id)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                    className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-muted transition-colors cursor-pointer"
-                  >
-                    {/* Bulk Selection */}
-                    <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.has(approval.id)}
-                        onChange={() => onToggleItem(approval.id)}
-                        className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
-                        style={{
-                          accentColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5',
-                          borderColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5'
-                        }}
-                      />
-                    </div>
+                          const hasWarning = 'warning' in approval && !!approval.warning
+                          const hasComments = 'comments' in approval && approval.comments && approval.comments.length > 0
+                          const hasTrip = 'trip' in approval && approval.trip && approval.trip.linked
+                          const detailsContent = getDetailsTooltipContent(approval)
+                          const commentsContent = getCommentsTooltipContent(approval)
+                          
+                          return (
+                            <div
+                              key={approval.id}
+                              onClick={() => {
+                                if (onSelectItem) {
+                                  onSelectItem(approval.id)
+                                }
+                              }}
+                              onMouseEnter={() => setHoveredItem(approval.id)}
+                              onMouseLeave={() => setHoveredItem(null)}
+                              className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-4 hover:bg-muted transition-colors cursor-pointer"
+                            >
+                              {/* Bulk Selection */}
+                              <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+                                <input
+                                  type="checkbox"
+                                  checked={selectedItems.has(approval.id)}
+                                  onChange={() => onToggleItem(approval.id)}
+                                  className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                                  style={{
+                                    accentColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5',
+                                    borderColor: selectedItems.has(approval.id) ? '#7A005D' : '#A3A3A5'
+                                  }}
+                                />
+                              </div>
 
-                    {/* Requested on */}
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-600">{approval.requestedOn}</span>
-                    </div>
+                              {/* Requested on */}
+                              <div className="flex items-center">
+                                <span className="text-sm text-gray-600">{approval.requestedOn}</span>
+                              </div>
 
-                    {/* Requested by */}
-                    <div className="flex items-center">
-                      <span className="text-sm font-medium text-gray-900">{approval.requestor}</span>
-                    </div>
+                              {/* Requested by */}
+                              <div className="flex items-center">
+                                <span className="text-sm font-medium text-gray-900">{approval.requestor}</span>
+                              </div>
 
-                    {/* Request type */}
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-600">{getDisplayCategory(approval.category)}</span>
-                    </div>
+                              {/* Request type */}
+                              <div className="flex items-center">
+                                <span className="text-sm text-gray-600">{getDisplayCategory(approval.category)}</span>
+                              </div>
 
-                    {/* Details */}
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                        <span className="text-sm text-gray-600 line-clamp-1">{approval.subject}</span>
-                        {(approval as any).pinned && (
-                          <Pin className="h-3.5 w-3.5 text-gray-500 fill-current flex-shrink-0" />
+                              {/* Details */}
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                                  <span className="text-sm text-gray-600 line-clamp-1">{approval.subject}</span>
+                                  {(approval as any).pinned && (
+                                    <Pin className="h-3.5 w-3.5 text-gray-500 fill-current flex-shrink-0" />
+                                  )}
+                                </div>
+                                {(approval as any).isCritical && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 flex-shrink-0">
+                                    ⚠️ Critical
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Attributes - Always show all icons */}
+                              <div className="flex items-center gap-2 relative">
+                                <div
+                                  className="cursor-pointer relative"
+                                  onMouseEnter={(e) => hasWarning && handleIconMouseEnter(e, approval.id, 'warning')}
+                                  onMouseLeave={handleIconMouseLeave}
+                                >
+                                  <AlertTriangle 
+                                    className="h-4 w-4" 
+                                    style={{ color: hasWarning ? '#106A63' : '#F2F2F2' }}
+                                  />
+                                </div>
+                                <div
+                                  className="cursor-pointer relative"
+                                  onMouseEnter={(e) => detailsContent && handleIconMouseEnter(e, approval.id, 'details')}
+                                  onMouseLeave={handleIconMouseLeave}
+                                >
+                                  <Info 
+                                    className="h-4 w-4" 
+                                    style={{ color: detailsContent ? '#106A63' : '#F2F2F2' }}
+                                  />
+                                </div>
+                                <div
+                                  className="cursor-pointer relative"
+                                  onMouseEnter={(e) => hasComments && handleIconMouseEnter(e, approval.id, 'comments')}
+                                  onMouseLeave={handleIconMouseLeave}
+                                >
+                                  <MessageCircle 
+                                    className="h-4 w-4" 
+                                    style={{ color: hasComments ? '#106A63' : '#F2F2F2' }}
+                                  />
+                                </div>
+                                <div
+                                  className="cursor-pointer relative"
+                                  onMouseEnter={(e) => hasTrip && handleIconMouseEnter(e, approval.id, 'trip')}
+                                  onMouseLeave={handleIconMouseLeave}
+                                >
+                                  <Plane 
+                                    className="h-4 w-4" 
+                                    style={{ color: hasTrip ? '#106A63' : '#F2F2F2' }}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Actions - Always visible */}
+                              <div className="flex items-center gap-1 justify-end">
+                                {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-7 w-7 hover:bg-gray-100"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      if (onRemoveItem) {
+                                        onRemoveItem(approval.id)
+                                      }
+                                    }}
+                                    title="Mark as done"
+                                  >
+                                    <Archive className="h-3.5 w-3.5 text-gray-600" />
+                                  </Button>
+                                ) : (
+                                  <>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7 hover:bg-green-100"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        if (onRemoveItem) {
+                                          onRemoveItem(approval.id)
+                                        }
+                                      }}
+                                      title="Approve"
+                                    >
+                                      <Check className="h-3.5 w-3.5 text-green-600" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-7 w-7 hover:bg-red-100"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        if (onRemoveItem) {
+                                          onRemoveItem(approval.id)
+                                        }
+                                      }}
+                                      title="Reject"
+                                    >
+                                      <X className="h-3.5 w-3.5 text-red-600" />
+                                    </Button>
+                                  </>
+                                )}
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7 hover:bg-gray-100"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    onOpenDrawer(approval.id)
+                                  }}
+                                  title="View details"
+                                >
+                                  <ChevronRight className="h-4 w-4 text-gray-600" />
+                                </Button>
+                              </div>
+                            </div>
+                            )
+                          })
                         )}
-                      </div>
-                      {(approval as any).isCritical && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 flex-shrink-0">
-                          ⚠️ Critical
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Attributes - Always show all icons */}
-                    <div className="flex items-center gap-2 relative">
-                      <div
-                        className="cursor-pointer relative"
-                        onMouseEnter={(e) => hasWarning && handleIconMouseEnter(e, approval.id, 'warning')}
-                        onMouseLeave={handleIconMouseLeave}
-                      >
-                        <AlertTriangle 
-                          className="h-4 w-4" 
-                          style={{ color: hasWarning ? '#106A63' : '#F2F2F2' }}
-                        />
-                      </div>
-                      <div
-                        className="cursor-pointer relative"
-                        onMouseEnter={(e) => detailsContent && handleIconMouseEnter(e, approval.id, 'details')}
-                        onMouseLeave={handleIconMouseLeave}
-                      >
-                        <Info 
-                          className="h-4 w-4" 
-                          style={{ color: detailsContent ? '#106A63' : '#F2F2F2' }}
-                        />
-                      </div>
-                      <div
-                        className="cursor-pointer relative"
-                        onMouseEnter={(e) => hasComments && handleIconMouseEnter(e, approval.id, 'comments')}
-                        onMouseLeave={handleIconMouseLeave}
-                      >
-                        <MessageCircle 
-                          className="h-4 w-4" 
-                          style={{ color: hasComments ? '#106A63' : '#F2F2F2' }}
-                        />
-                      </div>
-                      <div
-                        className="cursor-pointer relative"
-                        onMouseEnter={(e) => hasTrip && handleIconMouseEnter(e, approval.id, 'trip')}
-                        onMouseLeave={handleIconMouseLeave}
-                      >
-                        <Plane 
-                          className="h-4 w-4" 
-                          style={{ color: hasTrip ? '#106A63' : '#F2F2F2' }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Actions - Always visible */}
-                    <div className="flex items-center gap-1 justify-end">
-                      {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-7 w-7 hover:bg-gray-100"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            // Handle mark as done action
-                          }}
-                          title="Mark as done"
-                        >
-                          <Archive className="h-3.5 w-3.5 text-gray-600" />
-                        </Button>
-                      ) : (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 hover:bg-green-100"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              if (onRemoveItem) {
-                                onRemoveItem(approval.id)
-                              }
-                            }}
-                            title="Approve"
-                          >
-                            <Check className="h-3.5 w-3.5 text-green-600" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 hover:bg-red-100"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              if (onRemoveItem) {
-                                onRemoveItem(approval.id)
-                              }
-                            }}
-                            title="Reject"
-                          >
-                            <X className="h-3.5 w-3.5 text-red-600" />
-                          </Button>
-                        </>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 hover:bg-gray-100"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          onOpenDrawer(approval.id)
-                        }}
-                        title="View details"
-                      >
-                        <ChevronRight className="h-4 w-4 text-gray-600" />
-                      </Button>
-                    </div>
-                  </div>
-                )
-                        })
-                      )}
                     </div>
                   </div>
                 </div>
