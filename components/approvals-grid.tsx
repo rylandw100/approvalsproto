@@ -572,7 +572,7 @@ export function ApprovalsGrid({
         <div className="p-6">
           <div className="rounded-[16px] overflow-hidden min-w-full">
             {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
-            <div className="px-4 pt-3 pb-2 border-b border-gray-200 flex-shrink-0">
+            <div className={`px-4 pt-3 border-b border-gray-200 flex-shrink-0 ${viewMode !== undefined ? 'pb-4' : 'pb-2'}`}>
               {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -595,7 +595,7 @@ export function ApprovalsGrid({
                       borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
                     }}
                   />
-                  <label htmlFor="select-all-grid" className="text-xs text-gray-600">
+                  <label htmlFor="select-all-grid" className={`${viewMode !== undefined ? 'text-sm' : 'text-xs'} text-gray-600`}>
                     {sortedApprovals.length} items
                   </label>
                 </div>
@@ -812,7 +812,7 @@ export function ApprovalsGrid({
               </div>
             </div>
             {/* Table Header */}
-            <div className="grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-muted border-b border-border">
+            <div className={`grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-muted border-b border-border ${viewMode !== undefined ? 'border-t border-l border-r border-gray-200 rounded-t-[8px]' : ''}`}>
               <div></div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested on</div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested by</div>
@@ -823,7 +823,7 @@ export function ApprovalsGrid({
             </div>
 
             {/* Table Rows */}
-            <div className="divide-y divide-border">
+            <div className={`divide-y divide-border ${viewMode !== undefined ? 'border-l border-r border-b border-gray-200 rounded-b-[8px]' : ''}`}>
               {sortedApprovals.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 px-6">
                   <div className="text-center">

@@ -272,7 +272,7 @@ export function ApprovalsGridWithSplit({
           <div className="overflow-hidden p-6 flex flex-col" style={{ height: '750px' }}>
             <div className="bg-white rounded-[16px] border border-gray-200 overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
               {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
-              <div className="px-4 pt-3 pb-2 border-b border-gray-200 flex-shrink-0">
+              <div className="px-4 pt-3 pb-4 border-b border-gray-200 flex-shrink-0">
                   {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -292,7 +292,7 @@ export function ApprovalsGridWithSplit({
                           borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
                         }}
                       />
-                      <label htmlFor="select-all-split" className="text-xs text-gray-600">
+                      <label htmlFor="select-all-split" className="text-sm text-gray-600">
                         {filteredIds.length} items
                       </label>
                     </div>
