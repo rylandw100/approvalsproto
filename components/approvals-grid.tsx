@@ -572,7 +572,7 @@ export function ApprovalsGrid({
         <div className="p-6">
           <div className="rounded-[16px] overflow-hidden min-w-full">
             {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
-            <div className={`px-4 pt-3 border-b border-gray-200 flex-shrink-0 ${viewMode !== undefined ? 'pb-4' : 'pb-2'}`}>
+            <div className={`px-4 pt-3 flex-shrink-0 ${viewMode !== undefined ? 'pb-4' : 'pb-2'}`}>
               {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -742,7 +742,7 @@ export function ApprovalsGrid({
                         <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                       {isSortDropdownOpen && (
-                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
                           <button
                             onClick={() => {
                               handleSortChange("recency")
@@ -781,7 +781,7 @@ export function ApprovalsGrid({
                         <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                       {isViewModeDropdownOpen && (
-                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
                           <button
                             onClick={() => {
                               onViewModeChange("full-width")

@@ -272,7 +272,7 @@ export function ApprovalsGridWithSplit({
           <div className="overflow-hidden p-6 flex flex-col" style={{ height: '750px' }}>
             <div className="bg-white rounded-[16px] border border-gray-200 overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
               {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
-              <div className="px-4 pt-3 pb-4 border-b border-gray-200 flex-shrink-0">
+              <div className="px-4 pt-3 pb-4 flex-shrink-0">
                   {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -438,7 +438,7 @@ export function ApprovalsGridWithSplit({
                             <ChevronDown className="h-3.5 w-3.5" />
                           </Button>
                           {isSortDropdownOpen && (
-                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
                               <button
                                 onClick={() => {
                                   setSortBy("recency")
@@ -476,7 +476,7 @@ export function ApprovalsGridWithSplit({
                           <ChevronDown className="h-3.5 w-3.5" />
                         </Button>
                         {isViewModeDropdownOpen && (
-                          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
                             <button
                               onClick={() => {
                                 handleViewModeChange("full-width")
