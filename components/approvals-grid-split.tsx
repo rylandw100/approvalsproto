@@ -117,8 +117,10 @@ export function ApprovalsGridWithSplit({
   const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
+  const [isViewModeDropdownOpen, setIsViewModeDropdownOpen] = useState(false)
   const filterDropdownRef = useRef<HTMLDivElement>(null)
   const sortDropdownRef = useRef<HTMLDivElement>(null)
+  const viewModeDropdownRef = useRef<HTMLDivElement>(null)
 
   // Track filtered IDs for bulk selection calculation
   const handleFilterChange = (ids: number[]) => {
@@ -153,6 +155,9 @@ export function ApprovalsGridWithSplit({
       }
       if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
         setIsSortDropdownOpen(false)
+      }
+      if (viewModeDropdownRef.current && !viewModeDropdownRef.current.contains(event.target as Node)) {
+        setIsViewModeDropdownOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -460,23 +465,42 @@ export function ApprovalsGridWithSplit({
                           )}
                         </div>
                       )}
-                      <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
+                      <div className="relative" ref={viewModeDropdownRef}>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          className="h-7 px-2 text-xs"
-                          onClick={() => handleViewModeChange("full-width")}
+                          onClick={() => setIsViewModeDropdownOpen(!isViewModeDropdownOpen)}
+                          className="h-7 text-xs gap-1.5 px-2"
                         >
-                          Full-width
+                          View: {viewMode === "full-width" ? "Full-width" : "Split screen"}
+                          <ChevronDown className="h-3 w-3" />
                         </Button>
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="h-7 px-2 text-xs bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                          onClick={() => handleViewModeChange("split")}
-                        >
-                          Split screen
-                        </Button>
+                        {isViewModeDropdownOpen && (
+                          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                            <button
+                              onClick={() => {
+                                handleViewModeChange("full-width")
+                                setIsViewModeDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                viewMode === "full-width" ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              Full-width
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleViewModeChange("split")
+                                setIsViewModeDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                viewMode === "split" ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              Split screen
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -77,9 +77,11 @@ export function ApprovalsGrid({
   }
   const [isRequestTypeDropdownOpen, setIsRequestTypeDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
+  const [isViewModeDropdownOpen, setIsViewModeDropdownOpen] = useState(false)
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const requestTypeDropdownRef = useRef<HTMLDivElement>(null)
   const sortDropdownRef = useRef<HTMLDivElement>(null)
+  const viewModeDropdownRef = useRef<HTMLDivElement>(null)
 
   // Update internal state when external props change
   useEffect(() => {
@@ -117,6 +119,9 @@ export function ApprovalsGrid({
       }
       if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
         setIsSortDropdownOpen(false)
+      }
+      if (viewModeDropdownRef.current && !viewModeDropdownRef.current.contains(event.target as Node)) {
+        setIsViewModeDropdownOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -566,85 +571,9 @@ export function ApprovalsGrid({
       <div className="flex-1 overflow-auto relative">
         <div className="p-6">
           <div className="rippling-card-elevated rounded-[16px] overflow-hidden min-w-full">
-            {/* Header with title, bulk selection, and search - Inside the table frame */}
+            {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
             <div className="px-4 pt-3 pb-2 border-b border-gray-200 flex-shrink-0">
-              {/* Top row: Title and View Mode Buttons */}
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-base font-semibold text-gray-900">Needs my review</h2>
-                </div>
-                <div className="flex items-center gap-3">
-                  {page === "tasks" && (
-                    <div className="relative" ref={sortDropdownRef}>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                        className="h-7 text-xs gap-1.5 px-2"
-                      >
-                        Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
-                        <ChevronDown className="h-3 w-3" />
-                      </Button>
-                      {isSortDropdownOpen && (
-                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
-                          <button
-                            onClick={() => {
-                                  handleSortChange("recency")
-                              setIsSortDropdownOpen(false)
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                              sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
-                            }`}
-                          >
-                            Recency
-                          </button>
-                          <button
-                            onClick={() => {
-                                  handleSortChange("dueDate")
-                              setIsSortDropdownOpen(false)
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                              sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
-                            }`}
-                          >
-                            Due Date
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {viewMode !== undefined && onViewModeChange && (
-                    <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
-                      <Button
-                        variant={viewMode === "full-width" ? "default" : "ghost"}
-                        size="sm"
-                        className={`h-7 px-2 text-xs ${
-                          viewMode === "full-width"
-                            ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                            : ""
-                        }`}
-                        onClick={() => onViewModeChange("full-width")}
-                      >
-                        Full-width
-                      </Button>
-                      <Button
-                        variant={viewMode === "split" ? "default" : "ghost"}
-                        size="sm"
-                        className={`h-7 px-2 text-xs ${
-                          viewMode === "split"
-                            ? "bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                            : ""
-                        }`}
-                        onClick={() => onViewModeChange("split")}
-                      >
-                        Split screen
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              {/* Bottom row: Bulk Selection on left, Search and Filter on right */}
+              {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <input
@@ -797,7 +726,84 @@ export function ApprovalsGrid({
                       )}
                     </div>
                   )}
-                  </div>
+                  {page === "tasks" && (
+                    <div className="relative" ref={sortDropdownRef}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                        className="h-7 text-xs gap-1.5 px-2"
+                      >
+                        Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
+                        <ChevronDown className="h-3 w-3" />
+                      </Button>
+                      {isSortDropdownOpen && (
+                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                          <button
+                            onClick={() => {
+                              handleSortChange("recency")
+                              setIsSortDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                              sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Recency
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleSortChange("dueDate")
+                              setIsSortDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                              sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Due Date
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {viewMode !== undefined && onViewModeChange && (
+                    <div className="relative" ref={viewModeDropdownRef}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsViewModeDropdownOpen(!isViewModeDropdownOpen)}
+                        className="h-7 text-xs gap-1.5 px-2"
+                      >
+                        View: {viewMode === "full-width" ? "Full-width" : "Split screen"}
+                        <ChevronDown className="h-3 w-3" />
+                      </Button>
+                      {isViewModeDropdownOpen && (
+                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                          <button
+                            onClick={() => {
+                              onViewModeChange("full-width")
+                              setIsViewModeDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                              viewMode === "full-width" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Full-width
+                          </button>
+                          <button
+                            onClick={() => {
+                              onViewModeChange("split")
+                              setIsViewModeDropdownOpen(false)
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                              viewMode === "split" ? 'bg-gray-50 font-medium' : ''
+                            }`}
+                          >
+                            Split screen
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
