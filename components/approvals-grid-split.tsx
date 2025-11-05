@@ -211,6 +211,29 @@ export function ApprovalsGridWithSplit({
     return category
   }
 
+  // Alias variables to match ApprovalsGrid header structure
+  const requestTypes = categories
+  const requestTypeDropdownRef = filterDropdownRef
+  const isRequestTypeDropdownOpen = isFilterDropdownOpen
+  const setIsRequestTypeDropdownOpen = setIsFilterDropdownOpen
+  const selectedRequestType = selectedCategory
+  const getDisplayCategory = getCategoryDisplayName
+  
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+  }
+  
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+  }
+  
+  const handleSortChange = (newSortBy: "recency" | "dueDate") => {
+    setSortBy(newSortBy)
+  }
+  
+  // For item count, use filteredIds.length
+  const sortedApprovalsLength = filteredIds.length
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Content */}
@@ -272,200 +295,205 @@ export function ApprovalsGridWithSplit({
           <div className="overflow-hidden p-6 flex flex-col" style={{ height: '750px' }}>
             <div className="bg-white rounded-[16px] overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
               {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
-              <div className="px-4 pt-3 pb-4 flex-shrink-0">
-                  {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id="select-all-split"
-                        checked={isAllSelected}
-                        ref={(el) => {
-                          if (el) {
-                            (el as HTMLInputElement).indeterminate = isSomeSelected && !isAllSelected
-                          }
-                        }}
-                        onChange={handleSelectAllClick}
-                        className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
-                        style={{
-                          accentColor: isAllSelected ? '#7A005D' : '#A3A3A5',
-                          borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
-                        }}
+              <div className={`px-4 pt-3 flex-shrink-0 ${viewMode !== undefined ? 'pb-4' : 'pb-2'}`}>
+                {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    {viewMode === undefined && (
+                      <h2 className="text-base font-semibold text-gray-900 mr-3">Needs my review</h2>
+                    )}
+                    <input
+                      type="checkbox"
+                      id="select-all-split"
+                      checked={isAllSelected}
+                      ref={(el) => {
+                        if (el) {
+                          (el as HTMLInputElement).indeterminate = isSomeSelected && !isAllSelected
+                        }
+                      }}
+                      onChange={handleSelectAllClick}
+                      className="h-4 w-4 rounded focus:ring-2 focus:ring-offset-2"
+                      style={{
+                        accentColor: isAllSelected ? '#7A005D' : '#A3A3A5',
+                        borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
+                      }}
+                    />
+                    <label htmlFor="select-all-split" className={`${viewMode !== undefined ? 'text-sm' : 'text-xs'} text-gray-600`}>
+                      {sortedApprovalsLength} items
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2 justify-end">
+                    <div className="relative max-w-[280px]">
+                      <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input 
+                        placeholder="Search..." 
+                        className="w-full pl-9 pr-9 h-8 text-sm" 
+                        value={searchQuery}
+                        onChange={(e) => handleSearchChange(e.target.value)}
                       />
-                      <label htmlFor="select-all-split" className="text-sm text-gray-600">
-                        {filteredIds.length} items
-                      </label>
+                      {searchQuery && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
+                          onClick={() => handleSearchChange("")}
+                        >
+                          <X className="h-3.5 w-3.5 text-gray-400" />
+                        </Button>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2 justify-end">
-                      <div className="relative max-w-[280px]">
-                        <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input 
-                          placeholder="Search..." 
-                          className="w-full pl-9 pr-9 h-8 text-sm" 
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        {searchQuery && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 hover:bg-gray-100"
-                            onClick={() => setSearchQuery("")}
-                          >
-                            <X className="h-3.5 w-3.5 text-gray-400" />
-                          </Button>
+                    <div className="relative" ref={requestTypeDropdownRef}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsRequestTypeDropdownOpen(!isRequestTypeDropdownOpen)}
+                        className="h-8 text-sm gap-2 px-3"
+                      >
+                        <Filter className="h-4 w-4" />
+                        <span className="text-sm">{getDisplayCategory(selectedRequestType)}</span>
+                        <ChevronDown className="h-3.5 w-3.5" />
+                      </Button>
+                    {isRequestTypeDropdownOpen && (
+                      <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg z-20 min-w-[200px]">
+                        {page === "tasks" ? (
+                          <>
+                            <button
+                              onClick={() => {
+                                handleCategoryChange("All")
+                                setIsRequestTypeDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                                selectedRequestType === "All" ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              All
+                            </button>
+                            {requestTypes.filter(type => type !== "All" && type !== "HR Management" && type !== "Reimbursements" && type !== "Time and Attendance").map((type) => (
+                              type === "Approvals" ? (
+                                <div key={type}>
+                                  <button
+                                    onClick={() => {
+                                      handleCategoryChange(type)
+                                      setIsRequestTypeDropdownOpen(false)
+                                    }}
+                                    className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm font-medium ${
+                                      selectedRequestType === type ? 'bg-gray-50' : ''
+                                    }`}
+                                  >
+                                    {type}
+                                  </button>
+                                  <div className="pl-4">
+                                    <button
+                                      onClick={() => {
+                                        handleCategoryChange("HR Management")
+                                        setIsRequestTypeDropdownOpen(false)
+                                      }}
+                                      className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                                        selectedRequestType === "HR Management" ? 'bg-gray-50' : ''
+                                      }`}
+                                    >
+                                      HR Management
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        handleCategoryChange("Reimbursements")
+                                        setIsRequestTypeDropdownOpen(false)
+                                      }}
+                                      className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                                        selectedRequestType === "Reimbursements" ? 'bg-gray-50' : ''
+                                      }`}
+                                    >
+                                      Reimbursements
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        handleCategoryChange("Time and Attendance")
+                                        setIsRequestTypeDropdownOpen(false)
+                                      }}
+                                      className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
+                                        selectedRequestType === "Time and Attendance" ? 'bg-gray-50' : ''
+                                      }`}
+                                    >
+                                      Time and Attendance
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <button
+                                  key={type}
+                                  onClick={() => {
+                                    handleCategoryChange(type)
+                                    setIsRequestTypeDropdownOpen(false)
+                                  }}
+                                  className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                                    selectedRequestType === type ? 'bg-gray-50 font-medium' : ''
+                                  }`}
+                                >
+                                  {type}
+                                </button>
+                              )
+                            ))}
+                          </>
+                        ) : (
+                          requestTypes.map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => {
+                                handleCategoryChange(type)
+                                setIsRequestTypeDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm ${
+                                selectedRequestType === type ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              {type}
+                            </button>
+                          ))
                         )}
                       </div>
-                      <div className="relative flex-shrink-0" ref={filterDropdownRef}>
+                    )}
+                    </div>
+                    {page === "tasks" && (
+                      <div className="relative" ref={sortDropdownRef}>
                         <Button
                           variant="outline"
                           size="sm"
+                          onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                           className="h-8 text-sm gap-2 px-3"
-                          onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
                         >
-                          <Filter className="h-4 w-4" />
-                          <span className="text-sm">{getCategoryDisplayName(selectedCategory)}</span>
+                          Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
                           <ChevronDown className="h-3.5 w-3.5" />
                         </Button>
-                        {isFilterDropdownOpen && (
-                          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-[160px]">
-                          {page === "tasks" ? (
-                            <>
-                              <button
-                                onClick={() => {
-                                  setSelectedCategory("All")
-                                  setIsFilterDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  selectedCategory === "All" ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                All
-                              </button>
-                              {categories.filter(cat => cat !== "All" && cat !== "HR Management" && cat !== "Reimbursements" && cat !== "Time and Attendance").map((category) => (
-                                category === "Approvals" ? (
-                                  <div key={category}>
-                                    <button
-                                      onClick={() => {
-                                        setSelectedCategory(category)
-                                        setIsFilterDropdownOpen(false)
-                                      }}
-                                      className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs font-medium ${
-                                        selectedCategory === category ? 'bg-gray-50' : ''
-                                      }`}
-                                    >
-                                      {category}
-                                    </button>
-                                    <div className="pl-3">
-                                      <button
-                                        onClick={() => {
-                                          setSelectedCategory("HR Management")
-                                          setIsFilterDropdownOpen(false)
-                                        }}
-                                        className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs text-gray-600 ${
-                                          selectedCategory === "HR Management" ? 'bg-gray-50' : ''
-                                        }`}
-                                      >
-                                        HR Management
-                                      </button>
-                                      <button
-                                        onClick={() => {
-                                          setSelectedCategory("Reimbursements")
-                                          setIsFilterDropdownOpen(false)
-                                        }}
-                                        className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs text-gray-600 ${
-                                          selectedCategory === "Reimbursements" ? 'bg-gray-50' : ''
-                                        }`}
-                                      >
-                                        Reimbursements
-                                      </button>
-                                      <button
-                                        onClick={() => {
-                                          setSelectedCategory("Time and Attendance")
-                                          setIsFilterDropdownOpen(false)
-                                        }}
-                                        className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs text-gray-600 ${
-                                          selectedCategory === "Time and Attendance" ? 'bg-gray-50' : ''
-                                        }`}
-                                      >
-                                        Time and Attendance
-                                      </button>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <button
-                                    key={category}
-                                    onClick={() => {
-                                      setSelectedCategory(category)
-                                      setIsFilterDropdownOpen(false)
-                                    }}
-                                    className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                      selectedCategory === category ? 'bg-gray-50 font-medium' : ''
-                                    }`}
-                                  >
-                                    {category}
-                                  </button>
-                                )
-                              ))}
-                            </>
-                          ) : (
-                            categories.map((category) => (
-                              <button
-                                key={category}
-                                onClick={() => {
-                                  setSelectedCategory(category)
-                                  setIsFilterDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  selectedCategory === category ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                {category}
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      )}
-                      {page === "tasks" && (
-                        <div className="relative flex-shrink-0" ref={sortDropdownRef}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                            className="h-8 text-sm gap-2 px-3"
-                          >
-                            Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
-                            <ChevronDown className="h-3.5 w-3.5" />
-                          </Button>
-                          {isSortDropdownOpen && (
-                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
-                              <button
-                                onClick={() => {
-                                  setSortBy("recency")
-                                  setIsSortDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                Recency
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setSortBy("dueDate")
-                                  setIsSortDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                Due Date
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      <div className="relative flex-shrink-0" ref={viewModeDropdownRef}>
+                        {isSortDropdownOpen && (
+                          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
+                            <button
+                              onClick={() => {
+                                handleSortChange("recency")
+                                setIsSortDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              Recency
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleSortChange("dueDate")
+                                setIsSortDropdownOpen(false)
+                              }}
+                              className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                              }`}
+                            >
+                              Due Date
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {viewMode !== undefined && handleViewModeChange && (
+                      <div className="relative" ref={viewModeDropdownRef}>
                         <Button
                           variant="outline"
                           size="sm"
@@ -483,7 +511,7 @@ export function ApprovalsGridWithSplit({
                                 setIsViewModeDropdownOpen(false)
                               }}
                               className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                (viewMode as string) === "full-width" ? 'bg-gray-50 font-medium' : ''
+                                (viewMode as "full-width" | "split") === "full-width" ? 'bg-gray-50 font-medium' : ''
                               }`}
                             >
                               Full-width
@@ -494,7 +522,7 @@ export function ApprovalsGridWithSplit({
                                 setIsViewModeDropdownOpen(false)
                               }}
                               className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                (viewMode as string) === "split" ? 'bg-gray-50 font-medium' : ''
+                                (viewMode as "full-width" | "split") === "split" ? 'bg-gray-50 font-medium' : ''
                               }`}
                             >
                               Split screen
@@ -502,7 +530,7 @@ export function ApprovalsGridWithSplit({
                           </div>
                         )}
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
