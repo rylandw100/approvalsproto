@@ -274,8 +274,8 @@ export function ApprovalsGridWithSplit({
               {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
               <div className="px-4 pt-3 pb-4 flex-shrink-0">
                   {/* Single row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-row items-center justify-between gap-2 flex-nowrap">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       <input
                         type="checkbox"
                         id="select-all-split"
@@ -292,11 +292,11 @@ export function ApprovalsGridWithSplit({
                           borderColor: isAllSelected ? '#7A005D' : '#A3A3A5'
                         }}
                       />
-                      <label htmlFor="select-all-split" className="text-sm text-gray-600">
+                      <label htmlFor="select-all-split" className="text-sm text-gray-600 whitespace-nowrap">
                         {filteredIds.length} items
                       </label>
                     </div>
-                    <div className="flex items-center gap-2 justify-end flex-nowrap">
+                    <div className="flex flex-row items-center gap-2 flex-nowrap flex-shrink-0">
                       <div className="relative max-w-[280px] flex-shrink-0">
                         <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input 
