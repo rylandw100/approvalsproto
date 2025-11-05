@@ -673,6 +673,7 @@ export function ApprovalsList({
             </Button>
           )}
         </div>
+        </div>
         )}
         <div className="flex-1 overflow-y-auto min-h-0">
         {sortedApprovals.length === 0 ? (
