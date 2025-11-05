@@ -726,6 +726,7 @@ export function ApprovalsGrid({
                       )}
                     </div>
                   )}
+                  </div>
                   {page === "tasks" && (
                     <div className="relative" ref={sortDropdownRef}>
                       <Button
