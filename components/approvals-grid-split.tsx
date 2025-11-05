@@ -296,8 +296,8 @@ export function ApprovalsGridWithSplit({
                         {filteredIds.length} items
                       </label>
                     </div>
-                    <div className="flex items-center gap-2 justify-end flex-nowrap">
-                      <div className="relative w-[200px] flex-shrink-0">
+                    <div className="flex items-center gap-2 justify-end">
+                      <div className="relative max-w-[280px]">
                         <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                         <Input 
                           placeholder="Search..." 
