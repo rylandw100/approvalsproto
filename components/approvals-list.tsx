@@ -111,7 +111,7 @@ export function ApprovalsList({
     {
       id: 1,
       requestor: "Kristine Young",
-      subject: "Request to update Stephanie Perkins' target annual bonus",
+      subject: "Request to update Stephanie Perkins' target annual bonus from $15,000 to $22,500",
       category: "Approvals - HR Management",
       time: "just now",
       status: "pending",
@@ -158,7 +158,7 @@ export function ApprovalsList({
     {
       id: 5,
       requestor: "Michael Chen",
-      subject: "Request to update Jennifer Lee's salary",
+      subject: "Request to update Jennifer Lee's salary from $85,000 to $95,000 (promotion to Senior Engineer)",
       category: "Approvals - HR Management",
       time: "18 min ago",
       status: "pending"
@@ -182,7 +182,7 @@ export function ApprovalsList({
     {
       id: 8,
       requestor: "Lisa Thompson",
-      subject: "Request to update Robert Wilson's benefits",
+      subject: "Request to update Robert Wilson's benefits: add dental coverage and increase PTO from 15 to 20 days",
       category: "Approvals - HR Management",
       time: "32 min ago",
       status: "pending",

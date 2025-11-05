@@ -33,7 +33,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
   const approvalData: Record<number, any> = {
     1: {
       requestor: "Kristine Young",
-      subject: "Request to update Stephanie Perkins' target annual bonus",
+      subject: "Request to update Stephanie Perkins' target annual bonus from $15,000 to $22,500",
       category: "Approvals - HR Management",
       summary: "Kristine Young is requesting to update Stephanie Perkins' target annual bonus from $100,000 to $110,000. No reason was provided. If approved this change will be made immediately.",
       employee: {
@@ -135,7 +135,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
     },
     5: {
       requestor: "Michael Chen",
-      subject: "Request to update Jennifer Lee's salary",
+      subject: "Request to update Jennifer Lee's salary from $85,000 to $95,000 (promotion to Senior Engineer)",
       category: "Approvals - HR Management",
       summary: "Michael Chen is requesting to update Jennifer Lee's salary from $85,000 to $92,000 based on performance review.",
       employee: {
@@ -204,7 +204,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
     },
     8: {
       requestor: "Lisa Thompson",
-      subject: "Request to update Robert Wilson's benefits",
+      subject: "Request to update Robert Wilson's benefits: add dental coverage and increase PTO from 15 to 20 days",
       category: "Approvals - HR Management",
       summary: "Lisa Thompson is requesting to update Robert Wilson's health insurance benefits to premium coverage.",
       employee: {
