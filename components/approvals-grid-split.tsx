@@ -63,8 +63,9 @@ export function ApprovalsGridWithSplit({
       // Only call onCloseDrawer if drawer is actually open (not inline detail)
       onCloseDrawer()
     }
-    // When switching to split mode, keep the selected item visible
-    // The selectedItem is already set, so it will show in the split view
+    // When collapsing from full-width inline detail to split, preserve selectedItem
+    // The selectedItem should remain set so it shows in the split view
+    // Don't clear selectedItem when collapsing - it should be preserved
   }
   
   // Expose view mode change handler to parent (for drawer to call)

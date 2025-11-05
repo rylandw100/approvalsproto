@@ -505,10 +505,13 @@ export function ApprovalsGrid({
         <div className="space-y-1">
           <div className="font-semibold">Pay Run Details</div>
           {approval.payRunType && <div className="text-xs"><span className="font-medium">Pay run type:</span> {approval.payRunType}</div>}
-          {approval.payPeriodStartDate && <div className="text-xs"><span className="font-medium">Start date:</span> {approval.payPeriodStartDate}</div>}
-          {approval.payPeriodEndDate && <div className="text-xs"><span className="font-medium">End date:</span> {approval.payPeriodEndDate}</div>}
-          {approval.takeActionDeadline && <div className="text-xs"><span className="font-medium">Deadline:</span> {approval.takeActionDeadline}</div>}
-          {approval.payScheduleFrequency && <div className="text-xs"><span className="font-medium">Frequency:</span> {approval.payScheduleFrequency}</div>}
+          {approval.payPeriodStartDate && <div className="text-xs"><span className="font-medium">Pay period start date:</span> {approval.payPeriodStartDate}</div>}
+          {approval.payPeriodEndDate && <div className="text-xs"><span className="font-medium">Pay period end date:</span> {approval.payPeriodEndDate}</div>}
+          {approval.takeActionDeadline && <div className="text-xs"><span className="font-medium">Take action deadline:</span> {approval.takeActionDeadline}</div>}
+          {approval.checkDate && <div className="text-xs"><span className="font-medium">Check date:</span> {approval.checkDate}</div>}
+          {approval.isAutoApproved !== undefined && <div className="text-xs"><span className="font-medium">Is auto-approved:</span> {approval.isAutoApproved ? "True" : "False"}</div>}
+          {approval.payScheduleFrequency && <div className="text-xs"><span className="font-medium">Pay schedule frequency:</span> {approval.payScheduleFrequency}</div>}
+          {approval.paySchedule && <div className="text-xs"><span className="font-medium">Pay schedule:</span> {approval.paySchedule}</div>}
         </div>
       )
     }
@@ -929,26 +932,28 @@ export function ApprovalsGrid({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7 hover:bg-green-100"
+                            className="h-7 w-7"
+                            style={{ backgroundColor: '#106964', color: 'white' }}
                             onClick={(e) => {
                               e.stopPropagation()
                               // Handle approve action
                             }}
                             title="Approve"
                           >
-                            <Check className="h-3.5 w-3.5 text-green-600" />
+                            <Check className="h-3.5 w-3.5" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-7 w-7 hover:bg-red-100"
+                            className="h-7 w-7"
+                            style={{ backgroundColor: '#BB3D2A', color: 'white' }}
                             onClick={(e) => {
                               e.stopPropagation()
                               // Handle reject action
                             }}
                             title="Reject"
                           >
-                            <X className="h-3.5 w-3.5 text-red-600" />
+                            <X className="h-3.5 w-3.5" />
                           </Button>
                         </>
                       )}
@@ -1030,6 +1035,7 @@ export function ApprovalsGrid({
                   const hasApprovals = selectedApprovals.some(item => 
                     item.category.startsWith('Approvals -')
                   );
+                  const hasPayroll = selectedApprovals.some(item => item.category === 'Payroll');
                   const hasDocuments = selectedApprovals.some(item => item.category === 'Documents');
                   const hasTraining = selectedApprovals.some(item => item.category === 'Training');
                   const hasTeamBuilding = selectedApprovals.some(item => item.category === 'Team Building');
@@ -1037,13 +1043,13 @@ export function ApprovalsGrid({
                   // Show actions based on what's selected
                   const actions = [];
                   
-                  // If only approvals are selected, show Approve, Reject, Mark as done
-                  if (hasApprovals && !hasDocuments && !hasTraining && !hasTeamBuilding) {
+                  // If only approvals or payroll are selected, show Approve, Reject, Mark as done
+                  if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                     actions.push(
-                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#106964' }}>
                         Approve
                       </Button>,
-                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#BB3D2A' }}>
                         Reject
                       </Button>,
                       <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">

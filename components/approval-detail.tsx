@@ -939,8 +939,8 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
             <>
               <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
               <div className="flex gap-3">
-              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Decline</Button>
-              <Button disabled={hasSelectedItems} className="rippling-btn-primary">Approve</Button>
+              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline" style={{ borderColor: '#BB3D2A', color: '#BB3D2A' }}>Reject</Button>
+              <Button disabled={hasSelectedItems} className="rippling-btn-primary" style={{ backgroundColor: '#106964' }}>Approve</Button>
               </div>
             </>
           )}
@@ -975,6 +975,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 const hasApprovals = selectedApprovals.some(item => 
                   item.category.startsWith('Approvals -')
                 );
+                const hasPayroll = selectedApprovals.some(item => item.category === 'Payroll');
                 const hasDocuments = selectedApprovals.some(item => item.category === 'Documents');
                 const hasTraining = selectedApprovals.some(item => item.category === 'Training');
                 const hasTeamBuilding = selectedApprovals.some(item => item.category === 'Team Building');
@@ -982,13 +983,13 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // Show actions based on what's selected
                 const actions = [];
                 
-                // If only approvals are selected, show Approve, Reject, Mark as done
-                if (hasApprovals && !hasDocuments && !hasTraining && !hasTeamBuilding) {
+                // If only approvals or payroll are selected, show Approve, Reject, Mark as done
+                if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                   actions.push(
-                    <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#106964' }}>
                       Approve
                     </Button>,
-                    <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3" style={{ backgroundColor: '#BB3D2A' }}>
                       Reject
                     </Button>,
                     <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
