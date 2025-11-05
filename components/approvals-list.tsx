@@ -113,7 +113,7 @@ export function ApprovalsList({
       requestor: "Kristine Young",
       subject: "Request to update Stephanie Perkins' target annual bonus",
       category: "Approvals - HR Management",
-      time: "3 min ago",
+      time: "just now",
       status: "pending",
       warning: "Exceeds the approved band",
       comments: [
@@ -126,7 +126,7 @@ export function ApprovalsList({
       requestor: "Thomas Bennett",
       subject: "Request to reimburse $72.41 for Uber",
       category: "Approvals - Reimbursements",
-      time: "5 min ago",
+      time: "2 min ago",
       status: "pending",
              warning: "Potential duplicate detected",
              comments: [
@@ -142,7 +142,7 @@ export function ApprovalsList({
       requestor: "Madeline Hernandez",
       subject: "Request to reimburse $595.49 for Hilton Hotel",
       category: "Approvals - Reimbursements",
-      time: "10 min ago",
+      time: "8 min ago",
       status: "pending"
     },
     {
@@ -150,7 +150,7 @@ export function ApprovalsList({
       requestor: "Sarah Johnson",
       subject: "Request to log 13h 57m from Oct 26 - 27",
       category: "Approvals - Time and Attendance",
-      time: "15 min ago",
+      time: "12 min ago",
       status: "pending",
              warning: "Exceeds 12 hours",
              comments: []
@@ -160,7 +160,7 @@ export function ApprovalsList({
       requestor: "Michael Chen",
       subject: "Request to update Jennifer Lee's salary",
       category: "Approvals - HR Management",
-      time: "20 min ago",
+      time: "18 min ago",
       status: "pending"
     },
     {
@@ -168,7 +168,7 @@ export function ApprovalsList({
       requestor: "Emily Rodriguez",
       subject: "Request to reimburse $45.20 for parking",
       category: "Approvals - Reimbursements",
-      time: "25 min ago",
+      time: "22 min ago",
       status: "pending"
     },
     {
@@ -176,7 +176,7 @@ export function ApprovalsList({
       requestor: "David Park",
       subject: "Request to log 8h 30m from Oct 25",
       category: "Approvals - Time and Attendance",
-      time: "30 min ago",
+      time: "28 min ago",
       status: "pending"
     },
     {
@@ -184,7 +184,7 @@ export function ApprovalsList({
       requestor: "Lisa Thompson",
       subject: "Request to update Robert Wilson's benefits",
       category: "Approvals - HR Management",
-      time: "35 min ago",
+      time: "32 min ago",
       status: "pending",
       warning: "Exceeds the approved band"
     }
@@ -196,7 +196,7 @@ export function ApprovalsList({
       requestor: "Thomas Bennett",
       subject: "Pay run request - Jun 16 - Jun 30: Semi-monthly pay schedule for 123456789",
       category: "Payroll",
-      time: "just now",
+      time: "1 min ago",
       status: "pending",
       isCritical: true,
       pinned: true
@@ -206,7 +206,7 @@ export function ApprovalsList({
       requestor: "HR Team",
       subject: "Take required cybersecurity course for Q4 certification",
       category: "Training",
-      time: "2 hours ago",
+      time: "4 min ago",
       status: "pending",
       courseName: "Cybersecurity Fundamentals",
       dueDate: "Nov 15, 2024",
@@ -217,7 +217,7 @@ export function ApprovalsList({
       requestor: "Legal Department",
       subject: "Sign updated company policy document",
       category: "Documents",
-      time: "5 hours ago",
+      time: "6 min ago",
       status: "pending",
       documentName: "Employee Handbook 2024",
       dueDate: "Oct 30, 2024"
@@ -227,7 +227,7 @@ export function ApprovalsList({
       requestor: "Onboarding Team",
       subject: "Take new hire Alex Martinez out to lunch",
       category: "Team Building",
-      time: "1 day ago",
+      time: "14 min ago",
       status: "pending",
       newHireName: "Alex Martinez",
       newHireRole: "Software Engineer",
@@ -239,7 +239,7 @@ export function ApprovalsList({
       requestor: "HR Team",
       subject: "Complete leadership development course",
       category: "Training",
-      time: "2 days ago",
+      time: "20 min ago",
       status: "pending",
       courseName: "Leadership Essentials",
       dueDate: "Dec 1, 2024",
@@ -250,7 +250,7 @@ export function ApprovalsList({
       requestor: "Legal Department",
       subject: "Sign non-disclosure agreement for new project",
       category: "Documents",
-      time: "3 days ago",
+      time: "25 min ago",
       status: "pending",
       documentName: "NDA - Project Phoenix",
       dueDate: "Nov 5, 2024"
@@ -260,7 +260,7 @@ export function ApprovalsList({
       requestor: "Onboarding Team",
       subject: "Take new hire Sarah Kim out to lunch",
       category: "Team Building",
-      time: "4 days ago",
+      time: "30 min ago",
       status: "pending",
       newHireName: "Sarah Kim",
       newHireRole: "Product Designer",
@@ -417,7 +417,7 @@ export function ApprovalsList({
   }
 
   return (
-    <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 ${isPanelExpanded ? 'w-[584px]' : 'w-[335px]'}`}>
+    <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 border-l-0 ${isPanelExpanded ? 'w-[584px]' : 'w-[376px]'}`}>
       {/* Expansion Panel */}
       {!hideHeader && (
         <div className={`flex-shrink-0 border-r border-l-0 border-border pt-2 transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden border-l-0'}`}>
