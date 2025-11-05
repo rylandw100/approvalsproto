@@ -18,6 +18,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [removedItems, setRemovedItems] = useState<Set<number>>(new Set())
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerItem, setDrawerItem] = useState<number | null>(null)
+  const [filteredIds, setFilteredIds] = useState<number[]>([])
   const opt3ViewModeChangeRef = useRef<((mode: "full-width" | "split") => void) | null>(null)
 
   const handleRemoveItem = (id: number) => {
@@ -74,10 +75,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
     setSelectedItems(new Set())
   }
 
-  const handleFilterChange = (filteredIds: number[]) => {
+  const handleFilterChange = (ids: number[]) => {
+    setFilteredIds(ids)
     // If current selection is not in filtered results, clear it
-    if (selectedItem && !filteredIds.includes(selectedItem)) {
+    if (selectedItem && !ids.includes(selectedItem)) {
       setSelectedItem(null)
+    }
+  }
+
+  // Function to select the next item in the queue
+  const handleSelectNextItem = () => {
+    if (selectedItem && filteredIds.length > 0) {
+      const currentIndex = filteredIds.indexOf(selectedItem)
+      if (currentIndex !== -1 && currentIndex < filteredIds.length - 1) {
+        // Select the next item
+        const nextItem = filteredIds[currentIndex + 1]
+        setSelectedItem(nextItem)
+      } else if (currentIndex !== -1 && currentIndex === filteredIds.length - 1 && filteredIds.length > 1) {
+        // If it's the last item, select the previous one (since current will be removed)
+        const prevItem = filteredIds[currentIndex - 1]
+        setSelectedItem(prevItem)
+      } else {
+        // No more items, clear selection
+        setSelectedItem(null)
+      }
     }
   }
 
@@ -130,6 +151,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onRemoveItem={handleRemoveItem}
                     onRemoveItems={handleRemoveItems}
                     page={activePage}
+                    onSelectNextItem={handleSelectNextItem}
                   />
                 </div>
               </>
@@ -195,6 +217,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }
           }
         }}
+        onSelectNextItem={handleSelectNextItem}
       />
     </div>
   )

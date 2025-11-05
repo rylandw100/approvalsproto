@@ -15,9 +15,10 @@ interface ApprovalDetailProps {
   viewMode?: "full-width" | "split"
   onViewModeChange?: (mode: "full-width" | "split") => void
   onExpandToDrawer?: () => void
+  onSelectNextItem?: () => void
 }
 
-export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, removedItems = new Set(), onRemoveItem, onRemoveItems, page = "approvals", backgroundColor = "default", viewMode, onViewModeChange, onExpandToDrawer }: ApprovalDetailProps) {
+export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, removedItems = new Set(), onRemoveItem, onRemoveItems, page = "approvals", backgroundColor = "default", viewMode, onViewModeChange, onExpandToDrawer, onSelectNextItem }: ApprovalDetailProps) {
   const [activeTab, setActiveTab] = useState("Overview")
   
   // Helper function to get display category name
@@ -935,6 +936,12 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 onClick={() => {
                   if (selectedItem && onRemoveItem) {
                     onRemoveItem(selectedItem)
+                    if (onSelectNextItem) {
+                      // Small delay to ensure the item is removed from the list first
+                      setTimeout(() => {
+                        onSelectNextItem()
+                      }, 0)
+                    }
                   }
                 }}
               >
@@ -978,6 +985,12 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 onClick={() => {
                   if (selectedItem && onRemoveItem) {
                     onRemoveItem(selectedItem)
+                    if (onSelectNextItem) {
+                      // Small delay to ensure the item is removed from the list first
+                      setTimeout(() => {
+                        onSelectNextItem()
+                      }, 0)
+                    }
                   }
                 }}
               >
@@ -991,6 +1004,12 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 onClick={() => {
                   if (selectedItem && onRemoveItem) {
                     onRemoveItem(selectedItem)
+                    if (onSelectNextItem) {
+                      // Small delay to ensure the item is removed from the list first
+                      setTimeout(() => {
+                        onSelectNextItem()
+                      }, 0)
+                    }
                   }
                 }}
               >
@@ -1003,6 +1022,12 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 onClick={() => {
                   if (selectedItem && onRemoveItem) {
                     onRemoveItem(selectedItem)
+                    if (onSelectNextItem) {
+                      // Small delay to ensure the item is removed from the list first
+                      setTimeout(() => {
+                        onSelectNextItem()
+                      }, 0)
+                    }
                   }
                 }}
               >

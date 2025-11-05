@@ -126,6 +126,25 @@ export function ApprovalsGridWithSplit({
     onFilterChange(ids)
   }
 
+  // Function to select the next item in the queue
+  const handleSelectNextItem = () => {
+    if (selectedItem && filteredIds.length > 0) {
+      const currentIndex = filteredIds.indexOf(selectedItem)
+      if (currentIndex !== -1 && currentIndex < filteredIds.length - 1) {
+        // Select the next item
+        const nextItem = filteredIds[currentIndex + 1]
+        onSelectItem(nextItem)
+      } else if (currentIndex !== -1 && currentIndex === filteredIds.length - 1 && filteredIds.length > 1) {
+        // If it's the last item, select the previous one (since current will be removed)
+        const prevItem = filteredIds[currentIndex - 1]
+        onSelectItem(prevItem)
+      } else {
+        // No more items, clear selection
+        onSelectItem(null)
+      }
+    }
+  }
+
   // Handle click outside for dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -238,6 +257,7 @@ export function ApprovalsGridWithSplit({
                         viewMode={viewMode}
                         onViewModeChange={handleViewModeChange}
                         onExpandToDrawer={handleExpandToDrawer}
+                        onSelectNextItem={handleSelectNextItem}
                       />
             </div>
           )}
@@ -245,76 +265,10 @@ export function ApprovalsGridWithSplit({
       ) : (
         <div className="h-full flex flex-col bg-white overflow-hidden">
           <div className="overflow-hidden p-6 flex flex-col" style={{ height: '750px' }}>
-            <div className="bg-white rounded-[16px] border border-gray-200 overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
-              {/* Header with title, bulk selection, and search - Inside the table frame */}
+            <div className="bg-white border border-gray-200 overflow-hidden min-w-full flex flex-col flex-1 min-h-0">
+              {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
               <div className="px-4 pt-3 pb-2 border-b border-gray-200 flex-shrink-0">
-                  {/* Top row: Title and View Mode Buttons */}
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <h2 className="text-base font-semibold text-gray-900">Needs my review</h2>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {page === "tasks" && (
-                        <div className="relative" ref={sortDropdownRef}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                            className="h-7 text-xs gap-1.5 px-2"
-                          >
-                            Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
-                            <ChevronDown className="h-3 w-3" />
-                          </Button>
-                          {isSortDropdownOpen && (
-                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
-                              <button
-                                onClick={() => {
-                                  setSortBy("recency")
-                                  setIsSortDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                Recency
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setSortBy("dueDate")
-                                  setIsSortDropdownOpen(false)
-                                }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                  sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
-                                }`}
-                              >
-                                Due Date
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 px-2 text-xs"
-                          onClick={() => handleViewModeChange("full-width")}
-                        >
-                          Full-width
-                        </Button>
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="h-7 px-2 text-xs bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
-                          onClick={() => handleViewModeChange("split")}
-                        >
-                          Split screen
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Bottom row: Bulk Selection on left, Search and Filter on right */}
+                  {/* Bottom row: Bulk Selection on left, Search, Filter, Sort, and View Mode on right */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <input
@@ -467,6 +421,63 @@ export function ApprovalsGridWithSplit({
                           )}
                         </div>
                       )}
+                      {page === "tasks" && (
+                        <div className="relative" ref={sortDropdownRef}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                            className="h-7 text-xs gap-1.5 px-2"
+                          >
+                            Sort: {sortBy === "recency" ? "Recency" : "Due Date"}
+                            <ChevronDown className="h-3 w-3" />
+                          </Button>
+                          {isSortDropdownOpen && (
+                            <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[160px]">
+                              <button
+                                onClick={() => {
+                                  setSortBy("recency")
+                                  setIsSortDropdownOpen(false)
+                                }}
+                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                  sortBy === "recency" ? 'bg-gray-50 font-medium' : ''
+                                }`}
+                              >
+                                Recency
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setSortBy("dueDate")
+                                  setIsSortDropdownOpen(false)
+                                }}
+                                className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
+                                  sortBy === "dueDate" ? 'bg-gray-50 font-medium' : ''
+                                }`}
+                              >
+                                Due Date
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 px-2 text-xs"
+                          onClick={() => handleViewModeChange("full-width")}
+                        >
+                          Full-width
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="h-7 px-2 text-xs bg-[rgb(231,225,222)] text-black hover:bg-[rgb(231,225,222)]"
+                          onClick={() => handleViewModeChange("split")}
+                        >
+                          Split screen
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -509,6 +520,7 @@ export function ApprovalsGridWithSplit({
                               viewMode={viewMode}
                               onViewModeChange={handleViewModeChange}
                               onExpandToDrawer={handleExpandToDrawer}
+                              onSelectNextItem={handleSelectNextItem}
                             />
                   </div>
                 </div>
