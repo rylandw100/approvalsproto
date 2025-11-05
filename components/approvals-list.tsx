@@ -807,6 +807,7 @@ export function ApprovalsList({
           ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   )
