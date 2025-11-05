@@ -26,6 +26,8 @@ interface ApprovalsGridProps {
   onSelectItem?: (id: number | null) => void
   sortBy?: "recency" | "dueDate"
   onSortChange?: (sortBy: "recency" | "dueDate") => void
+  pinnedItems?: Set<number>
+  onTogglePin?: (id: number) => void
 }
 
 export function ApprovalsGrid({
@@ -47,7 +49,9 @@ export function ApprovalsGrid({
   selectedItem,
   onSelectItem,
   sortBy: externalSortBy,
-  onSortChange
+  onSortChange,
+  pinnedItems = new Set(),
+  onTogglePin
 }: ApprovalsGridProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
@@ -395,12 +399,12 @@ export function ApprovalsGrid({
 
   // Sort filtered approvals
   const sortedApprovals = [...filteredApprovals].sort((a, b) => {
-    // Critical/pinned items always go to the top
-    const aIsCritical = (a as any).isCritical || (a as any).pinned
-    const bIsCritical = (b as any).isCritical || (b as any).pinned
-    if (aIsCritical && !bIsCritical) return -1
-    if (!aIsCritical && bIsCritical) return 1
-    if (aIsCritical && bIsCritical) return 0 // Keep critical items in their original order
+    // Pinned items always go to the top (check pinnedItems state)
+    const aIsPinned = pinnedItems.has(a.id) || (a as any).isCritical || (a as any).pinned
+    const bIsPinned = pinnedItems.has(b.id) || (b as any).isCritical || (b as any).pinned
+    if (aIsPinned && !bIsPinned) return -1
+    if (!aIsPinned && bIsPinned) return 1
+    if (aIsPinned && bIsPinned) return 0 // Keep pinned items in their original order
     
     if (page === "tasks" && sortBy === "dueDate") {
       // Sort by due date (items without due date go to the end)
@@ -988,6 +992,20 @@ export function ApprovalsGrid({
                               <X className="h-3.5 w-3.5 text-red-600" />
                             </Button>
                           </>
+                        )}
+                        {onTogglePin && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-7 w-7 ${pinnedItems.has(approval.id) ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onTogglePin(approval.id)
+                            }}
+                            title={pinnedItems.has(approval.id) ? "Unpin" : "Pin"}
+                          >
+                            <Pin className={`h-3.5 w-3.5 ${pinnedItems.has(approval.id) ? 'text-gray-700 fill-current' : 'text-gray-600'}`} />
+                          </Button>
                         )}
                         <Button
                           variant="ghost"

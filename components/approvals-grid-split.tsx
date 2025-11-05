@@ -25,6 +25,8 @@ interface ApprovalsGridWithSplitProps {
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
+  pinnedItems?: Set<number>
+  onTogglePin?: (id: number) => void
 }
 
 export function ApprovalsGridWithSplit({
@@ -42,7 +44,9 @@ export function ApprovalsGridWithSplit({
   removedItems = new Set(),
   onRemoveItem,
   onRemoveItems,
-  page = "approvals"
+  page = "approvals",
+  pinnedItems = new Set(),
+  onTogglePin
 }: ApprovalsGridWithSplitProps) {
   const [viewMode, setViewMode] = useState<"full-width" | "split">("full-width")
   
@@ -260,6 +264,8 @@ export function ApprovalsGridWithSplit({
                       onSelectItem={onSelectItem}
                       sortBy={sortBy}
                       onSortChange={setSortBy}
+                      pinnedItems={pinnedItems}
+                      onTogglePin={onTogglePin}
                     />
           </div>
           {selectedItem && (
@@ -538,26 +544,28 @@ export function ApprovalsGridWithSplit({
                 {/* List and Detail View */}
                 <div className="flex flex-1 min-h-0 overflow-hidden border border-gray-200 rounded-[8px]">
                   <div className="w-[340px] border-r border-gray-200 flex flex-col min-h-0">
-                            <ApprovalsList 
-                              selectedItem={selectedItem} 
-                              onSelectItem={onSelectItem}
-                              selectedItems={selectedItems}
-                              onToggleItem={onToggleItem}
-                              onSelectAll={onSelectAll}
-                              onClearSelection={onClearSelection}
-                              onFilterChange={handleFilterChange}
-                              removedItems={removedItems}
-                              onRemoveItem={onRemoveItem}
-                              onRemoveItems={onRemoveItems}
-                              page={page}
-                              hideHeader={true}
-                              externalSearchQuery={searchQuery}
-                              externalSelectedCategory={selectedCategory}
-                              onSearchChange={setSearchQuery}
-                              onCategoryChange={setSelectedCategory}
-                              sortBy={sortBy}
-                              onSortChange={setSortBy}
-                            />
+                          <ApprovalsList
+                            selectedItem={selectedItem}
+                            onSelectItem={onSelectItem}
+                            selectedItems={selectedItems}
+                            onToggleItem={onToggleItem}
+                            onSelectAll={onSelectAll}
+                            onClearSelection={onClearSelection}
+                            onFilterChange={handleFilterChange}
+                            removedItems={removedItems}
+                            onRemoveItem={onRemoveItem}
+                            onRemoveItems={onRemoveItems}
+                            page={page}
+                            hideHeader={true}
+                            externalSearchQuery={searchQuery}
+                            externalSelectedCategory={selectedCategory}
+                            onSearchChange={setSearchQuery}
+                            onCategoryChange={setSelectedCategory}
+                            sortBy={sortBy}
+                            onSortChange={setSortBy}
+                            pinnedItems={pinnedItems}
+                            onTogglePin={onTogglePin}
+                          />
                   </div>
                   <div className="flex-1 flex flex-col min-h-0">
                             <ApprovalDetail 

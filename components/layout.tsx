@@ -8,7 +8,7 @@ import { ApprovalsGridWithSplit } from "./approvals-grid-split"
 import { ApprovalDetail } from "./approval-detail"
 import { AppNavBar } from "./app-navbar"
 import { Drawer } from "./drawer"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [activePage, setActivePage] = useState<"approvals" | "tasks">("tasks")
@@ -16,6 +16,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
   const [removedItems, setRemovedItems] = useState<Set<number>>(new Set())
+  const [pinnedItems, setPinnedItems] = useState<Set<number>>(new Set())
+
+  // Clear selectedItem when switching from opt1 to opt3
+  const prevActiveTabRef = useRef(activeTab)
+  useEffect(() => {
+    if (prevActiveTabRef.current === "opt1" && activeTab === "opt3") {
+      setSelectedItem(null)
+    }
+    prevActiveTabRef.current = activeTab
+  }, [activeTab])
+
+  const handleTogglePin = (id: number) => {
+    setPinnedItems(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerItem, setDrawerItem] = useState<number | null>(null)
   const [filteredIds, setFilteredIds] = useState<number[]>([])
@@ -140,6 +162,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onRemoveItem={handleRemoveItem}
                     onRemoveItems={handleRemoveItems}
                     page={activePage}
+                    pinnedItems={pinnedItems}
+                    onTogglePin={handleTogglePin}
                   />
                 </div>
                 <div className="flex-1 bg-background">
@@ -167,6 +191,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onRemoveItem={handleRemoveItem}
                   onRemoveItems={handleRemoveItems}
                   page={activePage}
+                  pinnedItems={pinnedItems}
+                  onTogglePin={handleTogglePin}
                 />
               </div>
             ) : (
@@ -191,6 +217,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onRemoveItem={handleRemoveItem}
                   onRemoveItems={handleRemoveItems}
                   page={activePage}
+                  pinnedItems={pinnedItems}
+                  onTogglePin={handleTogglePin}
                 />
               </div>
             )}

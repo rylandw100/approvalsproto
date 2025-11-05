@@ -23,6 +23,8 @@ interface ApprovalsListProps {
   onCategoryChange?: (category: string) => void
   sortBy?: "recency" | "dueDate"
   onSortChange?: (sortBy: "recency" | "dueDate") => void
+  pinnedItems?: Set<number>
+  onTogglePin?: (id: number) => void
 }
 
 export function ApprovalsList({ 
@@ -44,6 +46,8 @@ export function ApprovalsList({
   onCategoryChange,
   sortBy = "recency",
   onSortChange,
+  pinnedItems = new Set(),
+  onTogglePin,
 }: ApprovalsListProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
@@ -308,12 +312,12 @@ export function ApprovalsList({
 
   // Sort filtered approvals
   const sortedApprovals = [...filteredApprovals].sort((a, b) => {
-    // Critical/pinned items always go to the top
-    const aIsCritical = (a as any).isCritical || (a as any).pinned
-    const bIsCritical = (b as any).isCritical || (b as any).pinned
-    if (aIsCritical && !bIsCritical) return -1
-    if (!aIsCritical && bIsCritical) return 1
-    if (aIsCritical && bIsCritical) return 0 // Keep critical items in their original order
+    // Pinned items always go to the top (check pinnedItems state)
+    const aIsPinned = pinnedItems.has(a.id) || (a as any).isCritical || (a as any).pinned
+    const bIsPinned = pinnedItems.has(b.id) || (b as any).isCritical || (b as any).pinned
+    if (aIsPinned && !bIsPinned) return -1
+    if (!aIsPinned && bIsPinned) return 1
+    if (aIsPinned && bIsPinned) return 0 // Keep pinned items in their original order
     
     if (page === "tasks" && sortBy === "dueDate") {
       // Sort by due date (items without due date go to the end)
@@ -710,7 +714,7 @@ export function ApprovalsList({
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
-                    {(approval as any).pinned && (
+                    {(pinnedItems.has(approval.id) || (approval as any).pinned) && (
                       <Pin className="h-3.5 w-3.5 text-gray-500 fill-current" />
                     )}
                   </div>
@@ -743,6 +747,20 @@ export function ApprovalsList({
               
               {hoveredItem === approval.id && (
                 <div className="absolute top-2 right-2 flex gap-1">
+                  {onTogglePin && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`rippling-btn-ghost h-6 w-6 ${pinnedItems.has(approval.id) ? 'bg-gray-100' : 'hover:bg-gray-100'}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onTogglePin(approval.id)
+                      }}
+                      title={pinnedItems.has(approval.id) ? "Unpin" : "Pin"}
+                    >
+                      <Pin className={`h-3 w-3 ${pinnedItems.has(approval.id) ? 'text-gray-700 fill-current' : 'text-gray-500'}`} />
+                    </Button>
+                  )}
                   {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
                     <Button
                       variant="ghost"
