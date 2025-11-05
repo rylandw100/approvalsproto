@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Check, X, MessageCircle, Plane, Search, AlertTriangle, Archive } from "lucide-react"
+import { ChevronDown, Check, X, MessageCircle, Plane, Search, AlertTriangle, Archive, Pin } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 interface ApprovalsListProps {
@@ -186,8 +186,8 @@ export function ApprovalsList({
   const taskData = [
     {
       id: 100,
-      requestor: "Payroll Team",
-      subject: "Run payroll",
+      requestor: "Thomas Bennett",
+      subject: "Pay run request - Jun 16 - Jun 30: Semi-monthly pay schedule for 123456789",
       category: "Payroll",
       time: "just now",
       status: "pending",
@@ -582,8 +582,20 @@ export function ApprovalsList({
                   }}
                 />
                 <div className="flex-1">
-                  <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="rippling-text-sm text-foreground font-semibold">{approval.requestor}</h3>
+                    {(approval as any).pinned && (
+                      <Pin className="h-3.5 w-3.5 text-gray-500 fill-current" />
+                    )}
+                  </div>
                   <p className="rippling-text-sm text-muted-foreground mt-1 font-normal">{approval.subject}</p>
+                  {(approval as any).isCritical && (
+                    <div className="mt-1">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        ⚠️ Critical
+                      </span>
+                    </div>
+                  )}
                   {'warning' in approval && approval.warning && (
                     <div className="mt-1">
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

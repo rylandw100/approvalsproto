@@ -3,7 +3,7 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter, Archive } from "lucide-react"
+import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter, Archive, Pin } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 interface ApprovalsGridProps {
@@ -248,8 +248,8 @@ export function ApprovalsGrid({
   const taskData = [
     {
       id: 100,
-      requestor: "Payroll Team",
-      subject: "Run payroll",
+      requestor: "Thomas Bennett",
+      subject: "Pay run request - Jun 16 - Jun 30: Semi-monthly pay schedule for 123456789",
       category: "Payroll",
       time: "just now",
       requestedOn: "Oct 27, 2024",
@@ -817,8 +817,18 @@ export function ApprovalsGrid({
                     </div>
 
                     {/* Details */}
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-600 line-clamp-1">{approval.subject}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                        <span className="text-sm text-gray-600 line-clamp-1">{approval.subject}</span>
+                        {(approval as any).pinned && (
+                          <Pin className="h-3.5 w-3.5 text-gray-500 fill-current flex-shrink-0" />
+                        )}
+                      </div>
+                      {(approval as any).isCritical && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 flex-shrink-0">
+                          ⚠️ Critical
+                        </span>
+                      )}
                     </div>
 
                     {/* Attributes - Always show all icons */}
