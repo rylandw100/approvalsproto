@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Check, X, MessageCircle, Plane, Search, AlertTriangle, Archive, Pin } from "lucide-react"
+import { ChevronDown, Check, X, MessageCircle, Plane, Search, AlertTriangle, Archive, Pin, ChevronRight, ChevronLeft } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 interface ApprovalsListProps {
@@ -58,6 +58,7 @@ export function ApprovalsList({
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
   const [searchQuery, setSearchQuery] = useState<string>(externalSearchQuery || "")
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false)
   
   // Update internal state when external props change
   useEffect(() => {
@@ -363,6 +364,58 @@ export function ApprovalsList({
     }
   }
 
+  // Calculate category counts
+  const getCategoryCount = (category: string) => {
+    if (category === "All") {
+      return approvals.filter(approval => !removedItems.has(approval.id)).length
+    }
+    if (page === "tasks") {
+      if (category === "Approvals") {
+        return approvals.filter(approval => 
+          !removedItems.has(approval.id) && approval.category.startsWith("Approvals -")
+        ).length
+      }
+      if (category === "HR Management" || category === "Reimbursements" || category === "Time and Attendance") {
+        return approvals.filter(approval => 
+          !removedItems.has(approval.id) && 
+          (approval.category === `Approvals - ${category}` || approval.category === category)
+        ).length
+      }
+      return approvals.filter(approval => 
+        !removedItems.has(approval.id) && approval.category === category
+      ).length
+    } else {
+      // For approvals page, categories are like "HR Management" but approvals have "Approvals - HR Management"
+      return approvals.filter(approval => 
+        !removedItems.has(approval.id) && approval.category === `Approvals - ${category}`
+      ).length
+    }
+  }
+
+  // Get all sub-categories for the panel
+  const getPanelCategories = () => {
+    if (page === "tasks") {
+      return [
+        { name: "All", isSubCategory: false },
+        { name: "Approvals", isSubCategory: false },
+        { name: "HR Management", isSubCategory: true },
+        { name: "Reimbursements", isSubCategory: true },
+        { name: "Time and Attendance", isSubCategory: true },
+        { name: "Training", isSubCategory: false },
+        { name: "Documents", isSubCategory: false },
+        { name: "Team Building", isSubCategory: false },
+        { name: "Payroll", isSubCategory: false },
+      ]
+    } else {
+      return [
+        { name: "All", isSubCategory: false },
+        { name: "HR Management", isSubCategory: false },
+        { name: "Reimbursements", isSubCategory: false },
+        { name: "Time and Attendance", isSubCategory: false },
+      ]
+    }
+  }
+
   return (
     <div className="h-full flex flex-col bg-card">
       {!hideHeader && (
@@ -373,9 +426,9 @@ export function ApprovalsList({
               <Button 
                 variant="ghost" 
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="rippling-btn-ghost h-auto p-0 rippling-text-xl text-foreground hover:bg-transparent"
+                className="rippling-btn-ghost h-auto p-0 hover:bg-transparent"
               >
-                {selectedCategory}
+                <h2 className="text-2xl font-semibold text-foreground">{selectedCategory}</h2>
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
               {isDropdownOpen && (
@@ -567,7 +620,61 @@ export function ApprovalsList({
         </div>
       </div>
       )}
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Expansion Panel */}
+        {!hideHeader && (
+          <div className={`flex-shrink-0 border-r border-border transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
+            <div className="p-4 h-full">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-gray-900">Categories</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsPanelExpanded(false)}
+                  className="h-6 w-6"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="space-y-1">
+                {getPanelCategories().map((cat) => (
+                  <button
+                    key={cat.name}
+                    onClick={() => {
+                      handleCategoryChange(cat.name)
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                      cat.isSubCategory ? 'pl-6' : ''
+                    } ${
+                      selectedCategory === cat.name 
+                        ? 'bg-[#CCCCCC] text-black font-medium' 
+                        : 'hover:bg-muted text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span>{cat.name}</span>
+                      <span className="text-xs text-gray-500">{getCategoryCount(cat.name)}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Panel toggle button */}
+        {!hideHeader && !isPanelExpanded && (
+          <div className="flex-shrink-0 border-r border-border">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsPanelExpanded(true)}
+              className="h-8 w-8 m-1"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+        <div className="flex-1 overflow-y-auto min-h-0">
         {sortedApprovals.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full p-8">
             <div className="text-center">
