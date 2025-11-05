@@ -472,7 +472,7 @@ export function ApprovalsGridWithSplit({
                           onClick={() => setIsViewModeDropdownOpen(!isViewModeDropdownOpen)}
                           className="h-7 text-xs gap-1.5 px-2"
                         >
-                          View: {viewMode === "full-width" ? "Full-width" : "Split screen"}
+                          View: {(viewMode as "full-width" | "split") === "full-width" ? "Full-width" : "Split screen"}
                           <ChevronDown className="h-3 w-3" />
                         </Button>
                         {isViewModeDropdownOpen && (
@@ -483,7 +483,7 @@ export function ApprovalsGridWithSplit({
                                 setIsViewModeDropdownOpen(false)
                               }}
                               className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                viewMode === "full-width" ? 'bg-gray-50 font-medium' : ''
+                                (viewMode as string) === "full-width" ? 'bg-gray-50 font-medium' : ''
                               }`}
                             >
                               Full-width
@@ -494,7 +494,7 @@ export function ApprovalsGridWithSplit({
                                 setIsViewModeDropdownOpen(false)
                               }}
                               className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                                viewMode === "split" ? 'bg-gray-50 font-medium' : ''
+                                (viewMode as string) === "split" ? 'bg-gray-50 font-medium' : ''
                               }`}
                             >
                               Split screen
