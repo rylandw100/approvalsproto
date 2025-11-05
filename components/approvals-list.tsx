@@ -420,7 +420,7 @@ export function ApprovalsList({
   }
 
   return (
-    <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 border-l-0 ${isPanelExpanded ? 'w-[584px]' : 'w-[376px]'}`}>
+    <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 border-l-0 ${hideHeader ? 'w-full' : (isPanelExpanded ? 'w-[584px]' : 'w-[376px]')}`}>
       {/* Expansion Panel */}
       {!hideHeader && (
         <div className={`flex-shrink-0 border-r border-l-0 border-border pt-2 transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden border-l-0'}`}>

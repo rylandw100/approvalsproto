@@ -543,7 +543,7 @@ export function ApprovalsGridWithSplit({
 
                 {/* List and Detail View */}
                 <div className="flex flex-1 min-h-0 overflow-hidden border border-gray-200 rounded-[8px]">
-                  <div className="w-[340px] border-r border-gray-200 flex flex-col min-h-0">
+                  <div className="w-[340px] flex-shrink-0 border-r border-gray-200 flex flex-col min-h-0 overflow-hidden">
                           <ApprovalsList
                             selectedItem={selectedItem}
                             onSelectItem={onSelectItem}
@@ -567,7 +567,7 @@ export function ApprovalsGridWithSplit({
                             onTogglePin={onTogglePin}
                           />
                   </div>
-                  <div className="flex-1 flex flex-col min-h-0">
+                  <div className="flex-1 flex-shrink-0 flex flex-col min-h-0 overflow-hidden">
                             <ApprovalDetail 
                               selectedItem={selectedItem} 
                               selectedItems={selectedItems}
