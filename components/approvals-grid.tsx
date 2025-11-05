@@ -12,6 +12,9 @@ interface ApprovalsGridProps {
   onSelectAll: (filteredIds: number[]) => void
   onClearSelection: () => void
   onOpenDrawer: (id: number) => void
+  removedItems?: Set<number>
+  onRemoveItem?: (id: number) => void
+  onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
   viewMode?: "full-width" | "split"
   onViewModeChange?: (mode: "full-width" | "split") => void
@@ -31,6 +34,9 @@ export function ApprovalsGrid({
   onSelectAll,
   onClearSelection,
   onOpenDrawer,
+  removedItems = new Set(),
+  onRemoveItem,
+  onRemoveItems,
   page = "approvals",
   viewMode,
   onViewModeChange,
@@ -369,6 +375,9 @@ export function ApprovalsGrid({
   }
 
   const filteredApprovals = approvals.filter(approval => {
+    // Remove filter - exclude removed items
+    if (removedItems.has(approval.id)) return false
+    
     const searchMatch = searchQuery === "" || 
       approval.requestor.toLowerCase().includes(searchQuery.toLowerCase()) ||
       approval.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -803,9 +812,18 @@ export function ApprovalsGrid({
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold flex justify-end">Actions</div>
             </div>
 
-            {/* Table Rows */}
-            <div className="divide-y divide-border">
-              {sortedApprovals.map((approval) => {
+                    {/* Table Rows */}
+                    <div className="divide-y divide-border">
+                      {sortedApprovals.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-16 px-6">
+                          <div className="text-center">
+                            <div className="text-4xl mb-4">🎉</div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">You're all caught up!</h3>
+                            <p className="text-sm text-gray-600">All tasks have been processed.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        sortedApprovals.map((approval) => {
                 const hasWarning = 'warning' in approval && !!approval.warning
                 const hasComments = 'comments' in approval && approval.comments && approval.comments.length > 0
                 const hasTrip = 'trip' in approval && approval.trip && approval.trip.linked
@@ -935,7 +953,9 @@ export function ApprovalsGrid({
                             className="h-7 w-7 hover:bg-green-100"
                             onClick={(e) => {
                               e.stopPropagation()
-                              // Handle approve action
+                              if (onRemoveItem) {
+                                onRemoveItem(approval.id)
+                              }
                             }}
                             title="Approve"
                           >
@@ -947,7 +967,9 @@ export function ApprovalsGrid({
                             className="h-7 w-7 hover:bg-red-100"
                             onClick={(e) => {
                               e.stopPropagation()
-                              // Handle reject action
+                              if (onRemoveItem) {
+                                onRemoveItem(approval.id)
+                              }
                             }}
                             title="Reject"
                           >
@@ -970,7 +992,12 @@ export function ApprovalsGrid({
                     </div>
                   </div>
                 )
-              })}
+                        })
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1044,13 +1071,43 @@ export function ApprovalsGrid({
                   // If only approvals or payroll are selected, show Approve, Reject, Mark as done
                   if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                     actions.push(
-                      <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="approve" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Approve
                       </Button>,
-                      <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="reject" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Reject
                       </Button>,
-                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="mark-done" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Mark as done
                       </Button>
                     );
@@ -1058,10 +1115,30 @@ export function ApprovalsGrid({
                   // If only documents are selected, show Sign document, Mark as done
                   else if (hasDocuments && !hasApprovals && !hasTraining && !hasTeamBuilding) {
                     actions.push(
-                      <Button key="sign" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="sign" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Sign document
                       </Button>,
-                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="mark-done" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Mark as done
                       </Button>
                     );
@@ -1069,10 +1146,30 @@ export function ApprovalsGrid({
                   // If only training are selected, show Take course, Mark as done
                   else if (hasTraining && !hasApprovals && !hasDocuments && !hasTeamBuilding) {
                     actions.push(
-                      <Button key="take-course" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="take-course" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Take course
                       </Button>,
-                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="mark-done" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Mark as done
                       </Button>
                     );
@@ -1080,7 +1177,17 @@ export function ApprovalsGrid({
                   // If only team building are selected, show Mark as done
                   else if (hasTeamBuilding && !hasApprovals && !hasDocuments && !hasTraining) {
                     actions.push(
-                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="mark-done" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Mark as done
                       </Button>
                     );
@@ -1088,7 +1195,17 @@ export function ApprovalsGrid({
                   // If mixed selections, only show Mark as done
                   else {
                     actions.push(
-                      <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                      <Button 
+                        key="mark-done" 
+                        variant="ghost" 
+                        className="text-white hover:bg-white/20 h-8 px-3"
+                        onClick={() => {
+                          if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                            onRemoveItems(Array.from(selectedItems))
+                            onClearSelection()
+                          }
+                        }}
+                      >
                         Mark as done
                       </Button>
                     );

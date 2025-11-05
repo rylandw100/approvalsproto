@@ -10,11 +10,14 @@ interface DrawerProps {
   selectedItem: number | null
   selectedItems: Set<number>
   onClearSelection: () => void
+  removedItems?: Set<number>
+  onRemoveItem?: (id: number) => void
+  onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
   onViewModeChange?: (mode: "full-width" | "split") => void
 }
 
-export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSelection, page = "approvals", onViewModeChange }: DrawerProps) {
+export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSelection, removedItems = new Set(), onRemoveItem, onRemoveItems, page = "approvals", onViewModeChange }: DrawerProps) {
   if (!isOpen) return null
 
   return (
@@ -44,6 +47,9 @@ export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSe
             selectedItem={selectedItem}
             selectedItems={selectedItems}
             onClearSelection={onClearSelection}
+            removedItems={removedItems}
+            onRemoveItem={onRemoveItem}
+            onRemoveItems={onRemoveItems}
             page={page}
             viewMode="full-width"
             onViewModeChange={(mode) => {

@@ -15,9 +15,44 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTab] = useState<string>("opt1")
   const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())
+  const [removedItems, setRemovedItems] = useState<Set<number>>(new Set())
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [drawerItem, setDrawerItem] = useState<number | null>(null)
   const opt3ViewModeChangeRef = useRef<((mode: "full-width" | "split") => void) | null>(null)
+
+  const handleRemoveItem = (id: number) => {
+    setRemovedItems(prev => new Set(prev).add(id))
+    // Clear selection if the selected item is removed
+    if (selectedItem === id) {
+      setSelectedItem(null)
+    }
+    // Remove from selected items if it's selected
+    if (selectedItems.has(id)) {
+      setSelectedItems(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(id)
+        return newSet
+      })
+    }
+  }
+
+  const handleRemoveItems = (ids: number[]) => {
+    setRemovedItems(prev => {
+      const newSet = new Set(prev)
+      ids.forEach(id => newSet.add(id))
+      return newSet
+    })
+    // Clear selection if the selected item is removed
+    if (selectedItem && ids.includes(selectedItem)) {
+      setSelectedItem(null)
+    }
+    // Remove from selected items
+    setSelectedItems(prev => {
+      const newSet = new Set(prev)
+      ids.forEach(id => newSet.delete(id))
+      return newSet
+    })
+  }
 
   const handleToggleItem = (id: number) => {
     setSelectedItems(prev => {
@@ -80,6 +115,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     onSelectAll={handleSelectAll}
                     onClearSelection={handleClearSelection}
                     onFilterChange={handleFilterChange}
+                    removedItems={removedItems}
+                    onRemoveItem={handleRemoveItem}
+                    onRemoveItems={handleRemoveItems}
                     page={activePage}
                   />
                 </div>
@@ -88,6 +126,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     selectedItem={selectedItem} 
                     selectedItems={selectedItems}
                     onClearSelection={handleClearSelection}
+                    removedItems={removedItems}
+                    onRemoveItem={handleRemoveItem}
+                    onRemoveItems={handleRemoveItems}
                     page={activePage}
                   />
                 </div>
@@ -100,6 +141,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onSelectAll={handleSelectAll}
                   onClearSelection={handleClearSelection}
                   onOpenDrawer={handleOpenDrawer}
+                  removedItems={removedItems}
+                  onRemoveItem={handleRemoveItem}
+                  onRemoveItems={handleRemoveItems}
                   page={activePage}
                 />
               </div>
@@ -121,6 +165,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     opt3ViewModeChangeRef.current = handler
                   }}
                   drawerOpen={drawerOpen}
+                  removedItems={removedItems}
+                  onRemoveItem={handleRemoveItem}
+                  onRemoveItems={handleRemoveItems}
                   page={activePage}
                 />
               </div>
@@ -135,6 +182,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         selectedItem={drawerItem}
         selectedItems={selectedItems}
         onClearSelection={handleClearSelection}
+        removedItems={removedItems}
+        onRemoveItem={handleRemoveItem}
+        onRemoveItems={handleRemoveItems}
         page={activePage}
         onViewModeChange={(mode) => {
           // When collapsing from drawer, switch to split screen in opt3

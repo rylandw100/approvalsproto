@@ -7,6 +7,9 @@ interface ApprovalDetailProps {
   selectedItem: number | null
   selectedItems: Set<number>
   onClearSelection: () => void
+  removedItems?: Set<number>
+  onRemoveItem?: (id: number) => void
+  onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
   backgroundColor?: "white" | "default"
   viewMode?: "full-width" | "split"
@@ -14,7 +17,7 @@ interface ApprovalDetailProps {
   onExpandToDrawer?: () => void
 }
 
-export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, page = "approvals", backgroundColor = "default", viewMode, onViewModeChange, onExpandToDrawer }: ApprovalDetailProps) {
+export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, removedItems = new Set(), onRemoveItem, onRemoveItems, page = "approvals", backgroundColor = "default", viewMode, onViewModeChange, onExpandToDrawer }: ApprovalDetailProps) {
   const [activeTab, setActiveTab] = useState("Overview")
   
   // Helper function to get display category name
@@ -925,22 +928,86 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
       <div className="border-t border-border p-4 flex justify-between items-center bg-card flex-shrink-0">
           {(approval.category === "Training" || approval.category === "Documents" || approval.category === "Team Building") ? (
             <>
-              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
+              <Button 
+                variant="outline" 
+                disabled={hasSelectedItems} 
+                className="rippling-btn-outline"
+                onClick={() => {
+                  if (selectedItem && onRemoveItem) {
+                    onRemoveItem(selectedItem)
+                  }
+                }}
+              >
+                Mark as done
+              </Button>
               <div className="flex gap-3">
                 {approval.category === "Documents" && (
-                  <Button disabled={hasSelectedItems} className="rippling-btn-primary">Sign document</Button>
+                  <Button 
+                    disabled={hasSelectedItems} 
+                    className="rippling-btn-primary"
+                    onClick={() => {
+                      if (selectedItem && onRemoveItem) {
+                        onRemoveItem(selectedItem)
+                      }
+                    }}
+                  >
+                    Sign document
+                  </Button>
                 )}
                 {approval.category === "Training" && (
-                  <Button disabled={hasSelectedItems} className="rippling-btn-primary">Take course</Button>
+                  <Button 
+                    disabled={hasSelectedItems} 
+                    className="rippling-btn-primary"
+                    onClick={() => {
+                      if (selectedItem && onRemoveItem) {
+                        onRemoveItem(selectedItem)
+                      }
+                    }}
+                  >
+                    Take course
+                  </Button>
                 )}
               </div>
             </>
           ) : (
             <>
-              <Button variant="outline" disabled={hasSelectedItems} className="rippling-btn-outline">Mark as done</Button>
+              <Button 
+                variant="outline" 
+                disabled={hasSelectedItems} 
+                className="rippling-btn-outline"
+                onClick={() => {
+                  if (selectedItem && onRemoveItem) {
+                    onRemoveItem(selectedItem)
+                  }
+                }}
+              >
+                Mark as done
+              </Button>
               <div className="flex gap-3">
-              <Button disabled={hasSelectedItems} className="rippling-btn-primary" style={{ backgroundColor: '#BB3D2A' }}>Reject</Button>
-              <Button disabled={hasSelectedItems} className="rippling-btn-primary" style={{ backgroundColor: '#106964' }}>Approve</Button>
+              <Button 
+                disabled={hasSelectedItems} 
+                className="rippling-btn-primary" 
+                style={{ backgroundColor: '#BB3D2A' }}
+                onClick={() => {
+                  if (selectedItem && onRemoveItem) {
+                    onRemoveItem(selectedItem)
+                  }
+                }}
+              >
+                Reject
+              </Button>
+              <Button 
+                disabled={hasSelectedItems} 
+                className="rippling-btn-primary" 
+                style={{ backgroundColor: '#106964' }}
+                onClick={() => {
+                  if (selectedItem && onRemoveItem) {
+                    onRemoveItem(selectedItem)
+                  }
+                }}
+              >
+                Approve
+              </Button>
               </div>
             </>
           )}
@@ -986,13 +1053,43 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If only approvals or payroll are selected, show Approve, Reject, Mark as done
                 if ((hasApprovals || hasPayroll) && !hasDocuments && !hasTraining && !hasTeamBuilding) {
                   actions.push(
-                    <Button key="approve" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="approve" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Approve
                     </Button>,
-                    <Button key="reject" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="reject" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Reject
                     </Button>,
-                    <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="mark-done" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Mark as done
                     </Button>
                   );
@@ -1000,10 +1097,30 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If only documents are selected, show Sign document, Mark as done
                 else if (hasDocuments && !hasApprovals && !hasTraining && !hasTeamBuilding) {
                   actions.push(
-                    <Button key="sign" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="sign" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Sign document
                     </Button>,
-                    <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="mark-done" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Mark as done
                     </Button>
                   );
@@ -1011,10 +1128,30 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If only training are selected, show Take course, Mark as done
                 else if (hasTraining && !hasApprovals && !hasDocuments && !hasTeamBuilding) {
                   actions.push(
-                    <Button key="take-course" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="take-course" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Take course
                     </Button>,
-                    <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="mark-done" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Mark as done
                     </Button>
                   );
@@ -1022,7 +1159,17 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If only team building are selected, show Mark as done
                 else if (hasTeamBuilding && !hasApprovals && !hasDocuments && !hasTraining) {
                   actions.push(
-                    <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="mark-done" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Mark as done
                     </Button>
                   );
@@ -1030,7 +1177,17 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                 // If mixed selections, only show Mark as done
                 else {
                   actions.push(
-                    <Button key="mark-done" variant="ghost" className="text-white hover:bg-white/20 h-8 px-3">
+                    <Button 
+                      key="mark-done" 
+                      variant="ghost" 
+                      className="text-white hover:bg-white/20 h-8 px-3"
+                      onClick={() => {
+                        if (onRemoveItems && selectedItems && selectedItems.size > 0) {
+                          onRemoveItems(Array.from(selectedItems))
+                          onClearSelection()
+                        }
+                      }}
+                    >
                       Mark as done
                     </Button>
                   );

@@ -21,6 +21,9 @@ interface ApprovalsGridWithSplitProps {
   onCloseDrawer?: () => void
   drawerViewModeChange?: (handler: (mode: "full-width" | "split") => void) => void
   drawerOpen?: boolean
+  removedItems?: Set<number>
+  onRemoveItem?: (id: number) => void
+  onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
 }
 
@@ -36,6 +39,9 @@ export function ApprovalsGridWithSplit({
   onCloseDrawer,
   drawerViewModeChange,
   drawerOpen = false,
+  removedItems = new Set(),
+  onRemoveItem,
+  onRemoveItems,
   page = "approvals"
 }: ApprovalsGridWithSplitProps) {
   const [viewMode, setViewMode] = useState<"full-width" | "split">("full-width")
@@ -187,24 +193,27 @@ export function ApprovalsGridWithSplit({
       {viewMode === "full-width" ? (
         <div className="flex-1 flex overflow-hidden">
           <div className="flex-1 overflow-hidden">
-            <ApprovalsGrid
-              selectedItems={selectedItems}
-              onToggleItem={onToggleItem}
-              onSelectAll={onSelectAll}
-              onClearSelection={onClearSelection}
-              onOpenDrawer={onOpenDrawer}
-              page={page}
-              viewMode={viewMode}
-              onViewModeChange={handleViewModeChange}
-              externalSearchQuery={searchQuery}
-              externalSelectedCategory={selectedCategory}
-              onSearchChange={setSearchQuery}
-              onCategoryChange={setSelectedCategory}
-              selectedItem={selectedItem}
-              onSelectItem={onSelectItem}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-            />
+                    <ApprovalsGrid
+                      selectedItems={selectedItems}
+                      onToggleItem={onToggleItem}
+                      onSelectAll={onSelectAll}
+                      onClearSelection={onClearSelection}
+                      onOpenDrawer={onOpenDrawer}
+                      removedItems={removedItems}
+                      onRemoveItem={onRemoveItem}
+                      onRemoveItems={onRemoveItems}
+                      page={page}
+                      viewMode={viewMode}
+                      onViewModeChange={handleViewModeChange}
+                      externalSearchQuery={searchQuery}
+                      externalSelectedCategory={selectedCategory}
+                      onSearchChange={setSearchQuery}
+                      onCategoryChange={setSelectedCategory}
+                      selectedItem={selectedItem}
+                      onSelectItem={onSelectItem}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
+                    />
           </div>
           {selectedItem && (
             <div className="w-[800px] border-l border-gray-200 flex flex-col bg-[#FAF9F7] overflow-hidden">
@@ -218,15 +227,18 @@ export function ApprovalsGridWithSplit({
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <ApprovalDetail 
-                selectedItem={selectedItem} 
-                selectedItems={selectedItems}
-                onClearSelection={onClearSelection}
-                page={page}
-                viewMode={viewMode}
-                onViewModeChange={handleViewModeChange}
-                onExpandToDrawer={handleExpandToDrawer}
-              />
+                      <ApprovalDetail 
+                        selectedItem={selectedItem} 
+                        selectedItems={selectedItems}
+                        onClearSelection={onClearSelection}
+                        removedItems={removedItems}
+                        onRemoveItem={onRemoveItem}
+                        onRemoveItems={onRemoveItems}
+                        page={page}
+                        viewMode={viewMode}
+                        onViewModeChange={handleViewModeChange}
+                        onExpandToDrawer={handleExpandToDrawer}
+                      />
             </div>
           )}
         </div>
@@ -463,35 +475,41 @@ export function ApprovalsGridWithSplit({
                 {/* List and Detail View */}
                 <div className="flex flex-1 min-h-0 overflow-hidden">
                   <div className="w-[340px] border-r border-gray-200 flex flex-col min-h-0">
-                    <ApprovalsList 
-                      selectedItem={selectedItem} 
-                      onSelectItem={onSelectItem}
-                      selectedItems={selectedItems}
-                      onToggleItem={onToggleItem}
-                      onSelectAll={onSelectAll}
-                      onClearSelection={onClearSelection}
-                      onFilterChange={handleFilterChange}
-                      page={page}
-                      hideHeader={true}
-                      externalSearchQuery={searchQuery}
-                      externalSelectedCategory={selectedCategory}
-                      onSearchChange={setSearchQuery}
-                      onCategoryChange={setSelectedCategory}
-                      sortBy={sortBy}
-                      onSortChange={setSortBy}
-                    />
+                            <ApprovalsList 
+                              selectedItem={selectedItem} 
+                              onSelectItem={onSelectItem}
+                              selectedItems={selectedItems}
+                              onToggleItem={onToggleItem}
+                              onSelectAll={onSelectAll}
+                              onClearSelection={onClearSelection}
+                              onFilterChange={handleFilterChange}
+                              removedItems={removedItems}
+                              onRemoveItem={onRemoveItem}
+                              onRemoveItems={onRemoveItems}
+                              page={page}
+                              hideHeader={true}
+                              externalSearchQuery={searchQuery}
+                              externalSelectedCategory={selectedCategory}
+                              onSearchChange={setSearchQuery}
+                              onCategoryChange={setSelectedCategory}
+                              sortBy={sortBy}
+                              onSortChange={setSortBy}
+                            />
                   </div>
                   <div className="flex-1 flex flex-col min-h-0">
-                    <ApprovalDetail 
-                      selectedItem={selectedItem} 
-                      selectedItems={selectedItems}
-                      onClearSelection={onClearSelection}
-                      page={page}
-                      backgroundColor="white"
-                      viewMode={viewMode}
-                      onViewModeChange={handleViewModeChange}
-                      onExpandToDrawer={handleExpandToDrawer}
-                    />
+                            <ApprovalDetail 
+                              selectedItem={selectedItem} 
+                              selectedItems={selectedItems}
+                              onClearSelection={onClearSelection}
+                              removedItems={removedItems}
+                              onRemoveItem={onRemoveItem}
+                              onRemoveItems={onRemoveItems}
+                              page={page}
+                              backgroundColor="white"
+                              viewMode={viewMode}
+                              onViewModeChange={handleViewModeChange}
+                              onExpandToDrawer={handleExpandToDrawer}
+                            />
                   </div>
                 </div>
               </div>

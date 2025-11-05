@@ -12,6 +12,9 @@ interface ApprovalsListProps {
   onSelectAll: (filteredIds: number[]) => void
   onClearSelection: () => void
   onFilterChange: (filteredIds: number[]) => void
+  removedItems?: Set<number>
+  onRemoveItem?: (id: number) => void
+  onRemoveItems?: (ids: number[]) => void
   page?: "approvals" | "tasks"
   hideHeader?: boolean
   externalSearchQuery?: string
@@ -30,6 +33,9 @@ export function ApprovalsList({
   onSelectAll, 
   onClearSelection, 
   onFilterChange,
+  removedItems = new Set(),
+  onRemoveItem,
+  onRemoveItems,
   page = "approvals",
   hideHeader = false,
   externalSearchQuery,
@@ -282,6 +288,9 @@ export function ApprovalsList({
   }
   
   const filteredApprovals = approvals.filter(approval => {
+    // Remove filter - exclude removed items
+    if (removedItems.has(approval.id)) return false
+    
     // Category filter
     const categoryMatch = page === "tasks" 
       ? getCategoryMatch(approval, selectedCategory)
@@ -559,8 +568,17 @@ export function ApprovalsList({
       </div>
       )}
       <div className="flex-1 overflow-y-auto min-h-0">
-        <div className="space-y-0 pb-4">
-          {sortedApprovals.map((approval) => (
+        {sortedApprovals.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full p-8">
+            <div className="text-center">
+              <div className="text-4xl mb-4">🎉</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">You're all caught up!</h3>
+              <p className="text-sm text-gray-600">All tasks have been processed.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-0 pb-4">
+            {sortedApprovals.map((approval) => (
             <div
               key={approval.id}
               onClick={() => onSelectItem(approval.id)}
@@ -624,9 +642,11 @@ export function ApprovalsList({
                             className="rippling-btn-ghost h-6 w-6"
                       onClick={(e) => {
                         e.stopPropagation()
-                        // Handle archive action
+                        if (onRemoveItem) {
+                          onRemoveItem(approval.id)
+                        }
                       }}
-                      title="Archive"
+                      title="Mark as done"
                     >
                       <Archive className="h-3 w-3 text-muted-foreground" />
                     </Button>
@@ -638,8 +658,11 @@ export function ApprovalsList({
                         className="rippling-btn-ghost h-6 w-6 hover:bg-success/10"
                         onClick={(e) => {
                           e.stopPropagation()
-                          // Handle approve action
+                          if (onRemoveItem) {
+                            onRemoveItem(approval.id)
+                          }
                         }}
+                        title="Approve"
                       >
                         <Check className="h-3 w-3 text-success" />
                       </Button>
@@ -649,8 +672,11 @@ export function ApprovalsList({
                         className="rippling-btn-ghost h-6 w-6 hover:bg-destructive/10"
                         onClick={(e) => {
                           e.stopPropagation()
-                          // Handle reject action
+                          if (onRemoveItem) {
+                            onRemoveItem(approval.id)
+                          }
                         }}
+                        title="Reject"
                       >
                         <X className="h-3 w-3 text-destructive" />
                       </Button>
@@ -672,7 +698,8 @@ export function ApprovalsList({
               )}
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
