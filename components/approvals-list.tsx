@@ -420,7 +420,7 @@ export function ApprovalsList({
     <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 ${isPanelExpanded ? 'w-[584px]' : 'w-[335px]'}`}>
       {/* Expansion Panel */}
       {!hideHeader && (
-        <div className={`flex-shrink-0 border-r border-border transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
+        <div className={`flex-shrink-0 border-r border-l-0 border-border pt-6 transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden'}`}>
           <div className="p-4 h-full">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-gray-900">Categories</h3>

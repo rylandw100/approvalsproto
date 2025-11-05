@@ -812,7 +812,7 @@ export function ApprovalsGrid({
               </div>
             </div>
             {/* Table Header */}
-            <div className={`grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-muted border-b border-border ${viewMode === undefined ? 'border-t border-l border-r border-gray-200 rounded-t-[8px]' : ''}`}>
+            <div className={`grid grid-cols-[50px_130px_160px_160px_minmax(200px,1fr)_100px_140px] gap-4 px-6 py-3 bg-muted border-b border-border ${viewMode === undefined ? 'border-t border-l border-r border-gray-200 rounded-t-[8px]' : viewMode !== undefined ? 'border-t border-l border-r border-gray-200 rounded-t-[8px]' : ''}`}>
               <div></div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested on</div>
               <div className="rippling-text-xs text-muted-foreground uppercase font-semibold">Requested by</div>
@@ -823,7 +823,7 @@ export function ApprovalsGrid({
             </div>
 
             {/* Table Rows */}
-            <div className={`divide-y divide-border ${viewMode === undefined ? 'border-l border-r border-b border-gray-200 rounded-b-[8px]' : ''}`}>
+            <div className={`divide-y divide-border ${viewMode === undefined ? 'border-l border-r border-b border-gray-200 rounded-b-[8px]' : viewMode !== undefined ? 'border-l border-r border-b border-gray-200 rounded-b-[8px]' : ''}`}>
               {sortedApprovals.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 px-6">
                   <div className="text-center">
