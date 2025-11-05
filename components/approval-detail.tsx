@@ -221,13 +221,21 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
     },
     // Task data (for Inbox/Tasks page)
     100: {
-      requestor: "Payroll Team",
-      subject: "Run payroll",
+      requestor: "Thomas Bennett",
+      subject: "Pay run request - Jun 16 - Jun 30: Semi-monthly pay schedule for 123456789",
       category: "Payroll",
-      summary: "You need to run payroll for the current pay period. This is a critical task that must be completed before the end of the business day.",
+      summary: "Pay run request for the semi-monthly pay period from June 16 to June 30, 2024. This pay run covers employees and contractors under the semi-monthly pay schedule for 123456789.",
       isCritical: true,
       pinned: true,
       note: "Payroll processing is time-sensitive and must be completed by 5:00 PM today to ensure employees are paid on time.",
+      payRunType: "Regular",
+      payPeriodStartDate: "June 16, 2024",
+      payPeriodEndDate: "June 30, 2024",
+      takeActionDeadline: "October 22, 2024",
+      checkDate: "October 25, 2024",
+      isAutoApproved: false,
+      payScheduleFrequency: "Semi-monthly",
+      paySchedule: "Semi-monthly pay schedule for 123456789",
       employee: {
         name: "You",
         role: "Payroll Administrator",
@@ -471,6 +479,13 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                   <div className={`bg-blue-50 border border-blue-200 rounded-lg ${isSplitView ? "p-3" : "p-6"}`}>
                     <h2 className={`${isSplitView ? "text-base" : "text-lg"} font-semibold text-gray-900 ${isSplitView ? "mb-1" : "mb-2"}`}>Request Summary</h2>
                     <p className={`${isSplitView ? "text-sm" : ""} text-gray-700`}>{approval.summary}</p>
+                       {approval.isCritical && (
+                         <div className="mt-3">
+                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                             ⚠️ Critical
+                           </span>
+                         </div>
+                       )}
                        {approval.trip && approval.trip.linked && (
                          <div className="mt-3">
                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -494,6 +509,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                          approval.category === "Training" ? "Course Information" :
                          approval.category === "Documents" ? "Document Information" :
                          approval.category === "Team Building" ? "New Hire Information" :
+                         approval.category === "Payroll" ? "Pay Run Information" :
                          "Impacted Employee"}
                       </h3>
                     </div>
@@ -508,20 +524,24 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                                ? approval.documentName?.charAt(0) || "D"
                                : approval.category === "Team Building"
                                ? approval.newHireName?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || "N"
+                               : approval.category === "Payroll"
+                               ? "P"
                                : initials
                              }
                            </div>
                            <div className="flex-1">
                              <h4 className="font-medium text-gray-900">
                                {(approval.category === "Reimbursements" || approval.category === "Approvals - Reimbursements")
-                                 ? approval.changes.new
+                                 ? approval.changes?.new || "Expense"
                                  : approval.category === "Training"
                                  ? approval.courseName || "Course"
                                  : approval.category === "Documents"
                                  ? approval.documentName || "Document"
                                  : approval.category === "Team Building"
                                  ? approval.newHireName || "New Hire"
-                                 : approval.employee.name
+                                 : approval.category === "Payroll"
+                                 ? approval.subject || "Pay Run"
+                                 : approval.employee?.name || "Employee"
                                }
                              </h4>
                              <p className="text-sm text-gray-600">
@@ -533,11 +553,13 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                                  ? `Due date: ${approval.dueDate || "N/A"}`
                                  : approval.category === "Team Building"
                                  ? `${approval.newHireRole || "Employee"} - ${approval.suggestedDate || "TBD"}`
-                                 : `${approval.employee.role} - ${approval.employee.status}`
+                                 : approval.category === "Payroll"
+                                 ? `${approval.payScheduleFrequency || "N/A"} - ${approval.payPeriodStartDate || "N/A"}`
+                                 : `${approval.employee?.role || "Employee"} - ${approval.employee?.status || "N/A"}`
                                }
                              </p>
-                             {(approval.category !== "Reimbursements" && approval.category !== "Approvals - Reimbursements" && approval.category !== "Training" && approval.category !== "Documents" && approval.category !== "Team Building") && (
-                               <p className="text-sm text-gray-600">{approval.employee.location}</p>
+                             {(approval.category !== "Reimbursements" && approval.category !== "Approvals - Reimbursements" && approval.category !== "Training" && approval.category !== "Documents" && approval.category !== "Team Building" && approval.category !== "Payroll") && (
+                               <p className="text-sm text-gray-600">{approval.employee?.location}</p>
                              )}
                            </div>
                          </div>
@@ -659,19 +681,54 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
                                <span className="font-medium text-gray-900">{approval.requestor}</span>
                              </div>
                            </>
+                         ) : approval.category === "Payroll" ? (
+                           <>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Pay run type</span>
+                               <span className="font-medium text-gray-900">{approval.payRunType || "Regular"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Pay period start date</span>
+                               <span className="font-medium text-gray-900">{approval.payPeriodStartDate || "N/A"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Pay period end date</span>
+                               <span className="font-medium text-gray-900">{approval.payPeriodEndDate || "N/A"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Take action deadline</span>
+                               <span className="font-medium text-gray-900">{approval.takeActionDeadline || "N/A"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Check date</span>
+                               <span className="font-medium text-gray-900">{approval.checkDate || "N/A"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Is auto-approved</span>
+                               <span className="font-medium text-gray-900">{approval.isAutoApproved ? "True" : "False"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Pay schedule frequency</span>
+                               <span className="font-medium text-gray-900">{approval.payScheduleFrequency || "N/A"}</span>
+                             </div>
+                             <div className="flex justify-between">
+                               <span className="text-gray-600">Pay schedule</span>
+                               <span className="font-medium text-gray-900">{approval.paySchedule || "N/A"}</span>
+                             </div>
+                           </>
                          ) : (
                            <>
                              <div className="flex justify-between">
                                <span className="text-gray-600">Current Value</span>
-                               <span className="font-medium text-gray-900">{approval.changes.current}</span>
+                               <span className="font-medium text-gray-900">{approval.changes?.current || "N/A"}</span>
                              </div>
                              <div className="flex justify-between">
                                <span className="text-gray-600">New Value</span>
-                               <span className="font-medium text-green-600">{approval.changes.new}</span>
+                               <span className="font-medium text-green-600">{approval.changes?.new || "N/A"}</span>
                              </div>
                              <div className="flex justify-between">
                                <span className="text-gray-600">Change Amount</span>
-                               <span className="font-medium">{approval.changes.amount}</span>
+                               <span className="font-medium">{approval.changes?.amount || "N/A"}</span>
                              </div>
                            </>
                          )}

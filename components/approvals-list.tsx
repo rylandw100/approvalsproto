@@ -18,6 +18,8 @@ interface ApprovalsListProps {
   externalSelectedCategory?: string
   onSearchChange?: (query: string) => void
   onCategoryChange?: (category: string) => void
+  sortBy?: "recency" | "dueDate"
+  onSortChange?: (sortBy: "recency" | "dueDate") => void
 }
 
 export function ApprovalsList({ 
@@ -33,7 +35,9 @@ export function ApprovalsList({
   externalSearchQuery,
   externalSelectedCategory,
   onSearchChange,
-  onCategoryChange
+  onCategoryChange,
+  sortBy = "recency",
+  onSortChange,
 }: ApprovalsListProps) {
   // Helper function to get display category name
   const getDisplayCategory = (category: string) => {
@@ -43,7 +47,7 @@ export function ApprovalsList({
     return category
   }
   const [selectedCategory, setSelectedCategory] = useState<string>(externalSelectedCategory || "All")
-  const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
+  // sortBy is now passed as a prop
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
@@ -503,7 +507,9 @@ export function ApprovalsList({
                 <div className="absolute top-full right-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-10 min-w-[160px] rippling-card-elevated">
                   <button
                     onClick={() => {
-                      setSortBy("recency")
+                      if (onSortChange) {
+                        onSortChange("recency")
+                      }
                       setIsSortDropdownOpen(false)
                     }}
                     className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${
@@ -514,7 +520,9 @@ export function ApprovalsList({
                   </button>
                   <button
                     onClick={() => {
-                      setSortBy("dueDate")
+                      if (onSortChange) {
+                        onSortChange("dueDate")
+                      }
                       setIsSortDropdownOpen(false)
                     }}
                     className={`w-full text-left px-4 py-2 hover:bg-muted text-sm rippling-text-sm transition-colors ${

@@ -474,6 +474,8 @@ export function ApprovalsGridWithSplit({
                       externalSelectedCategory={selectedCategory}
                       onSearchChange={setSearchQuery}
                       onCategoryChange={setSelectedCategory}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
                     />
                   </div>
                   <div className="flex-1 flex flex-col min-h-0">

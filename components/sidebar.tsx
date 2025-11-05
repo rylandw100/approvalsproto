@@ -18,7 +18,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
           className={`h-12 w-12 rounded-xl transition-all duration-200 ${
             activePage === "approvals" 
               ? 'bg-[rgb(231,225,222)]' 
-              : 'rippling-btn-ghost hover:bg-primary-light'
+              : 'rippling-btn-ghost hover:bg-muted'
           }`}
           onClick={() => onPageChange("approvals")}
         >
@@ -32,7 +32,7 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
           className={`h-12 w-12 rounded-xl transition-all duration-200 ${
             activePage === "tasks" 
               ? 'bg-[rgb(231,225,222)]' 
-              : 'rippling-btn-ghost hover:bg-primary-light'
+              : 'rippling-btn-ghost hover:bg-muted'
           }`}
           onClick={() => onPageChange("tasks")}
         >
