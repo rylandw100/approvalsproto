@@ -534,8 +534,8 @@ export function ApprovalsGrid({
     if (!('comments' in approval) || !approval.comments || approval.comments.length === 0) return null
     
     const sortedComments = [...approval.comments].sort((a, b) => {
-      const timeA = parseInt(a.timestamp)
-      const timeB = parseInt(b.timestamp)
+      const timeA = parseInt(a.timestamp || "0")
+      const timeB = parseInt(b.timestamp || "0")
       return timeB - timeA
     })
     const mostRecent = sortedComments[0]
@@ -1217,8 +1217,6 @@ export function ApprovalsGrid({
               </div>
             </div>
           )}
-        </div>
-      </div>
     </div>
   )
 }
