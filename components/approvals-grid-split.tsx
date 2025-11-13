@@ -67,10 +67,14 @@ export function ApprovalsGridWithSplit({
     }
     
     // When collapsing from full-width to split, close drawer if open
-    // But only close the drawer if there's actually a drawer open (not just inline detail)
-    // We can tell if we're in inline detail mode because selectedItem is set but drawerOpen is false
-    if (mode === "split" && onCloseDrawer && prevMode === "full-width" && drawerOpen) {
-      // Only call onCloseDrawer if drawer is actually open (not inline detail)
+    // But preserve selectedItem so it shows in the split view
+    // We need to close the drawer but NOT clear selectedItem
+    if (mode === "split" && prevMode === "full-width" && drawerOpen && onCloseDrawer) {
+      // When collapsing from drawer to split, we want to preserve selectedItem
+      // The selectedItem should already be set by the layout's onViewModeChange handler
+      // Just close the drawer - don't let it clear selectedItem
+      // We'll handle closing the drawer state directly here to avoid clearing selectedItem
+      // Actually, we need to call onCloseDrawer but the layout should preserve selectedItem
       onCloseDrawer()
     }
     // When collapsing from full-width inline detail to split, preserve selectedItem
@@ -82,16 +86,13 @@ export function ApprovalsGridWithSplit({
   useEffect(() => {
     if (drawerViewModeChange) {
       const handleDrawerModeChange = (mode: "full-width" | "split") => {
-        if (mode === "split") {
-          setViewMode("split")
-          if (onCloseDrawer) {
-            onCloseDrawer()
-          }
-        }
+        // Use the main handleViewModeChange to ensure all logic is applied correctly
+        // This will preserve selectedItem when collapsing from drawer to split
+        handleViewModeChange(mode)
       }
       drawerViewModeChange(handleDrawerModeChange)
     }
-  }, [drawerViewModeChange, onCloseDrawer])
+  }, [drawerViewModeChange, handleViewModeChange])
   
   // When an item is selected in full-width mode, open the drawer
   // But only if we just switched to full-width from split AND an item was just selected

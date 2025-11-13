@@ -131,12 +131,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }
 
   const handleCloseDrawer = () => {
-    // Only clear selectedItem if we're actually closing a drawer (drawerOpen is true)
-    // Don't clear if we're switching to split view with a selected item
-    // The selectedItem will be preserved by the onViewModeChange handler when collapsing to split
-    if (activeTab === "opt3" && drawerOpen) {
-      // Clear selectedItem when closing normally (not collapsing to split)
-      // The onViewModeChange handler will preserve it when collapsing to split
+    // Only clear selectedItem if we're actually closing a drawer normally (not collapsing to split)
+    // When collapsing to split, drawerItem will be set, so preserve it by not clearing selectedItem
+    if (activeTab === "opt3" && drawerOpen && drawerItem !== null) {
+      // drawerItem is set, which means we're collapsing to split
+      // selectedItem should already be set by onViewModeChange handler
+      // Don't clear selectedItem - preserve it for split view
+      // Just close the drawer
+    } else if (activeTab === "opt3" && drawerOpen) {
+      // drawerItem is null, we're closing normally, so clear selectedItem
+      setSelectedItem(null)
+    } else {
+      // Not in opt3, clear normally
       setSelectedItem(null)
     }
     setDrawerOpen(false)
@@ -248,12 +254,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             // Preserve the selected item when collapsing to split view
             // Capture drawerItem before closing the drawer
             const itemToPreserve = drawerItem
-            if (itemToPreserve !== null) {
-              setSelectedItem(itemToPreserve)
-            }
-            setDrawerOpen(false)
-            setDrawerItem(null)
             if (opt3ViewModeChangeRef.current) {
+              // Set selectedItem before calling the view mode change handler
+              // This ensures the item is preserved when the drawer closes
+              if (itemToPreserve !== null) {
+                setSelectedItem(itemToPreserve)
+              }
+              // Call the handler which will close the drawer and change view mode
               opt3ViewModeChangeRef.current("split")
             }
           }
