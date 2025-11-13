@@ -55,7 +55,7 @@ export function Drawer({ isOpen, onClose, selectedItem, selectedItems, onClearSe
             viewMode="full-width"
             onViewModeChange={(mode) => {
               if (mode === "split") {
-                onClose()
+                // Don't call onClose here - let the parent handle closing and preserving selection
                 if (onViewModeChange) {
                   onViewModeChange("split")
                 }

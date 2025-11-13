@@ -133,7 +133,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const handleCloseDrawer = () => {
     // Only clear selectedItem if we're actually closing a drawer (drawerOpen is true)
     // Don't clear if we're switching to split view with a selected item
+    // The selectedItem will be preserved by the onViewModeChange handler when collapsing to split
     if (activeTab === "opt3" && drawerOpen) {
+      // Clear selectedItem when closing normally (not collapsing to split)
+      // The onViewModeChange handler will preserve it when collapsing to split
       setSelectedItem(null)
     }
     setDrawerOpen(false)
@@ -242,7 +245,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         onViewModeChange={(mode) => {
           // When collapsing from drawer, switch to split screen in opt3
           if (activeTab === "opt3" && mode === "split") {
-            handleCloseDrawer()
+            // Preserve the selected item when collapsing to split view
+            // Capture drawerItem before closing the drawer
+            const itemToPreserve = drawerItem
+            if (itemToPreserve !== null) {
+              setSelectedItem(itemToPreserve)
+            }
+            setDrawerOpen(false)
+            setDrawerItem(null)
             if (opt3ViewModeChangeRef.current) {
               opt3ViewModeChangeRef.current("split")
             }
