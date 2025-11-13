@@ -238,8 +238,8 @@ export function ApprovalsGridWithSplit({
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Content */}
       {viewMode === "full-width" ? (
-        <div className="flex-1 flex overflow-hidden">
-          <div className="flex-1 overflow-auto min-h-0">
+        <div className="flex-1 flex overflow-hidden min-h-0">
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                     <ApprovalsGrid
                       selectedItems={selectedItems}
                       onToggleItem={onToggleItem}

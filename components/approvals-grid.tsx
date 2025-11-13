@@ -565,8 +565,8 @@ export function ApprovalsGrid({
   }
 
   return (
-    <div className="h-full flex flex-col bg-background">
-      <div className="flex-1 overflow-auto relative">
+    <div className="h-full flex flex-col bg-background min-h-0">
+      <div className="flex-1 overflow-auto relative min-h-0">
         <div className="p-6">
           <div className="rounded-[16px] overflow-hidden min-w-full">
             {/* Header with bulk selection, search, filter, sort, and view mode - Inside the table frame */}
