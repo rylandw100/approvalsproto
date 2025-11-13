@@ -998,6 +998,7 @@ export function ApprovalsGrid({
                   )
                 })
               )}
+              </div>
             </div>
           </div>
         </div>
