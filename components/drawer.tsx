@@ -13,7 +13,7 @@ interface DrawerProps {
   removedItems?: Set<number>
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
   onViewModeChange?: (mode: "full-width" | "split") => void
   onSelectNextItem?: () => void
 }
