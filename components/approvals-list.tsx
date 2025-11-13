@@ -509,7 +509,9 @@ export function ApprovalsList({
         <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
-            {page !== "finance" && (
+            {page === "finance" ? (
+              <h2 className="text-base font-semibold text-gray-900">Reimbursement requests</h2>
+            ) : (
             <div className="relative" ref={dropdownRef}>
               <Button 
                 variant="ghost" 

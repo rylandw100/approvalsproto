@@ -24,6 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Clear selectedItem when switching away from opt3 (to opt1 or opt2)
     // or when switching to opt3 from opt1 or opt2
+    // Also clear when switching to opt1 to ensure first item is selected
     if (prevActiveTabRef.current !== activeTab) {
       // If we're leaving opt3, clear selectedItem
       if (prevActiveTabRef.current === "opt3") {
@@ -31,6 +32,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       }
       // If we're entering opt3 from opt1 or opt2, clear selectedItem
       if (activeTab === "opt3" && (prevActiveTabRef.current === "opt1" || prevActiveTabRef.current === "opt2")) {
+        setSelectedItem(null)
+      }
+      // If we're entering opt1, clear selectedItem so first item gets selected
+      if (activeTab === "opt1") {
         setSelectedItem(null)
       }
     }
@@ -114,6 +119,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       setSelectedItem(null)
     }
   }
+
+  // Auto-select first item in opt1 when filteredIds change and no item is selected
+  useEffect(() => {
+    if (activeTab === "opt1" && filteredIds.length > 0 && selectedItem === null) {
+      setSelectedItem(filteredIds[0])
+    }
+  }, [activeTab, filteredIds, selectedItem])
 
   // Function to select the next item in the queue
   const handleSelectNextItem = () => {
