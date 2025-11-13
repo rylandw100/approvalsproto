@@ -1,11 +1,11 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Stamp, CheckSquare } from "lucide-react"
+import { Stamp, CheckSquare, DollarSign } from "lucide-react"
 
 interface SidebarProps {
-  activePage: "approvals" | "tasks"
-  onPageChange: (page: "approvals" | "tasks") => void
+  activePage: "approvals" | "tasks" | "finance"
+  onPageChange: (page: "approvals" | "tasks" | "finance") => void
 }
 
 export function Sidebar({ activePage, onPageChange }: SidebarProps) {
@@ -37,6 +37,20 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
           onClick={() => onPageChange("approvals")}
         >
           <Stamp className={`h-6 w-6 ${activePage === "approvals" ? "text-black" : ""}`} />
+        </Button>
+      </div>
+      <div className="w-full flex justify-center">
+        <Button 
+          variant="ghost"
+          size="icon"
+          className={`h-12 w-12 rounded-xl transition-all duration-200 ${
+            activePage === "finance" 
+              ? 'bg-[rgb(231,225,222)]' 
+              : 'rippling-btn-ghost hover:bg-muted'
+          }`}
+          onClick={() => onPageChange("finance")}
+        >
+          <DollarSign className={`h-6 w-6 ${activePage === "finance" ? "text-black" : ""}`} />
         </Button>
       </div>
     </div>

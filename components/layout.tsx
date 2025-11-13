@@ -11,7 +11,7 @@ import { Drawer } from "./drawer"
 import { useState, useRef, useEffect } from "react"
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [activePage, setActivePage] = useState<"approvals" | "tasks">("tasks")
+  const [activePage, setActivePage] = useState<"approvals" | "tasks" | "finance">("tasks")
   const [activeTab, setActiveTab] = useState<string>("opt1")
   const [selectedItem, setSelectedItem] = useState<number | null>(null)
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set())

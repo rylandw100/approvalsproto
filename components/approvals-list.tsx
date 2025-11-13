@@ -15,7 +15,7 @@ interface ApprovalsListProps {
   removedItems?: Set<number>
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
   hideHeader?: boolean
   externalSearchQuery?: string
   externalSelectedCategory?: string
@@ -287,8 +287,12 @@ export function ApprovalsList({
     }
   ]
 
-  // For tasks page, show both approvals and tasks. For approvals page, only show approvals.
-  const approvals = page === "tasks" ? [...approvalData, ...taskData] : approvalData
+  // For tasks page, show both approvals and tasks. For approvals page, only show approvals. For finance page, only show reimbursement requests.
+  const approvals = page === "tasks" 
+    ? [...approvalData, ...taskData] 
+    : page === "finance"
+    ? approvalData.filter(a => a.category === "Approvals - Reimbursements")
+    : approvalData
 
   const categories = page === "tasks" 
     ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building", "Payroll"]
@@ -309,6 +313,16 @@ export function ApprovalsList({
   const filteredApprovals = approvals.filter(approval => {
     // Remove filter - exclude removed items
     if (removedItems.has(approval.id)) return false
+    
+    // For finance page, no category filtering needed (already filtered to reimbursements)
+    if (page === "finance") {
+      // Only apply search filter
+      const searchMatch = searchQuery === "" || 
+        approval.requestor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        approval.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        approval.category.toLowerCase().includes(searchQuery.toLowerCase())
+      return searchMatch
+    }
     
     // Category filter
     const categoryMatch = page === "tasks" 
@@ -437,7 +451,7 @@ export function ApprovalsList({
   return (
     <div className={`h-full flex bg-card transition-all duration-300 flex-shrink-0 border-l-0 ${hideHeader ? 'w-full' : (isPanelExpanded ? 'w-[584px]' : 'w-[376px]')}`}>
       {/* Expansion Panel */}
-      {!hideHeader && (
+      {!hideHeader && page !== "finance" && (
         <div className={`flex-shrink-0 border-r border-l-0 border-border pt-2 transition-all duration-300 ${isPanelExpanded ? 'w-[250px]' : 'w-0 overflow-hidden border-l-0'}`}>
           <div className="p-4 h-full">
             <div className="flex items-center justify-between mb-4">
@@ -477,7 +491,7 @@ export function ApprovalsList({
         </div>
       )}
       {/* Panel toggle button */}
-      {!hideHeader && !isPanelExpanded && (
+      {!hideHeader && !isPanelExpanded && page !== "finance" && (
         <div className="flex-shrink-0 border-r border-border">
           <Button
             variant="ghost"
@@ -495,6 +509,7 @@ export function ApprovalsList({
         <div className="p-6 border-b border-border flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
+            {page !== "finance" && (
             <div className="relative" ref={dropdownRef}>
               <Button 
                 variant="ghost" 
@@ -602,6 +617,7 @@ export function ApprovalsList({
               </div>
               )}
             </div>
+            )}
           </div>
         </div>
         

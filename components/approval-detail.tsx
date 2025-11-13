@@ -10,7 +10,7 @@ interface ApprovalDetailProps {
   removedItems?: Set<number>
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
   backgroundColor?: "white" | "default"
   viewMode?: "full-width" | "split"
   onViewModeChange?: (mode: "full-width" | "split") => void

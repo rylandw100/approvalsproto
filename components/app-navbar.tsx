@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button"
 interface AppNavBarProps {
   activeTab: string
   onTabChange: (tab: string) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
 }
 
 export function AppNavBar({ activeTab, onTabChange, page = "approvals" }: AppNavBarProps) {
-  const title = page === "tasks" ? "Inbox" : "Approvals"
-  const tab1Label = page === "tasks" ? "Pending opt. 1" : "Needs my review opt. 1"
-  const tab2Label = page === "tasks" ? "Pending opt. 2" : "Needs my review opt. 2"
-  const tab3Label = page === "tasks" ? "Pending opt. 3" : "Needs my review opt. 3"
+  const title = page === "tasks" ? "Inbox" : page === "finance" ? "Finance Overview" : "Approvals"
+  const tab1Label = page === "tasks" ? "Pending opt. 1" : page === "finance" ? "Reimbursements opt. 1" : "Needs my review opt. 1"
+  const tab2Label = page === "tasks" ? "Pending opt. 2" : page === "finance" ? "Reimbursements opt. 2" : "Needs my review opt. 2"
+  const tab3Label = page === "tasks" ? "Pending opt. 3" : page === "finance" ? "Reimbursements opt. 3" : "Needs my review opt. 3"
 
   return (
     <div className="bg-card border-b border-border">

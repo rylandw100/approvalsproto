@@ -15,7 +15,7 @@ interface ApprovalsGridProps {
   removedItems?: Set<number>
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
   viewMode?: "full-width" | "split"
   onViewModeChange?: (mode: "full-width" | "split") => void
   externalSearchQuery?: string
@@ -358,8 +358,12 @@ export function ApprovalsGrid({
     }
   ]
 
-  // For tasks page, show both approvals and tasks. For approvals page, only show approvals.
-  const approvals = page === "tasks" ? [...approvalData, ...taskData] : approvalData
+  // For tasks page, show both approvals and tasks. For approvals page, only show approvals. For finance page, only show reimbursement requests.
+  const approvals = page === "tasks" 
+    ? [...approvalData, ...taskData] 
+    : page === "finance"
+    ? approvalData.filter(a => a.category === "Approvals - Reimbursements")
+    : approvalData
 
   const requestTypes = page === "tasks"
     ? ["All", "Approvals", "HR Management", "Reimbursements", "Time and Attendance", "Training", "Documents", "Team Building", "Payroll"]
@@ -380,6 +384,16 @@ export function ApprovalsGrid({
   const filteredApprovals = approvals.filter(approval => {
     // Remove filter - exclude removed items
     if (removedItems.has(approval.id)) return false
+    
+    // For finance page, no category filtering needed (already filtered to reimbursements)
+    if (page === "finance") {
+      // Only apply search filter
+      const searchMatch = searchQuery === "" || 
+        approval.requestor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        approval.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        approval.category.toLowerCase().includes(searchQuery.toLowerCase())
+      return searchMatch
+    }
     
     const searchMatch = searchQuery === "" || 
       approval.requestor.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -617,6 +631,7 @@ export function ApprovalsGrid({
                       </Button>
                     )}
                   </div>
+                  {page !== "finance" && (
                   <div className="relative" ref={requestTypeDropdownRef}>
                     <Button
                       variant="outline"
@@ -728,6 +743,7 @@ export function ApprovalsGrid({
                     </div>
                   )}
                   </div>
+                  )}
                   {page === "tasks" && (
                     <div className="relative" ref={sortDropdownRef}>
                       <Button

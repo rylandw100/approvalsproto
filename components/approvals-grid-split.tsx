@@ -24,7 +24,7 @@ interface ApprovalsGridWithSplitProps {
   removedItems?: Set<number>
   onRemoveItem?: (id: number) => void
   onRemoveItems?: (ids: number[]) => void
-  page?: "approvals" | "tasks"
+  page?: "approvals" | "tasks" | "finance"
   pinnedItems?: Set<number>
   onTogglePin?: (id: number) => void
 }
@@ -345,6 +345,7 @@ export function ApprovalsGridWithSplit({
                         </Button>
                       )}
                     </div>
+                    {page !== "finance" && (
                     <div className="relative" ref={requestTypeDropdownRef}>
                       <Button
                         variant="outline"
@@ -456,6 +457,7 @@ export function ApprovalsGridWithSplit({
                       </div>
                     )}
                     </div>
+                    )}
                     {page === "tasks" && (
                       <div className="relative" ref={sortDropdownRef}>
                         <Button
