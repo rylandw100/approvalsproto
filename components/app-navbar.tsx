@@ -61,16 +61,16 @@ export function AppNavBar({ activeTab, onTabChange, page = "approvals" }: AppNav
           </button>
           <button
             onClick={() => onTabChange("opt3")}
-            className={`px-4 pb-1 border-b-2 transition-colors ${
+            className={`px-6 pb-3 border-b-2 transition-all duration-200 ${
               activeTab === "opt3"
-                ? "border-[#512f3e]"
-                : "border-transparent"
+                ? "border-primary"
+                : "border-transparent hover:border-muted-foreground/30"
             }`}
           >
-            <span className={`text-sm ${
+            <span className={`rippling-text-sm transition-colors ${
               activeTab === "opt3"
-                ? "font-medium text-[#512f3e]"
-                : "text-gray-600"
+                ? "text-primary font-semibold"
+                : "text-muted-foreground hover:text-foreground"
             }`}>
               {tab3Label}
             </span>

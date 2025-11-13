@@ -478,7 +478,7 @@ export function ApprovalDetail({ selectedItem, selectedItems, onClearSelection, 
           {activeTab === "Overview" && (
             <div className="flex-1 overflow-y-auto min-h-0">
               <div className={`${isSplitView ? "p-4 pb-4" : "p-6 pb-20"}`}>
-                <div className={`${isSplitView ? "space-y-3" : "max-w-3xl space-y-6"}`}>
+                <div className={`${isSplitView ? "space-y-3" : "space-y-6"}`}>
                   <div className={`bg-blue-50 border border-blue-200 rounded-lg ${isSplitView ? "p-3" : "p-6"}`}>
                     <h2 className={`${isSplitView ? "text-base" : "text-lg"} font-semibold text-gray-900 ${isSplitView ? "mb-1" : "mb-2"}`}>Request Summary</h2>
                     <p className={`${isSplitView ? "text-sm" : ""} text-gray-700`}>{approval.summary}</p>
