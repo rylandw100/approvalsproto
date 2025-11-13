@@ -3,7 +3,7 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter, Archive, Pin } from "lucide-react"
+import { Check, X, MessageCircle, Plane, AlertTriangle, ChevronRight, Info, Search, ChevronDown, Filter, Archive, Pin, PanelLeft, Menu } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
 interface ApprovalsGridProps {
@@ -81,11 +81,9 @@ export function ApprovalsGrid({
   }
   const [isRequestTypeDropdownOpen, setIsRequestTypeDropdownOpen] = useState(false)
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false)
-  const [isViewModeDropdownOpen, setIsViewModeDropdownOpen] = useState(false)
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const requestTypeDropdownRef = useRef<HTMLDivElement>(null)
   const sortDropdownRef = useRef<HTMLDivElement>(null)
-  const viewModeDropdownRef = useRef<HTMLDivElement>(null)
 
   // Update internal state when external props change
   useEffect(() => {
@@ -123,9 +121,6 @@ export function ApprovalsGrid({
       }
       if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
         setIsSortDropdownOpen(false)
-      }
-      if (viewModeDropdownRef.current && !viewModeDropdownRef.current.contains(event.target as Node)) {
-        setIsViewModeDropdownOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -773,43 +768,22 @@ export function ApprovalsGrid({
                     </div>
                   )}
                   {viewMode !== undefined && onViewModeChange && (
-                    <div className="relative" ref={viewModeDropdownRef}>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsViewModeDropdownOpen(!isViewModeDropdownOpen)}
-                        className="h-8 text-sm gap-2 px-3"
-                      >
-                        View: {viewMode === "full-width" ? "Full-width" : "Split screen"}
-                        <ChevronDown className="h-3.5 w-3.5" />
-                      </Button>
-                      {isViewModeDropdownOpen && (
-                        <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-20 min-w-[200px]">
-                          <button
-                            onClick={() => {
-                              onViewModeChange("full-width")
-                              setIsViewModeDropdownOpen(false)
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                              viewMode === "full-width" ? 'bg-gray-50 font-medium' : ''
-                            }`}
-                          >
-                            Full-width
-                          </button>
-                          <button
-                            onClick={() => {
-                              onViewModeChange("split")
-                              setIsViewModeDropdownOpen(false)
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 text-xs ${
-                              viewMode === "split" ? 'bg-gray-50 font-medium' : ''
-                            }`}
-                          >
-                            Split screen
-                          </button>
-                        </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const currentMode = viewMode as "full-width" | "split"
+                        onViewModeChange(currentMode === "full-width" ? "split" : "full-width")
+                      }}
+                      className="h-8 w-8 p-0"
+                      title={viewMode === "full-width" ? "Switch to split screen" : "Switch to full-width"}
+                    >
+                      {viewMode === "full-width" ? (
+                        <PanelLeft className="h-4 w-4" />
+                      ) : (
+                        <Menu className="h-4 w-4" />
                       )}
-                    </div>
+                    </Button>
                   )}
                 </div>
               </div>
