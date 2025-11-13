@@ -19,11 +19,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [pinnedItems, setPinnedItems] = useState<Set<number>>(new Set([100])) // Payroll task (id: 100) pinned by default
   const [sortBy, setSortBy] = useState<"recency" | "dueDate">("recency")
 
-  // Clear selectedItem when switching from opt1 to opt3
+  // Clear selectedItem when switching tabs to prevent showing details in wrong view
   const prevActiveTabRef = useRef(activeTab)
   useEffect(() => {
-    if (prevActiveTabRef.current === "opt1" && activeTab === "opt3") {
-      setSelectedItem(null)
+    // Clear selectedItem when switching away from opt3 (to opt1 or opt2)
+    // or when switching to opt3 from opt1 or opt2
+    if (prevActiveTabRef.current !== activeTab) {
+      // If we're leaving opt3, clear selectedItem
+      if (prevActiveTabRef.current === "opt3") {
+        setSelectedItem(null)
+      }
+      // If we're entering opt3 from opt1 or opt2, clear selectedItem
+      if (activeTab === "opt3" && (prevActiveTabRef.current === "opt1" || prevActiveTabRef.current === "opt2")) {
+        setSelectedItem(null)
+      }
     }
     prevActiveTabRef.current = activeTab
   }, [activeTab])

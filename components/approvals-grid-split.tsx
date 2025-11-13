@@ -269,7 +269,8 @@ export function ApprovalsGridWithSplit({
                       onTogglePin={onTogglePin}
                     />
           </div>
-          {selectedItem && (
+          {/* Don't show inline detail in full-width mode - details should only show in drawer */}
+          {false && selectedItem && (
             <div className="w-[800px] border-l border-gray-200 flex flex-col bg-[#FAF9F7] overflow-hidden">
               <div className="flex items-center justify-end p-2 border-b border-gray-200 flex-shrink-0">
                 <Button
