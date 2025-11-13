@@ -118,6 +118,7 @@ export function ApprovalsList({
       subject: "Request to update Stephanie Perkins' target annual bonus from $15,000 to $22,500",
       category: "Approvals - HR Management",
       time: "just now",
+      requestedOn: "Oct 28, 2024",
       status: "pending",
       warning: "Exceeds the approved band",
       comments: [
@@ -131,6 +132,7 @@ export function ApprovalsList({
       subject: "Request to reimburse $72.41 for Uber",
       category: "Approvals - Reimbursements",
       time: "2 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending",
              warning: "Potential duplicate detected",
              comments: [
@@ -147,6 +149,7 @@ export function ApprovalsList({
       subject: "Request to reimburse $595.49 for Hilton Hotel",
       category: "Approvals - Reimbursements",
       time: "8 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending"
     },
     {
@@ -155,6 +158,7 @@ export function ApprovalsList({
       subject: "Request to log 13h 57m from Oct 26 - 27",
       category: "Approvals - Time and Attendance",
       time: "12 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending",
              warning: "Exceeds 12 hours",
              comments: []
@@ -165,6 +169,7 @@ export function ApprovalsList({
       subject: "Request to update Jennifer Lee's salary from $85,000 to $95,000 (promotion to Senior Engineer)",
       category: "Approvals - HR Management",
       time: "18 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending"
     },
     {
@@ -173,6 +178,7 @@ export function ApprovalsList({
       subject: "Request to reimburse $45.20 for parking",
       category: "Approvals - Reimbursements",
       time: "22 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending"
     },
     {
@@ -181,6 +187,7 @@ export function ApprovalsList({
       subject: "Request to log 8h 30m from Oct 25",
       category: "Approvals - Time and Attendance",
       time: "28 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending"
     },
     {
@@ -189,6 +196,7 @@ export function ApprovalsList({
       subject: "Request to update Robert Wilson's benefits: add dental coverage and increase PTO from 15 to 20 days",
       category: "Approvals - HR Management",
       time: "32 min ago",
+      requestedOn: "Oct 28, 2024",
       status: "pending",
       warning: "Exceeds the approved band"
     }
@@ -738,7 +746,7 @@ export function ApprovalsList({
                       {'dueDate' in approval && approval.dueDate && (
                         <span className="rippling-text-xs text-muted-foreground whitespace-nowrap">Due: {approval.dueDate}</span>
                       )}
-                      <span className="rippling-text-xs text-muted-foreground whitespace-nowrap">{approval.time}</span>
+                      <span className="rippling-text-xs text-muted-foreground whitespace-nowrap">{'requestedOn' in approval && approval.requestedOn ? approval.requestedOn : approval.time}</span>
                     </div>
                   </div>
                 </div>
