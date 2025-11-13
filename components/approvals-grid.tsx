@@ -1214,9 +1214,8 @@ export function ApprovalsGrid({
                   return actions;
                 })()}
               </div>
-              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
